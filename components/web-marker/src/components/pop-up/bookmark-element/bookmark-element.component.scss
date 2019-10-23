@@ -96,7 +96,7 @@ bronco-chip-list {
 
 .favoriteIcon.active {
   svg {
-    color: yellow;
-    fill: yellow;
+    color: var(--primary-color);
+    fill: var(--primary-color);
   }
 }
