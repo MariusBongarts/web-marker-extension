@@ -1,7 +1,7 @@
 {
-  "name": "webMarker",
+  "name": "web-marker-extension",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chrome Extension to highlight text on websites",
   "main": "background.js",
   "scripts": {
     "start": "npm start --prefix components/web-marker",
