@@ -1,0 +1,77 @@
+@import './../../variables.scss';
+
+:host {
+  --box-shadow: 2px 2px 4px 5px #c7c7c73b;
+  --bg-color: var(--secondary-color);
+  --bg-color-chip: var(--primary-dark);
+  --color: white;
+  --min-height: 0;
+  --font-size-chip: 10px;
+  --height-chip: 28px;
+  --chip-width: 100%;
+  --padding-input: 5px;
+}
+
+bronco-chip {
+  flex: 1 auto;
+  padding: 0;
+  margin: 0;
+  --background-color: var(--bg-color-chip);
+  --color: var(--white-dark);
+  --font-size: var(--font-size-chip);
+  // --font-weight: inherit;
+  --height: var(--height-chip);
+  --margin: 2px 1px;
+  --width: var(--chip-width);
+}
+
+.chip-list {
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  border-width: 0 0 1px;
+  padding: 5px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  box-shadow: var(--box-shadow);
+  min-height: var(--min-height);
+}
+
+
+.chip-list.marked-to-submit {
+  box-shadow: 1px 1px 2px 2px var(--primary-color-transparent);
+}
+
+.chip-list > bronco-chip {
+  display: flex;
+  margin: 2px 2px;
+}
+
+input {
+  color: var(--color);
+  outline: none;
+  font-size: var(--font-size) !important;
+  line-height: var(--font-size) !important;
+  border: none;
+  flex: 1 auto;
+  width: 80px;
+  overflow: hidden;
+  background: none;
+  // border-bottom: 1px solid #ffffffc9;
+  margin: 0px 5px;
+  padding: var(--padding-input);
+}
+
+
+input:focus .chip-list {
+  box-shadow: 1px 1px 2px 2px rgba(126, 0, 0, 0.212);
+}
+
+input::placeholder {
+  color: #ffffffc9;
+}
+
+input:focus input::placeholder {
+  color: #e0383800;
+}
+

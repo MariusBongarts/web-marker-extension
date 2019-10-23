@@ -1,0 +1,24 @@
+@import "../../../variables.scss";
+
+:host {
+  --border-radius: 50%;
+  --font-size: 15px;
+  --position: absolute;
+  --size: 20px;
+  --right: -25%;
+}
+
+.sideBadge {
+  background: var(--secondary-color);
+  border-radius: var(--border-radius);
+  box-shadow: 4px 0px 10px -4px var(--primary-light);
+  border: solid 1px var(--primary-color);
+  width: var(--size);
+  height: var(--size);
+  position: var(--position);
+  top: 0px;
+  line-height: var(--size);
+  font-size: var(--font-size);
+  right: var(--right);
+  color: var(--primary-color);
+}

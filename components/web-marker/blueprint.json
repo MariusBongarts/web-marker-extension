@@ -1,0 +1,17 @@
+{
+  "logo": {
+    "src": "https://raw.githubusercontent.com/andreasbm/readme/master/assets/logo-shadow.png",
+    "width": "150"
+  },
+  "ids": {
+    "github": "marius2502/bronco-button"
+  },
+  "badges": [
+    {
+      "alt": "Coverage",
+      "url": "https://github.com/badges/shields",
+      "img": "https://img.shields.io/badge/custom-badge-f39f37.svg"
+    }
+  ],
+  "text": "Use this starter kit to build your own lightweight web components"
+}

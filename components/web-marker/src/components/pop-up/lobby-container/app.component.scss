@@ -1,0 +1,88 @@
+@import "../../../variables.scss";
+
+
+:host {
+  z-index: 99999999 !important;
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  min-width: 360px;
+  min-height: 360px;
+  //background: var(--primary-color);
+  // background: linear-gradient(to top left, #53e3a6 0%, #00b077 100%);
+  // background: linear-gradient(to bottom right, #00b077 0%, #53e3a6 100%);
+  background: linear-gradient(to top right, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: 10px;
+}
+
+.container.form-success h1 {
+  transform: translateY(85px);
+}
+.container {
+  margin: 0 auto;
+  padding: 20px 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+.container h1 {
+  font-size: 40px;
+  transition-duration: 1s;
+  transition-timing-function: ease-in- put;
+  font-weight: 200;
+  color: white;
+}
+form {
+  padding: 20px 0;
+  position: relative;
+  z-index: 2;
+}
+form input {
+  appearance: none;
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 250px;
+  border-radius: 3px;
+  padding: 10px 15px;
+  margin: 0 auto 10px auto;
+  display: block;
+  text-align: center;
+  font-size: 18px;
+  color: white;
+  -webkit-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+  font-weight: 300;
+}
+form input:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+form input:focus {
+  background-color: white;
+  width: 300px;
+  color: #53e3a6;
+}
+form button {
+  appearance: none;
+  outline: 0;
+  background-color: var(--secondary-color);
+  border: 0;
+  padding: 10px 15px;
+  color: #53e3a6;
+  border-radius: 3px;
+  width: 250px;
+  cursor: pointer;
+  font-size: 18px;
+  transition-duration: 0.25s;
+}
+
+form button.loading {
+  width: 42px;
+  border-radius: 50%;
+  transition: width 0.3s 0s, font-size 0.1s 0.15s, border-radius 0s 0.29s;
+}
+
+form button:hover {
+  background-color: var(--secondary-dark);
+  // background-color: #f5f7f9;
+}

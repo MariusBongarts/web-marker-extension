@@ -1,0 +1,100 @@
+@import '../../variables.scss';
+:host {
+  --height: 28px;
+  --font-size: 14px;
+  --font-weight: bold;
+  --margin: 0px 1px;
+  --width: 100%;
+  --color: white;
+  --background-color: var(--primary-color);
+}
+.chip {
+  display: inline-flex;
+  flex-direction: row;
+  background-color: var(--background-color);
+  border: none;
+  cursor: default;
+  height: var(--height);
+  outline: none;
+  padding: 0;
+  width: var(--width);
+  margin: var(--margin);
+  font-size: var(--font-size);
+  color: var(--color);
+  font-family: var(--font-family);
+  white-space: nowrap;
+  align-items: center;
+  border-radius: 16px;
+  vertical-align: middle;
+  text-decoration: none;
+  justify-content: space-between;
+  font-weight: var(--font-weight);
+}
+
+.chip-content {
+  cursor: inherit;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  white-space: nowrap;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.chip-close {
+  display: flex;
+}
+
+.chip-svg {
+  color: #888888;
+  cursor: pointer;
+  height: auto;
+  fill: currentColor;
+  width: var(--font-size);
+  height: var(--font-size);
+  display: inline-block;
+  font-size: var(--font-size);
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  user-select: none;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+.chip-svg:hover {
+  color: #bbbbbb;
+}
+
+.chip.delete-mode .chip-svg {
+  color: #ee00009b;
+}
+
+/* Ripple effect */
+.ripple {
+  background-position: center;
+  transition: background 0.3s;
+}
+.ripple:hover {
+  background: var(--primary-dark) radial-gradient(circle, transparent 1%, var(--primary-color) 1%) center/15000%;
+}
+.ripple:active {
+  background-color: rgba(199, 199, 199, 0.589);
+  background-size: 100%;
+  transition: background 0s;
+}
+
+/* Button style */
+button {
+  border: none;
+  border-radius: 2px;
+  padding: 12px 18px;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: white;
+  background-color: #2196f3;
+  box-shadow: 0 0 4px #999;
+  outline: none;
+}
+
+.badge {
+  color: var(--primary-color);
+}

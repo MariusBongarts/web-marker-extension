@@ -1,0 +1,9 @@
+# Packages
+node_modules/
+
+# Test-coverage Istanbul
+coverage/
+
+
+# Mac only
+.DS_Store

@@ -1,0 +1,241 @@
+@import '../../../variables.scss';
+
+.tabbar {
+  --primary: var(--primary-light);
+  --background: var(--secondary-color);
+  --inactive: #99A3BA;
+  --shadow: rgba(18, 22, 33, .24);
+  --line: #CDD9ED;
+  background: var(--background);
+  box-shadow: 0 1px 4px -1px var(--shadow);
+  border-radius: 5px 5px 21px 21px;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  ul {
+      --x: 54px;
+      margin: 0;
+      padding: 0 12px;
+      list-style: none;
+      display: grid;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: var(--x);
+          background: var(--primary);
+          width: 60px;
+          margin-left: -30px;
+          height: 40px;
+      }
+      li {
+          position: relative;
+          &:before,
+          &:after {
+              content: '';
+              background: var(--background);
+              height: 44px;
+              width: 84px;
+              position: absolute;
+              top: 0;
+              left: 50%;
+              margin-left: -42px;
+          }
+          &:before {
+              border-radius: 0 48% 0 0;
+          }
+          &:after {
+              border-radius: 48% 0 0 0;
+          }
+          a {
+              padding: 20px 0 10px 0;
+              display: block;
+              text-decoration: none;
+              position: relative;
+              z-index: 1;
+              color: var(--primary);
+              transition: transform .2s ease;
+              &:active {
+                  transform: scale(.9);
+              }
+              &:before,
+              &:after {
+                  content: '';
+                  top: 0;
+                  left: 50%;
+                  position: absolute;
+                  background: var(--primary);
+                  border-radius: 1px;
+                  width: 2px;
+                  margin-left: -1px;
+                  transform-origin: 50% 0;
+                  transform: translateY(-14px) scaleX(.6);
+              }
+              &:before {
+                  height: 8px;
+              }
+              &:after {
+                  height: 4px;
+              }
+              div {
+                  background: var(--inactive);
+                  cursor: pointer;
+                  width: 24px;
+                  height: 24px;
+                  margin: 0 auto 4px auto;
+                  &:before {
+                      --y: -100%;
+                      content: '';
+                      display: block;
+                      width: 100%;
+                      height: 100%;
+                      top: 0;
+                      left: 0;
+                      transform: translateY(var(--y));
+                      position: absolute;
+                      transition: transform .3s linear;
+                      background: var(--primary);
+                  }
+              }
+              span {
+                  display: block;
+                  font-weight: 500;
+                  font-size: 14px;
+                  opacity: 0;
+                  transition: opacity .26s linear;
+              }
+          }
+          &.active {
+              &:before {
+                  animation: before 1.1s ease;
+              }
+              &:after {
+                  animation: after 1.1s ease;
+              }
+              a {
+                  animation: bounce .9s linear .3s;
+                  &:before {
+                      animation: drop .4s linear .1s forwards;
+                  }
+                  &:after {
+                      animation: drop .5s linear .13s forwards;
+                  }
+                  div {
+                      &:before {
+                          --y: 0;
+                          transition-delay: .2s;
+                      }
+                  }
+                  span {
+                      opacity: 1;
+                      transition-delay: .28s;
+                  }
+              }
+          }
+          &.tags {
+            a {
+                div {
+                    -webkit-mask-box-image: url('https://aaroniker.me/feather-icons/tag.svg');
+                    mask: url('https://aaroniker.me/feather-icons/tag.svg');
+                }
+            }
+          }
+          &.user {
+            a {
+                div {
+                    -webkit-mask-box-image: url('https://aaroniker.me/feather-icons/user.svg');
+                    mask: url('https://aaroniker.me/feather-icons/user.svg');
+                }
+            }
+          }
+          &.folder {
+              a {
+                  div {
+                      -webkit-mask-box-image: url('https://aaroniker.me/feather-icons/folder.svg');
+                      mask: url('https://aaroniker.me/feather-icons/folder.svg');
+                  }
+              }
+          }
+          &.settings {
+              a {
+                  div {
+                      -webkit-mask-box-image: url('https://aaroniker.me/feather-icons/settings.svg');
+                      mask: url('https://aaroniker.me/feather-icons/settings.svg');
+                  }
+              }
+          }
+      }
+  }
+}
+
+@keyframes bounce {
+  40% {
+      transform: translateY(9px);
+  }
+  55% {
+      transform: translateY(-1px);
+  }
+  70% {
+      transform: translateY(4px);
+  }
+}
+
+@keyframes drop {
+  50% {
+      transform: translateY(10px) scaleY(1.2) scaleX(.5);
+  }
+  100% {
+      transform: translateY(20px) scaleY(0) scaleX(.5);
+  }
+}
+
+@keyframes before {
+  45%,
+  55% {
+      transform: translateX(-41px);
+  }
+}
+
+@keyframes after {
+  45%,
+  55% {
+      transform: translateX(41px);
+  }
+}
+
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: inherit;
+  &:before,
+  &:after {
+      box-sizing: inherit;
+  }
+}
+
+// Center & dribbble
+body {
+  font-family: 'Roboto', Arial;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #EEF4FF;
+  .dribbble {
+      position: fixed;
+      display: block;
+      right: 20px;
+      bottom: 20px;
+      img {
+          display: block;
+          height: 28px;
+      }
+  }
+}

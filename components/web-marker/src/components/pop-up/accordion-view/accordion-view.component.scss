@@ -1,0 +1,97 @@
+@import "../../../variables.scss";
+// https://codepen.io/raubaca/pen/PZzpVe?editors=1010
+
+input {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+// Layout
+.row {
+  display: flex;
+  .col {
+    flex: 1;
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+}
+/* Accordion styles */
+.tabs {
+  overflow: hidden;
+  box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+}
+.tab {
+  width: 100%;
+  color: var(--white-dark);
+  font-size: 11px;
+  font-family: var(--font-family);
+  overflow: hidden;
+  &-label {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    background: var(--secondary-dark);
+    font-weight: bold;
+    cursor: pointer;
+    /* Icon */
+    &:hover {
+      color: white;
+      .badge {
+        color: var(--primary-light);
+      }
+    }
+    &::before {
+      content: "\276F";
+      width: 10px;
+      height: 100%;
+      text-align: center;
+      transition: all 0.35s;
+    }
+  }
+  &-content {
+    max-height: 0;
+    background: var(--secondary-color);
+    transition: all 0.35s;
+    // padding-bottom: 5px;
+  }
+  &-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    font-size: 7.5px;
+    background: var(--secondary-color);
+    cursor: pointer;
+    &:hover {
+      background: var(--secondary-light);
+    }
+  }
+}
+
+.tab.hide {
+  display: none;
+}
+
+// :checked
+input:checked {
+  + .tab-label {
+    color: var(--primary-color);
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+  ~ .tab-content {
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  ~ .tab-content::-webkit-scrollbar {
+    display: none;
+  }
+  .badge {
+    color: var(--primary-light);
+  }
+}
+
+mark-element {
+  --margin: 0px 0px;
+}

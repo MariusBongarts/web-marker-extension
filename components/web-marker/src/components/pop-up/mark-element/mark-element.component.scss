@@ -1,0 +1,88 @@
+@import "../../../variables.scss";
+
+:host {
+  font-family: var(--font-family);
+  --margin: 5px 0px;
+}
+
+.mark {
+  //background: linear-gradient(to top right, var(--primary-dark) 0%, var(--primary-color) 100%);
+  background: var(--secondary-dark);
+  color: var(--white-dark);
+  padding: 10px;
+  padding-left: 5px;
+  margin: var(--margin);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mark:hover {
+  color: white;
+
+  blockquote {
+    border-left: solid 3px var(--primary-color);
+    color: white;
+  }
+
+  bronco-chip {
+    --background-color: var(--primary-color);
+    --color: white;
+  }
+
+}
+
+.header {
+  width: 100%;
+  font-size: 9px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 5px;
+}
+
+.main {
+  width: 100%;
+}
+
+.footer {
+  width: 100%;
+}
+
+
+
+blockquote {
+  border-left: solid 3px var(--primary-dark);
+  margin: 8px 2px;
+  padding-left: 10px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+bronco-chip {
+  --background-color: var(--primary-dark);
+  --color: var(--white-dark);
+  --font-size: 10px;
+  --font-weight: inherit;
+  --height: 17px;
+  --margin: 2px 1px;
+  --width: auto;
+}
+
+bronco-chip-list {
+  --bg-color: rgba(0, 0, 0, 0);
+  --box-shadow: none;
+  --color: var(--white-dark);
+  --font-size-chip: 10px;
+  --font-weight: inherit;
+  --height-chip: 17px;
+  --margin: 2px 1px;
+  --width: auto;
+  --padding-input: 0px;
+}
+
+.timeSince {
+  float: right;
+}
+
+.deleteBtn {
+  cursor: pointer;
+}

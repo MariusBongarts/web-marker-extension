@@ -1,0 +1,29 @@
+@import "../../../variables.scss";
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding-right: 5px;
+}
+
+bronco-chip {
+  flex: 1 auto;
+  margin: 2px;
+  --height: 20px;
+  --background-color: var(--secondary-dark);
+  --font-size: 12px;
+}
+
+.chipContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectedChipContainer {
+  padding-right: 8px;
+}
+
+.selectedChipContainer > bronco-chip {
+  margin-top: 0px;
+}

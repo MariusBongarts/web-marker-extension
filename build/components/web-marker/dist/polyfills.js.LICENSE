@@ -1,0 +1,224 @@
+/******/
+
+// webpackBootstrap
+
+// The module cache
+
+// The require function
+
+// Check if module is in cache
+
+// Create a new module (and put it into the cache)
+
+// Execute the module function
+
+// Return the exports of the module
+
+// Flag the module as loaded
+
+// expose the modules object (__webpack_modules__)
+
+// Load entry module and return exports
+
+// expose the module cache
+
+// define getter function for harmony exports
+
+// define __esModule on exports
+
+// create a fake namespace object
+
+// mode & 1: value is a module id, require it
+
+// mode & 2: merge all properties of value into the ns
+
+// mode & 4: return value when already ns object
+
+// mode & 8|1: behave like require
+
+// getDefaultExport function for compatibility with non-harmony modules
+
+// Object.prototype.hasOwnProperty.call
+
+// __webpack_public_path__
+
+/************************************************************************/
+
+/***/
+
+// This works in non-strict mode
+
+// This works if eval is allowed (see CSP)
+
+// This works if the window reference is available
+
+// g can still be undefined, but nothing to do about it...
+
+// We return undefined, instead of nothing here, so it's
+
+// easier to handle this case. if(!global) { ...}
+
+/* harmony import */
+
+/**
+@license @nocompile
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/* WEBPACK VAR INJECTION */
+
+/*
+
+ Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+ This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ Code distributed by Google as part of the polymer project is also
+ subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+ Copyright (C) 2015 by WebReflection
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+/*
+
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+
+ Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ Code distributed by Google as part of the polymer project is also
+ subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+//# sourceMappingURL=webcomponents-bundle.js.map
+
+// DOM APIs, for completeness
+
+// Does not start the time, just sets up the members needed.
+
+// setimmediate attaches itself to the global object
+
+// On some exotic environments, it's not clear which object `setimmediate` was
+
+// able to install onto.  Search each possibility in the same order as the
+
+// `setimmediate` library.
+
+// Spec says greater than zero
+
+// Don't get fooled by e.g. browserify environments.
+
+// The test against `importScripts` prevents this implementation from being installed inside a web worker,
+
+// where `global.postMessage` means something completely different and can't be used for this purpose.
+
+// For web workers, where supported
+
+// For IE 6–8
+
+// Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+
+// into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+
+// For non-IE10 modern browsers
+
+// Callback can either be a function or a string
+
+// Copy function arguments
+
+// Store and register the task
+
+// From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+
+// So if we're currently running a task, we'll need to delay this invocation.
+
+// Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+
+// "too much recursion" error.
+
+// shim for using process in browser
+
+// cached from whatever global is present so that test runners that stub it
+
+// don't break things.  But we need to wrap it in a try catch in case it is
+
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+
+// function because try/catches deoptimize in certain engines.
+
+//normal enviroments in sane situations
+
+// if setTimeout wasn't available but was latter defined
+
+// when when somebody has screwed with setTimeout but no I.E. maddness
+
+// When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+
+// same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+
+// if clearTimeout wasn't available but was latter defined
+
+// When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+
+// same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+
+// Some versions of I.E. have different rules for clearTimeout vs setTimeout
+
+// v8 likes predictible objects
+
+// empty string to avoid regexp issues

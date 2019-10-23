@@ -1,0 +1,64 @@
+
+:host {
+  z-index: 9999 !important;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  height: 0px;
+  background: none;
+}
+
+
+.markContainer my-menu {
+  z-index: 9999 !important;
+  overflow: hidden;
+  border-radius: 5px;
+  padding: 5px;
+  min-width: 50px;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  animation: slideOut 0.4s forwards;
+  visibility: hidden;
+  transition: opacity 400ms, visibility 400ms;
+}
+
+.markContainer my-menu.slideIn {
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  animation: slideIn 0.4s forwards !important;
+}
+
+.markContainer my-menu.slideOut {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  animation: slideOut 0.4s forwards !important;
+}
+
+
+@keyframes slideIn {
+  100% {
+    -webkit-transform: translate(0%, -100%);
+  }
+  0% { -webkit-transform: translate(0%, -300%); }
+}
+
+@keyframes slideOut {
+  100% { -webkit-transform: translate(0%, -300%); }
+  0% { -webkit-transform: translate(0%, -100%); }
+}
+
+.chip-container {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+bronco-chip-list {
+  min-width: 300px;
+  max-width: 600px;
+  --height: 28px;
+  --font-size: 1.1em;
+}

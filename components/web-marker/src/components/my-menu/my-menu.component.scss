@@ -1,0 +1,62 @@
+@import '../../variables.scss';
+:host {
+  z-index: 9999 !important;
+  color: white;
+  height: 20px;
+  margin: -10px auto 0px auto;
+  margin-bottom: 100px;
+  background: #3d3d3d;
+  width: 150px;
+}
+
+.menuContainer {
+  z-index: 9999 !important;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon {
+  fill: white;
+  color: white;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+.btn.user {
+  border-left: 1px solid rgba(187, 187, 187, 0.459);
+}
+
+.icon.user-icon {
+  transform: scale(1.1);
+}
+
+.btn:hover .icon, .btn:focus .icon {
+  transform: scale(1.05);
+}
+
+.btn:hover .icon.user-icon {
+  transform: scale(1.15);
+}
+
+.btn.active .markIcon, .btn:hover .markIcon {
+  fill: var(--highlight-color);
+}
+
+.btn.active .tagIcon, .btn:hover .tagIcon, .icon.user-icon:hover {
+  color: var(--primary-color);
+}
+
+
+.btn {
+  z-index: 9999;
+  padding: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+  background: none;
+  cursor: pointer;
+}
+
+button:focus {outline:0;}

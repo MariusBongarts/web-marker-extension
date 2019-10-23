@@ -1,0 +1,26 @@
+{
+  "name": "WebHighlighter",
+  "version": "1.0",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "./node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+        "./components/web-marker/dist/main.js",
+        "./dist/content.js"]
+    }
+  ],
+  "icons": {
+    "16": "./assets/markerIcon.png",
+    "128": "./assets/markerIcon.png"
+  },
+  "browser_action": {
+    "default_title": "WebHighlighter"
+  },
+  "background": {
+    "scripts": ["./dist/background.js"],
+    "persistent": false
+  },
+  "permissions": ["tabs", "contextMenus", "storage"]
+}

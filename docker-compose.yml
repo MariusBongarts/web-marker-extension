@@ -1,0 +1,76 @@
+version: '3'
+services:
+
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: "mongodb"
+  #   volumes:
+  #     - ./data:/data
+  #   ports:
+  #       - 27017:27017
+  #   command: mongod
+
+  server:
+    build:
+      context: ./NestJsServer
+    expose:
+      - 3000
+    environment:
+      API_HOST: "http://localhost:3000"
+      APP_SERVER_PORT: 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./NestJsServer/src:/srv/app/server/src
+    command: npm start
+    # depends_on:
+    #   - mongo
+
+  socket:
+    build:
+      context: ./NestJsServer
+    expose:
+      - 3001
+    environment:
+      API_HOST: "http://localhost:3001"
+      APP_SERVER_PORT: 3001
+    ports:
+      - 3001:3001
+    volumes:
+      - ./NestJsServer/src:/srv/app/server/src
+    command: npm start
+    # depends_on:
+    #   - mongo
+
+  extension:
+    build:
+      context: ./components/web-marker
+    environment:
+      FRONTEND_PORT: 8080
+      API_HOST: "http://localhost:8080"
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - ./components/web-marker/src:/srv/app/client/src
+    links:
+      - server
+    command: npm start
+
+  # client:
+  #   build:
+  #     context: ./WebMarkerClient
+  #   environment:
+  #     FRONTEND_PORT: 8081
+  #     API_HOST: "http://localhost:8081"
+  #   expose:
+  #     - 8081
+  #   ports:
+  #     - 8081:8081
+  #   volumes:
+  #     - ./WebMarkerClient/src:/srv/app/extension/src
+  #   links:
+  #     - server
+  #   command: npm start
+

@@ -1,0 +1,71 @@
+@import "../../../variables.scss";
+
+:host {
+  z-index: 99999999 !important;
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  min-width: 360px;
+  min-height: 150px;
+  // background: linear-gradient(to top left, #53e3a6 0%, #00b077 100%);
+  // background: linear-gradient(to bottom right, #00b077 0%, #53e3a6 100%);
+
+  color: white;
+}
+
+.container.form-success h1 {
+  transform: translateY(85px);
+}
+.container {
+  background: linear-gradient(
+    to top right,
+    var(--primary-color) 0%,
+    var(--primary-light) 100%
+  );
+  background: var(--secondary-color);
+  border-radius: 10px;
+  box-shadow: 2px 2px 3px 3px rgba(128, 128, 128, 0.363);
+  margin: 0 auto;
+  padding: 20px 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+.container h1 {
+  font-size: 40px;
+  transition-duration: 1s;
+  transition-timing-function: ease-in- put;
+  font-weight: 200;
+}
+
+.logoutBtn {
+  appearance: none;
+  outline: 0;
+  background-color: var(--secondary-light);
+  border: 0;
+  padding: 2px 4px;
+  border-radius: 10px;
+  color: white;
+  width: 100px;
+  cursor: pointer;
+  font-size: 14px;
+  transition-duration: 0.25s;
+  margin: 5px;
+}
+
+.goToPageBtn {
+  background: var(--primary-color);
+  z-index: 9999;
+  padding: 7px 30px;
+  //margin: 5px 0px;
+  border: none;
+  border-radius: 20px;
+  color: var(--white-dark);
+  font-weight: bold;
+  box-shadow: 1px 1px 1px 1px var(--primary-color-transparent);
+  outline: none;
+  text-decoration: none;
+  color: white;
+  font-weight: normal;
+  cursor: pointer;
+}

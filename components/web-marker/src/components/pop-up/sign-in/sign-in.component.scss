@@ -1,0 +1,81 @@
+@import '../../../variables.scss';
+
+:host {
+  min-width: 360px;
+}
+
+h1 {
+  font-weight: lighter;
+  padding-left: 20px;
+  padding-right: 10px;
+  width: 100%;
+  color: white;
+}
+
+label {
+  margin-top: 1rem;
+  margin-left: 35px;
+  display: block;
+  color: white;
+  margin-bottom: 0.5rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+input {
+  display: block;
+  border: solid rgba(0, 0, 0, 0.125) 1px;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+button {
+  margin-top: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  border: solid rgba(0, 0, 0, 0.125) 1px;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: var(--primary-dark);
+  color: white;
+  position: relative;
+  left: 2%;
+  bottom: 2%;
+}
+
+.invalid-feedback {
+  display: none;
+}
+
+.was-validated {
+  input:invalid {
+    border: solid var(--error-color) 1px;
+  }
+
+  input:invalid ~ .invalid-feedback {
+    color: var(--error-color);
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    display: block;
+  }
+
+  input:valid ~ .invalid-feedback {
+    display: none;
+  }
+}
+
+#container {
+  background: var(--secondary-color);
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.input {
+  padding-left: 10px;
+  padding-right: 10px;
+}
