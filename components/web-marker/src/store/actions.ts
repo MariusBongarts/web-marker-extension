@@ -1,3 +1,5 @@
+import { BookmarkService } from './../services/bookmark.service';
+import { Bookmark } from './../models/bookmark';
 import { MarkerService } from './../services/marker.service';
 import { JwtPayload } from './../models/jwtPayload';
 import { Mark } from './../models/mark';
@@ -37,19 +39,45 @@ export function updateMark(mark: Mark) {
   store.dispatch(reduxAction);
 }
 
+export function initBookmarks(bookmarks: Bookmark[]) {
+  const reduxAction: ReduxAction = {
+    type: 'INIT_BOOKMARKS',
+    bookmarks: bookmarks
+  }
+  store.dispatch(reduxAction);
+}
+
+export function addBookmark(bookmark: Bookmark) {
+  const reduxAction: ReduxAction = {
+    type: 'ADD_BOOKMARK',
+    bookmark: bookmark
+  }
+  store.dispatch(reduxAction);
+}
+
+export function removeBookmark(bookmarkId: string) {
+  const reduxAction: ReduxAction = {
+    type: 'REMOVE_BOOKMARK',
+    bookmarkId: bookmarkId
+  }
+  store.dispatch(reduxAction);
+}
+
+export function updateBoomkark(bookmark: Bookmark) {
+  const reduxAction: ReduxAction = {
+    type: 'UPDATE_BOOKMARK',
+    bookmark: bookmark
+  }
+  store.dispatch(reduxAction);
+}
+
 export async function login(jwtPayload: JwtPayload) {
   const reduxAction: ReduxAction = {
     type: 'LOGIN',
     jwtPayload: jwtPayload
   }
   store.dispatch(reduxAction);
-  const markService = new MarkerService();
-  try {
-    const marks = await markService.getMarks();
-    initMarks(marks);
-  } catch (error) {
-    logout()
-  }
+  await initData();
 }
 
 export function logout() {
@@ -58,4 +86,20 @@ export function logout() {
   }
   store.dispatch(reduxAction);
   initMarks([]);
+}
+
+async function initData() {
+  const markService = new MarkerService();
+  const bookmarkService = new BookmarkService();
+  try {
+
+    // Init marks
+    const marks = await markService.getMarks();
+    const bookmarks = await bookmarkService.getBookmarks();
+    initMarks(marks);
+    initBookmarks(bookmarks);
+
+  } catch (error) {
+    logout()
+  }
 }

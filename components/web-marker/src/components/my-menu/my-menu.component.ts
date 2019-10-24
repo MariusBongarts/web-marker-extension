@@ -86,16 +86,7 @@ export class MyMarkElement extends LitElement {
       endContainerText: range.endContainer.textContent,
       startOffset: range.startOffset,
       endOffset: range.endOffset,
-      scrollY: window.scrollY,
-      bookmark: {
-        id: uuidv4(),
-        createdAt: new Date().getTime(),
-        url: location.href,
-        origin: location.origin,
-        isStarred: false,
-        tags: [],
-        title: document.title
-      }
+      scrollY: window.scrollY
     };
     return mark;
   }

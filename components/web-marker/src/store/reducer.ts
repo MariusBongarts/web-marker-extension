@@ -1,3 +1,4 @@
+import { Bookmark } from './../models/bookmark';
 import { JwtService } from './../services/jwt.service';
 import { JwtPayload } from './../models/jwtPayload';
 import { Mark } from './../models/mark';
@@ -7,20 +8,35 @@ const jwtService = new JwtService();
 export interface State {
   loggedIn: boolean,
   marks: Mark[],
+  bookmarks: Bookmark[],
   lastAction?: ReduxAction
   jwtPayload?: JwtPayload | undefined;
 }
 
 const INITIAL_STATE: State = {
   loggedIn: false,
-  marks: []
+  marks: [],
+  bookmarks: []
 };
 
-export type ReduxActionType = 'ADD_MARK' | 'REMOVE_MARK' | 'CHANGE_TEST' | 'INIT_MARKS' | 'UPDATE_MARK' | 'LOGIN' | 'LOGOUT';
+export type ReduxActionType =
+  'ADD_MARK' |
+  'REMOVE_MARK' |
+  'INIT_MARKS' |
+  'UPDATE_MARK' |
+  'ADD_BOOKMARK' |
+  'REMOVE_BOOKMARK' |
+  'INIT_BOOKMARKS' |
+  'UPDATE_BOOKMARK' |
+  'LOGIN' |
+  'LOGOUT';
 
 export interface ReduxAction {
   type: ReduxActionType,
   marks?: Mark[],
+  bookmarks?: Bookmark[],
+  bookmark?: Bookmark,
+  bookmarkId?: string,
   mark?: Mark,
   markId?: string,
   jwtPayload?: JwtPayload | undefined;
@@ -51,6 +67,30 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       return {
         ...state,
         marks: state.marks.map(mark => mark.id === action.mark.id ? action.mark : mark),
+        lastAction: action.type
+      };
+    case 'INIT_BOOKMARKS':
+      return {
+        ...state,
+        bookmarks: action.bookmarks,
+        lastAction: action.type
+      };
+    case 'ADD_BOOKMARK':
+      return {
+        ...state,
+        bookmarks: [...state.bookmarks, action.bookmark],
+        lastAction: action.type
+      };
+    case 'REMOVE_BOOKMARK':
+      return {
+        ...state,
+        bookmarks: state.bookmarks.filter(e => e.id !== action.bookmarkId),
+        lastAction: action.type
+      };
+    case 'UPDATE_BOOKMARK':
+      return {
+        ...state,
+        bookmarks: state.bookmarks.map(bookmark => bookmark.id === action.bookmark.id ? action.bookmark : bookmark),
         lastAction: action.type
       };
     case 'LOGIN':

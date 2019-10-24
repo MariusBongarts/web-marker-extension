@@ -15,7 +15,6 @@ export interface Mark extends Entity{
   completeText: string,
   title: string,
   scrollY: number,
-  bookmark: Bookmark,
   _directory?: string,
   _bookmark?: string
 }
