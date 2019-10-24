@@ -13,6 +13,8 @@ const componentCSS = require('./bookmark-element.component.scss');
 class BookmarkElementComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
   bookmarkService = new BookmarkService();
+  stopUpdate = false;
+  updateStarted = false;
 
   @property()
   tags = [];
@@ -24,21 +26,35 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   bookmark!: Bookmark;
 
   stateChanged() {
-    this.bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
-    this.bookmark ? this.tags = this.bookmark.tags : '';
+    if (!this.bookmark) {
+      this.bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+      this.bookmark ? this.tags = this.bookmark.tags : '';
+    }
+  }
+
+  async disconnectedCallback() {
+    await this.updateBookmark();
   }
 
 
-  tagsChanged(e: CustomEvent) {
-    if (this.tags.length != e.detail.chips.length) {
-      this.tags = e.detail.chips;
-      console.log(e.detail)
+  async tagsChanged(e: CustomEvent) {
+    this.updateStarted ? this.stopUpdate = true : '';
+    if (this.bookmark.tags.length != e.detail.chips.length) {
+      this.bookmark = { ...this.bookmark, tags: e.detail.chips };
+      console.log(e.detail);
       this.dispatchEvent(
         new CustomEvent('tagsChanged', {
           bubbles: true,
           detail: e.detail
         })
       );
+
+      // Prevents to update too much. Checks if update got interrupted by user input
+      setTimeout(async () => {
+        this.updateStarted = true;
+        if (!this.stopUpdate) await this.updateBookmark();
+        this.stopUpdate = false;
+      }, 1500);
     }
   }
 
@@ -56,7 +72,7 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
    */
   async starBookmark() {
     if (this.bookmark) {
-      this.bookmark = {...this.bookmark, isStarred: !this.bookmark.isStarred};
+      this.bookmark = { ...this.bookmark, isStarred: !this.bookmark.isStarred };
       await this.bookmarkService.updateBookmark(this.bookmark);
     } else {
       const newBookmark = this.bookmarkService.createNewBookmark(true);
@@ -83,9 +99,9 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
       ${this.bookmark ? html`
       <div class="footer">
         <bronco-chip-list
-        @tagsChanged=${(e: CustomEvent) => this.tagsChanged(e)}
+        @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
         .hideOnOutsideClick=${false}
-        .chips=${this.tags}></bronco-chip-list>
+        .chips=${this.bookmark.tags}></bronco-chip-list>
       </div>
       ` : ''}
     </div>
