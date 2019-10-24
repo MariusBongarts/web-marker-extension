@@ -3,7 +3,8 @@ import { JwtService } from './jwt.service';
 import { Mark } from './../models/mark';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { addMark, removeMark, updateMark, addBookmark, removeBookmark } from '../store/actions';
+import { updateBookmark, addBookmark, removeBookmark, initBookmarks } from '../store/actions';
+import { v4 as uuid } from 'uuid';
 
 
 export class BookmarkService {
@@ -19,6 +20,7 @@ export class BookmarkService {
   async getBookmarks(): Promise<Bookmark[]> {
     const response = await this.httpClient.get(this.BASE_URL);
     const bookmarks = (await response.json() as Bookmark[]);
+    initBookmarks(bookmarks);
     return bookmarks;
   }
 
@@ -28,7 +30,7 @@ export class BookmarkService {
     return bookmark;
   }
 
-  async createBookmark(bookmark: Bookmark): Promise<Bookmark | undefined> {
+  async createBookmark(bookmark?: Bookmark): Promise<Bookmark | undefined> {
     // Update redux
     addBookmark(bookmark);
     const response = await this.httpClient.post(this.BASE_URL, bookmark);
@@ -44,14 +46,30 @@ export class BookmarkService {
 
   async updateBookmark(bookmark: Bookmark): Promise<void> {
     // Update redux
-    this.updateBookmark(bookmark);
+    updateBookmark(bookmark);
     await this.httpClient.put(this.BASE_URL, bookmark);
+
+    // Update bookmarks for store
+    await this.getBookmarks();
   }
 
   async getBookmarkById(id: string): Promise<Bookmark> {
     const response = await this.httpClient.get(this.BASE_URL + '/' + id);
     const bookmark = (await response.json() as Bookmark);
     return bookmark;
+  }
+
+  createNewBookmark(isStarred: boolean) {
+    return {
+      id: uuid(),
+      createdAt: new Date().getTime(),
+      url: location.href,
+      isStarred: isStarred,
+      tags: [],
+      title: document.title,
+      origin: location.origin
+    } as Bookmark;
+
   }
 
 }

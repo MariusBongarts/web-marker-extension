@@ -1,14 +1,16 @@
+import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
 import { Mark } from './../models/mark';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { addMark, removeMark, updateMark } from '../store/actions';
+import { addMark, removeMark, updateMark, initMarks } from '../store/actions';
 
 
 export class MarkerService {
   httpClient!: HttpClient;
   socket;
   jwtService = new JwtService();
+  bookmarkService = new BookmarkService();
 
   constructor() {
     this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
@@ -17,6 +19,7 @@ export class MarkerService {
   async getMarks(): Promise<Mark[]> {
     const response = await this.httpClient.get('/marks');
     const marks: Mark[] = (await response.json() as Mark[]);
+    initMarks(marks);
     return marks;
   }
 
@@ -31,12 +34,19 @@ export class MarkerService {
     //await this.emitSocket('createMark', mark);
     const response = await this.httpClient.post('/marks', mark);
     const createdMark: Mark = (await response.json() as Mark);
+
+    // Reload bookmarks to update for changes (If first mark on page is made, bookmark will be created)
+    await this.bookmarkService.getBookmarks();
+
     return createdMark;
   }
 
   async deleteMark(markId: string): Promise<void> {
     removeMark(markId)
     await this.httpClient.delete('/marks/' + markId);
+
+  // Reload bookmarks to update for changes (If last mark gets deleted, bookmark will be deleted if not starred)
+    await this.bookmarkService.getBookmarks();
   }
 
   async updateMark(mark: Mark): Promise<void> {

@@ -97,7 +97,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
   }
 
   async disconnectedCallback() {
-    this.mark.tags = this.chips;
+    this.mark && this.mark.tags ? this.mark.tags = this.chips : '';
     this.submit();
   }
 

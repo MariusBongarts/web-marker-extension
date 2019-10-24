@@ -63,7 +63,7 @@ export function removeBookmark(bookmarkId: string) {
   store.dispatch(reduxAction);
 }
 
-export function updateBoomkark(bookmark: Bookmark) {
+export function updateBookmark(bookmark: Bookmark) {
   const reduxAction: ReduxAction = {
     type: 'UPDATE_BOOKMARK',
     bookmark: bookmark
@@ -94,10 +94,8 @@ async function initData() {
   try {
 
     // Init marks
-    const marks = await markService.getMarks();
-    const bookmarks = await bookmarkService.getBookmarks();
-    initMarks(marks);
-    initBookmarks(bookmarks);
+  await markService.getMarks();
+  await bookmarkService.getBookmarks();
 
   } catch (error) {
     logout()
