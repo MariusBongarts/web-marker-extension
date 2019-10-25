@@ -26,9 +26,17 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   bookmark!: Bookmark;
 
   stateChanged() {
-    if (!this.bookmark) {
-      this.bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+    const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+
+    // Only set tags when bookmark is undefined
+    if (!this.bookmark && bookmark) {
+      this.bookmark = bookmark
       this.bookmark ? this.tags = this.bookmark.tags : '';
+    }
+
+    // If bookmark got deleted, it should set bookmark to undefined
+    if (!bookmark) {
+      this.bookmark = undefined;
     }
   }
 
@@ -41,7 +49,6 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     this.updateStarted ? this.stopUpdate = true : '';
     if (this.bookmark.tags.length != e.detail.chips.length) {
       this.bookmark = { ...this.bookmark, tags: e.detail.chips };
-      console.log(e.detail);
       this.dispatchEvent(
         new CustomEvent('tagsChanged', {
           bubbles: true,
