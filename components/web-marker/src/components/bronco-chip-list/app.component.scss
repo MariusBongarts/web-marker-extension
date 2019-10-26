@@ -10,6 +10,7 @@
   --height-chip: 28px;
   --chip-width: 100%;
   --padding-input: 5px;
+  --border-radius: 10px;
 }
 
 bronco-chip {
@@ -27,7 +28,7 @@ bronco-chip {
 
 .chip-list {
   background-color: var(--bg-color);
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   border-width: 0 0 1px;
   padding: 5px;
   display: flex;

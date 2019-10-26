@@ -7,19 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { addMark, removeMark, updateMark } from '../store/actions';
+import { addMark, removeMark, updateMark, initMarks } from '../store/actions';
 export class MarkerService {
     constructor() {
         this.jwtService = new JwtService();
+        this.bookmarkService = new BookmarkService();
         this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
     }
     getMarks() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.httpClient.get('/marks');
             const marks = yield response.json();
+            initMarks(marks);
             return marks;
         });
     }
@@ -36,6 +39,8 @@ export class MarkerService {
             //await this.emitSocket('createMark', mark);
             const response = yield this.httpClient.post('/marks', mark);
             const createdMark = yield response.json();
+            // Reload bookmarks to update for changes (If first mark on page is made, bookmark will be created)
+            yield this.bookmarkService.getBookmarks();
             return createdMark;
         });
     }
@@ -43,6 +48,8 @@ export class MarkerService {
         return __awaiter(this, void 0, void 0, function* () {
             removeMark(markId);
             yield this.httpClient.delete('/marks/' + markId);
+            // Reload bookmarks to update for changes (If last mark gets deleted, bookmark will be deleted if not starred)
+            yield this.bookmarkService.getBookmarks();
         });
     }
     updateMark(mark) {

@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { BookmarkService } from './../services/bookmark.service';
 import { MarkerService } from './../services/marker.service';
 import { store } from './store';
 export function initMarks(marks) {
@@ -37,6 +38,34 @@ export function updateMark(mark) {
     };
     store.dispatch(reduxAction);
 }
+export function initBookmarks(bookmarks) {
+    const reduxAction = {
+        type: 'INIT_BOOKMARKS',
+        bookmarks: bookmarks
+    };
+    store.dispatch(reduxAction);
+}
+export function addBookmark(bookmark) {
+    const reduxAction = {
+        type: 'ADD_BOOKMARK',
+        bookmark: bookmark
+    };
+    store.dispatch(reduxAction);
+}
+export function removeBookmark(bookmarkId) {
+    const reduxAction = {
+        type: 'REMOVE_BOOKMARK',
+        bookmarkId: bookmarkId
+    };
+    store.dispatch(reduxAction);
+}
+export function updateBookmark(bookmark) {
+    const reduxAction = {
+        type: 'UPDATE_BOOKMARK',
+        bookmark: bookmark
+    };
+    store.dispatch(reduxAction);
+}
 export function login(jwtPayload) {
     return __awaiter(this, void 0, void 0, function* () {
         const reduxAction = {
@@ -44,14 +73,7 @@ export function login(jwtPayload) {
             jwtPayload: jwtPayload
         };
         store.dispatch(reduxAction);
-        const markService = new MarkerService();
-        try {
-            const marks = yield markService.getMarks();
-            initMarks(marks);
-        }
-        catch (error) {
-            logout();
-        }
+        yield initData();
     });
 }
 export function logout() {
@@ -60,5 +82,19 @@ export function logout() {
     };
     store.dispatch(reduxAction);
     initMarks([]);
+}
+function initData() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const markService = new MarkerService();
+        const bookmarkService = new BookmarkService();
+        try {
+            // Init marks
+            yield markService.getMarks();
+            yield bookmarkService.getBookmarks();
+        }
+        catch (error) {
+            logout();
+        }
+    });
 }
 //# sourceMappingURL=actions.js.map

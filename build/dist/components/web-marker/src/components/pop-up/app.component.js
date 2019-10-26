@@ -35,7 +35,6 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
     stateChanged() {
         if (!store.getState().loggedIn)
             this.loggedUser = undefined;
-        console.log("Hallo");
     }
     firstUpdated() {
         return __awaiter(this, void 0, void 0, function* () {

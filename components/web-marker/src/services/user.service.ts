@@ -29,6 +29,7 @@ export class UserService {
   }
 
   async logout() {
+    console.log("Logged out");
     this.jwtService.setJwt('');
     logout();
   }
