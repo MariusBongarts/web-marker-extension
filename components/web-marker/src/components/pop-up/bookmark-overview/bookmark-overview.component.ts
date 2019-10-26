@@ -39,7 +39,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   async firstUpdated() {
     this.getDistinctOrigins();
     this.marks = store.getState().marks;
-    this.bookmarks = store.getState().bookmarks.filter(bookmark => bookmark.url.includes(this.originFilter));
+    this.bookmarks = store.getState().bookmarks;
     this.loaded = true;
   }
 
@@ -71,7 +71,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
             <input type="radio" id="closeBtn" name="radioBtn">
           </div>
         ` : ''}
-      ${this.bookmarks.map((bookmark: Bookmark) => html`
+      ${this.bookmarks.filter(bookmark=> bookmark.url.includes(this.originFilter)).map((bookmark: Bookmark) => html`
       <div class="tab ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
 
         <input type="radio" id="${bookmark._id}" name="radioBtn">
