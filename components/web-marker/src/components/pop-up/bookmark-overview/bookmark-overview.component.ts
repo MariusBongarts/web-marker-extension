@@ -37,20 +37,16 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
 
   async firstUpdated() {
-    this.getDistinctOrigins();
-    this.marks = store.getState().marks;
-    this.bookmarks = store.getState().bookmarks;
-    this.loaded = true;
   }
 
   stateChanged() {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
-    //this.getDistinctOrigins();
+    this.getDistinctOrigins();
   }
 
   getDistinctOrigins() {
-    this.origins = [...new Set(this.marks.map(mark => mark.origin))];
+    this.origins = [...new Set(this.bookmarks.map(bookmark => bookmark.origin))];
     this.origins = this.origins.map(origin => urlToOrigin(origin));
     this.origins.sort();
     this.origins = [...new Set(this.origins.map(origin => origin))];

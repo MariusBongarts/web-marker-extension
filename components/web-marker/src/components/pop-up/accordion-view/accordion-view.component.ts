@@ -46,11 +46,11 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   stateChanged() {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
-    //this.getDistinctOrigins();
+    this.getDistinctOrigins();
   }
 
   getDistinctOrigins() {
-    this.origins = [...new Set(this.marks.map(mark => mark.origin))];
+    this.origins = [...new Set(this.bookmarks.map(bookmark => bookmark.origin))];
     this.origins = this.origins.map(origin => urlToOrigin(origin));
     this.origins.sort();
     this.origins = [...new Set(this.origins.map(origin => origin))];
@@ -79,12 +79,18 @@ export class TreeViewComponent extends connect(store)(LitElement) {
         <label class="tab-label" for="${this.selectedOrigin && this.selectedOrigin === origin ? 'closeBtn' : origin}"
         @click=${(e) => this.toggleOrigin(origin)}
         >
-        <span>${origin.substring(0, 30)}</span>
-        <span class="badge">${this.marks.filter(mark => mark.origin.includes(origin)).length}</span>
+        <span style="width: 100%; margin: 0px 10px;">${origin.substring(0, 30)}</span>
+
+        <!-- Show either bookmark icon if there are no marks or number if marks for bookmark -->
+        <span class="badge">
+        ${this.marks.filter(mark => mark.origin.includes(origin)).length ?
+        this.marks.filter(mark => mark.origin.includes(origin)).length
+        :
+        html` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`
+      }</span>
       </label>
       <div class="tab-content">
         <bookmark-overview .originFilter=${this.selectedOrigin}></bookmark-overview>
-
       </div>
           `)}
       </div>
