@@ -72,6 +72,16 @@ export class BroncoChipList extends connect(store)(LitElement) {
   @property()
   markedToSubmit = false;
 
+
+
+  /**
+   * Current value for input for auto-complete
+   *
+   * @memberof BroncoChipList
+   */
+  @property()
+  inputValue = ''
+
   firstUpdated() {
     this.mark ? this.chips = this.mark.tags : '';
     document.addEventListener('click', () => this.markedToDelete = false);
@@ -105,7 +115,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
     this.dispatchEvent(
       new CustomEvent('tagsChanged', {
         bubbles: true,
-        detail: { chips: this.chips, deletedChip: deletedChip ? deletedChip : undefined }
+        detail: { chips: [...new Set(this.chips)], deletedChip: deletedChip ? deletedChip : undefined }
       })
     );
 
@@ -124,6 +134,8 @@ export class BroncoChipList extends connect(store)(LitElement) {
    */
   async submitChip(e: KeyboardEvent) {
     const target = e.target as HTMLInputElement;
+
+    this.inputValue = target.value;
 
     if (target.value) {
       this.markedToDelete = false;
@@ -157,7 +169,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
     this.dispatchEvent(
       new CustomEvent('submitTriggered', {
         bubbles: true,
-        detail: this.chips
+        detail: [...new Set(this.chips)]
       }));
   }
 
@@ -182,8 +194,8 @@ export class BroncoChipList extends connect(store)(LitElement) {
    */
   async deleteChip(target: HTMLInputElement) {
     if (this.markedToDelete && !target.value && this.chips.length) {
-      console.log(this.chips[this.chips.length-1]);
-      await this.filterChips(this.chips[this.chips.length-1]);
+      console.log(this.chips[this.chips.length - 1]);
+      await this.filterChips(this.chips[this.chips.length - 1]);
       this.markedToDelete = false;
     } else {
       this.markedToDelete = true;
@@ -196,20 +208,31 @@ export class BroncoChipList extends connect(store)(LitElement) {
     await this.emit(chip);
   }
 
+  autoCompleteEvent(value: string) {
+    this.inputElement.value = value;
+
+  }
+
   render() {
     return html`
-<div class="chip-list ${this.markedToSubmit ? 'marked-to-submit' : ''}">
+<div class="chip-list">
 ${this.chips.map((chip, index) => html`
 <bronco-chip .deleteMode="${this.markedToDelete && index === this.chips.length - 1}"
 @deleted=${async () => await this.filterChips(chip)}
 
 >${chip}</bronco-chip>
 `)}
-
     <input
-    placeholder=${this.markedToSubmit ? 'Save' : '+'}
+    placeholder=${'+'}
     type="text" class="form-control ${this.chips.length ? 'not-empty' : ''}" name="tag"  id="tag"  @keyup=${async (e: any) => await this.submitChip(e)}>
-</div>
+  </div>
+  ${this.inputValue ? html`
+  <auto-complete
+  .items=${["Test", "Neu", "Test2"].filter(value => !this.chips.includes(value))}
+  .filter=${this.inputValue}
+  @selected=${(e: CustomEvent) => this.autoCompleteEvent(e.detail)}
+  ></auto-complete>
+  ` : ''}
 `;
   }
 

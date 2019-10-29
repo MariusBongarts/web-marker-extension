@@ -1,0 +1,27 @@
+@import "../../../variables.scss";
+
+:host {
+  width: 100%;
+  left: 0%;
+}
+
+.auto-complete-items {
+  padding: 0px 5px;
+}
+
+bronco-chip {
+  flex: 1 auto;
+  padding: 0;
+  margin: 0;
+  --background-color: var(--secondary-light);
+  --color: var(--white-dark);
+  --font-size: var(--font-size-chip);
+  // --font-weight: inherit;
+  --height: var(--height-chip);
+  --margin: 2px 1px;
+  --width: var(--chip-width);
+}
+
+bronco-chip.active {
+  --background-color: var(--bg-color-chip);
+}

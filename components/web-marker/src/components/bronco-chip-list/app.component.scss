@@ -76,3 +76,11 @@ input:focus input::placeholder {
   color: #e0383800;
 }
 
+.auto-complete {
+  margin: auto;
+
+  auto-complete {
+    position: relative;
+    top: 100%;
+  }
+}
