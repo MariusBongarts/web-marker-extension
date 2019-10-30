@@ -28,6 +28,9 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   originFilter = '';
 
   @property()
+  searchFilter = '';
+
+  @property()
   loaded = false;
 
   @property()
@@ -37,6 +40,8 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
 
   async firstUpdated() {
+
+
   }
 
   stateChanged() {
@@ -57,6 +62,14 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   }
 
 
+  filterBookmarks() {
+    let filteredBookmarks = this.bookmarks;
+    filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.url.includes(this.originFilter));
+    filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title.includes(this.searchFilter));
+    return filteredBookmarks;
+  }
+
+
   render() {
     return html`
     ${this.marks && this.bookmarks ? html`
@@ -67,7 +80,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
             <input type="radio" id="closeBtn" name="radioBtn">
           </div>
         ` : ''}
-      ${this.bookmarks.filter(bookmark=> bookmark.url.includes(this.originFilter)).map((bookmark: Bookmark) => html`
+      ${this.filterBookmarks().map(bookmark => html`
       <div class="tab
       ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
 
@@ -89,13 +102,15 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
       }</span>
       </label>
 
+
       <div class="tab-content">
 
+
       ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
-        <bronco-chip-list
+      <bronco-chip-list
         @tagsChanged=${async (e: CustomEvent) => ''}
         .hideOnOutsideClick=${false}
-        .chips=${this.selectedBookmark.tags}></bronco-chip-list>
+        .chips=${bookmark.tags}></bronco-chip-list>
         ` : ''}
 
         ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`

@@ -27,7 +27,7 @@ export class HeaderToggleComponent extends LitElement {
     )
   }
 
-  emitInput(e: KeyboardEvent) {
+  emitInput() {
     const value = this.searchElement.value.toLowerCase();
     this.dispatchEvent(
       new CustomEvent('inputChange', {
@@ -67,10 +67,10 @@ export class HeaderToggleComponent extends LitElement {
       class="searchInput"
       type="search"
       autofocus
-      @blur=${() => this.searchActive = false}
-      @search=${(e: KeyboardEvent) => this.emitInput(e)}
-      @keydown=${(e: KeyboardEvent) => this.emitInput(e)}
-      @keyup=${(e: KeyboardEvent) => this.emitInput(e)}
+      @blur=${() => this.searchElement.value ? '' : this.searchActive = false}
+      @search=${(e: KeyboardEvent) => this.emitInput()}
+      @keydown=${(e: KeyboardEvent) => this.emitInput()}
+      @keyup=${(e: KeyboardEvent) => this.emitInput()}
       placeholder="Search...">
       `}
 

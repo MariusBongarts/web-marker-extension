@@ -30,7 +30,7 @@ export class SearchViewComponent extends connect(store)(LitElement) {
     return html`
     <tags-view .marks=${this.marks} .filter=${this.searchValue}></tags-view>
     <hr class="divider">
-    <accordion-view .marks=${this.marks} .filter=${this.searchValue}></accordion-view>
+    <bookmark-overview .marks=${this.marks} .searchFilter=${this.searchValue}></bookmark-overview>
     <hr class="divider">
     ${this.marks.filter(mark => mark.text.toLowerCase().includes(this.searchValue)).map(mark => html`<mark-element .mark=${mark}></mark-element>`)}
 `;
