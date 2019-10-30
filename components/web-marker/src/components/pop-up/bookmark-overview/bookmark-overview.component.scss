@@ -41,12 +41,14 @@ input {
         color: var(--primary-light);
       }
     }
-    &::before {
-      content: "\276F";
-      width: 10px;
-      height: 100%;
-      text-align: center;
-      transition: all 0.35s;
+    &:not(.hide-dropdown) {
+      &:before {
+        content: "\276F";
+        width: 10px;
+        height: 100%;
+        text-align: center;
+        transition: all 0.35s;
+      }
     }
   }
   &-content {

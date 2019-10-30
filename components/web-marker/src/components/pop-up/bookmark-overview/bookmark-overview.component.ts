@@ -68,11 +68,14 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
           </div>
         ` : ''}
       ${this.bookmarks.filter(bookmark=> bookmark.url.includes(this.originFilter)).map((bookmark: Bookmark) => html`
-      <div class="tab ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
+      <div class="tab
+      ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
 
         <input type="radio" id="${bookmark._id}" name="radioBtn">
         <!-- setTimeout() is necessary to change selectedOrigin after radio input event -->
-        <label class="tab-label" for="${this.selectedBookmark && this.selectedBookmark === bookmark ? 'closeBtn' : bookmark._id}"
+        <label class="tab-label
+          ${this.marks.filter(mark => mark._bookmark === bookmark._id).length ? '' : 'hide-dropdown'}
+        " for="${this.selectedBookmark && this.selectedBookmark === bookmark ? 'closeBtn' : bookmark._id}"
         @click=${(e) => this.toggleBookmark(bookmark)}
         >
         <span class="bookmarkHeader">${bookmark.title}</span>
