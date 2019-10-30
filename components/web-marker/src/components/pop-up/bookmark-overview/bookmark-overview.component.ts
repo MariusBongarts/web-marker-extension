@@ -96,7 +96,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
         ` : ''}
       ${this.filterBookmarks().map(bookmark => html`
       <div class="tab
-      ${this.filterBookmarks().length < 1 ? 'border-top' : ''}
+      ${!this.searchFilter || this.filterBookmarks().length > 1 ? 'border-top' : ''}
       ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
 
         <input type="radio" id="${bookmark._id}" name="radioBtn">
