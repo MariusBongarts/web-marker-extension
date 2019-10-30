@@ -3,7 +3,8 @@ const jwtService = new JwtService();
 const INITIAL_STATE = {
     loggedIn: false,
     marks: [],
-    bookmarks: []
+    bookmarks: [],
+    searchValue: '',
 };
 export const reducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -27,6 +28,8 @@ export const reducer = (state = INITIAL_STATE, action) => {
             return Object.assign(Object.assign({}, state), { loggedIn: true, jwtPayload: action.jwtPayload });
         case 'LOGOUT':
             return Object.assign(Object.assign({}, state), { loggedIn: false, jwtPayload: undefined });
+        case 'SEARCH_VALUE_CHANGED':
+            return Object.assign(Object.assign({}, state), { searchValue: action.searchValue });
         default:
             return state;
     }

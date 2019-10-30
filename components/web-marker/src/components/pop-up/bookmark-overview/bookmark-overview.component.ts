@@ -1,3 +1,4 @@
+import { BookmarkService } from './../../../services/bookmark.service';
 import { Bookmark } from './../../../models/bookmark';
 import { Mark } from './../../../models/mark';
 import { JwtPayload } from './../../../models/jwtPayload';
@@ -14,6 +15,9 @@ const componentCSS = require('./bookmark-overview.component.scss');
 @customElement('bookmark-overview')
 export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
+  bookmarkService = new BookmarkService();
+  stopUpdate = false;
+  updateStarted = false;
 
   @property()
   activeDirectory = '';
@@ -45,9 +49,11 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   }
 
   stateChanged() {
-    this.marks = store.getState().marks;
-    this.bookmarks = store.getState().bookmarks;
-    this.getDistinctOrigins();
+    if (!this.selectedBookmark) {
+      this.marks = store.getState().marks;
+      this.bookmarks = store.getState().bookmarks;
+      this.getDistinctOrigins();
+    }
   }
 
   getDistinctOrigins() {
@@ -83,6 +89,26 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
     return tmp;
   }
 
+  async tagsChanged(e: CustomEvent) {
+    this.updateStarted ? this.stopUpdate = true : '';
+    if (this.selectedBookmark.tags.length != e.detail.chips.length) {
+      this.selectedBookmark.tags = e.detail.chips;
+
+      // Prevents to update too much. Checks if update got interrupted by user input
+      setTimeout(async () => {
+        this.updateStarted = true;
+        if (!this.stopUpdate) await this.updateBookmark();
+        this.stopUpdate = false;
+      }, 1000);
+    }
+  }
+
+  async updateBookmark() {
+    if (this.selectedBookmark) {
+      await this.bookmarkService.updateBookmark(this.selectedBookmark);
+    }
+  }
+
 
   render() {
     return html`
@@ -113,7 +139,8 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
         ${this.marks.filter(mark => mark._bookmark === bookmark._id).length ?
         this.marks.filter(mark => mark._bookmark === bookmark._id).length
         :
-        html` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`
+        html`
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`
       }</span>
       </label>
 
@@ -123,7 +150,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
       ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
       <bronco-chip-list
-        @tagsChanged=${async (e: CustomEvent) => ''}
+        @tagsChanged=${async (e: CustomEvent) => this.tagsChanged(e)}
         .hideOnOutsideClick=${false}
         .chips=${bookmark.tags}></bronco-chip-list>
         ` : ''}

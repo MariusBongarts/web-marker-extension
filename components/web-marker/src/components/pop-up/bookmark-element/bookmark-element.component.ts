@@ -25,6 +25,10 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   @property()
   bookmark!: Bookmark;
 
+  firstUpdated() {
+    console.log(this.bookmark);
+  }
+
   stateChanged() {
     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
@@ -46,6 +50,7 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
 
 
   async tagsChanged(e: CustomEvent) {
+    console.log("isahosssssssiaioh")
     this.updateStarted ? this.stopUpdate = true : '';
     if (this.bookmark.tags.length != e.detail.chips.length) {
       this.bookmark = { ...this.bookmark, tags: e.detail.chips };
@@ -60,6 +65,7 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
       setTimeout(async () => {
         this.updateStarted = true;
         if (!this.stopUpdate) await this.updateBookmark();
+        console.log("isahoiaioh")
         this.stopUpdate = false;
       }, 1500);
     }

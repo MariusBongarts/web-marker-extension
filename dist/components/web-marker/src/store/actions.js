@@ -83,6 +83,13 @@ export function logout() {
     store.dispatch(reduxAction);
     initMarks([]);
 }
+export function searchValueChanged(value) {
+    const reduxAction = {
+        type: 'SEARCH_VALUE_CHANGED',
+        searchValue: value
+    };
+    store.dispatch(reduxAction);
+}
 function initData() {
     return __awaiter(this, void 0, void 0, function* () {
         const markService = new MarkerService();
