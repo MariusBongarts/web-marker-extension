@@ -1794,6 +1794,10 @@
 
 /* 59 */
 
+/* 60 */
+
+/* 61 */
+
 /**
  * URL parser.
  *
@@ -1815,7 +1819,7 @@
 
 // define href
 
-/* 60 */
+/* 62 */
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -1910,7 +1914,7 @@
 	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
 	*/
 
-/* 61 */
+/* 63 */
 
 /**
  * Helpers.
@@ -1958,7 +1962,7 @@
  * @api private
  */
 
-/* 62 */
+/* 64 */
 
 /**
  * Enable namespaces listed in `localStorage.debug` initially.
@@ -1984,7 +1988,7 @@
 
 // double check webkit in userAgent just in case we are in a worker
 
-/* 63 */
+/* 65 */
 
 /**
  * Create a debugger with the given `namespace`.
@@ -2070,9 +2074,9 @@
  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
  */
 
-/* 64 */
+/* 66 */
 
-/* 65 */
+/* 67 */
 
 /*global Blob,File*/
 
@@ -2127,7 +2131,7 @@
 
 // and object
 
-/* 66 */
+/* 68 */
 
 // base64 is 4/3 + up to two characters of the original data
 
@@ -2145,11 +2149,11 @@
 
 // See: https://github.com/beatgammit/base64-js/issues/42
 
-/* 67 */
-
-/* 68 */
-
 /* 69 */
+
+/* 70 */
+
+/* 71 */
 
 /**
  * Exports parser
@@ -2158,7 +2162,7 @@
  *
  */
 
-/* 70 */
+/* 72 */
 
 /**
  * Socket constructor.
@@ -2374,7 +2378,7 @@
  *
  */
 
-/* 71 */
+/* 73 */
 
 /**
  * Module exports.
@@ -2388,7 +2392,7 @@
 
 // when trying to create
 
-/* 72 */
+/* 74 */
 
 /* global attachEvent */
 
@@ -2511,7 +2515,7 @@
  * emitted.
  */
 
-/* 73 */
+/* 75 */
 
 /**
  * Gets the keys for an object.
@@ -2520,9 +2524,9 @@
  * @api private
  */
 
-/* 74 */
+/* 76 */
 
-/* 75 */
+/* 77 */
 
 /**
  * An abstraction for slicing an arraybuffer even when
@@ -2531,13 +2535,13 @@
  * @api public
  */
 
-/* 76 */
+/* 78 */
 
 // after first error, rest are passed to err_cb
 
 // future error callbacks will go to error handler
 
-/* 77 */
+/* 79 */
 
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
@@ -2569,7 +2573,7 @@
 
 // 3-byte sequence (may include unpaired surrogates)
 
-/* 78 */
+/* 80 */
 
 /*
  * base64-arraybuffer
@@ -2581,7 +2585,7 @@
 
 // Use a lookup table to find the index.
 
-/* 79 */
+/* 81 */
 
 /**
  * Create a blob builder even when vendor prefixes exist
@@ -2601,11 +2605,11 @@
 
 // include the subarray region from the underlying buffer
 
-/* 80 */
-
-/* 81 */
-
 /* 82 */
+
+/* 83 */
+
+/* 84 */
 
 /**
  * Cached regular expressions.
@@ -2664,7 +2668,7 @@
 
 // double escaping is required for escaped new lines because unescaping of new lines can be done safely on server-side
 
-/* 83 */
+/* 85 */
 
 /**
  * Get either the `WebSocket` or `MozWebSocket` globals
@@ -2749,13 +2753,13 @@
  * @api public
  */
 
-/* 84 */
+/* 86 */
 
 /* (ignored) */
 
-/* 85 */
+/* 87 */
 
-/* 86 */
+/* 88 */
 
 /**
  * Initialize backoff timer with `opts`.
@@ -2803,10 +2807,6 @@
  *
  * @api public
  */
-
-/* 87 */
-
-/* 88 */
 
 /* 89 */
 
@@ -2857,6 +2857,10 @@
 /* 112 */
 
 /* 113 */
+
+/* 114 */
+
+/* 115 */
 
 // EXTERNAL MODULE: ./src/index.scss
 
@@ -4492,6 +4496,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          */
 
 /**
+         * Current value for input for auto-complete
+         *
+         * @memberof BroncoChipList
+         */
+
+/**
      * Listen to keyboard event to either add or remove tags
      * Tags are being added when user enters space or enter
      *
@@ -4512,6 +4522,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      *
      * @param {HTMLInputElement} target
      * @memberof BroncoChipList
+     */
+
+/**
+     * Event triggered by the custom auto-complete component.
+     *
+     * If user clicks on autocomplete it has to be manually added. If user presses enter it will be captured by
+     * the event listener of the inputElement.
+     *
+     * @param {CustomEvent} e
+     * @param {boolean} [isClick]
+     * @memberof BroncoChipList
+     */
+
+// CONCATENATED MODULE: ./src/components/bronco-chip-list/auto-complete/auto-complete.component.ts
+
+// Enter
+
+// Key arrow down
+
+// Key arrow up
+
+/**
+     * Remove event handler
+     *
+     * @memberof HeaderToggleComponent
      */
 
 // CONCATENATED MODULE: ./src/services/user.service.ts

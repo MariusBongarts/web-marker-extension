@@ -125,6 +125,17 @@ export class BroncoChipList extends connect(store)(LitElement) {
     }
   }
 
+  getAllTags() {
+    let tags = [];
+    store.getState().marks.forEach(mark => {
+      tags = [...tags, ...mark.tags];
+    });
+    tags = [...new Set(tags)];
+    tags.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    return tags;
+  }
+
+
   /**
    * Listen to keyboard event to either add or remove tags
    * Tags are being added when user enters space or enter
@@ -194,7 +205,6 @@ export class BroncoChipList extends connect(store)(LitElement) {
    */
   async deleteChip(target: HTMLInputElement) {
     if (this.markedToDelete && !target.value && this.chips.length) {
-      console.log(this.chips[this.chips.length - 1]);
       await this.filterChips(this.chips[this.chips.length - 1]);
       this.markedToDelete = false;
     } else {
@@ -208,9 +218,26 @@ export class BroncoChipList extends connect(store)(LitElement) {
     await this.emit(chip);
   }
 
-  autoCompleteEvent(value: string) {
-    this.inputElement.value = value;
 
+  /**
+   * Event triggered by the custom auto-complete component.
+   *
+   * If user clicks on autocomplete it has to be manually added. If user presses enter it will be captured by
+   * the event listener of the inputElement.
+   *
+   * @param {CustomEvent} e
+   * @param {boolean} [isClick]
+   * @memberof BroncoChipList
+   */
+  autoCompleteEvent(e: CustomEvent, isClick?: boolean) {
+    if (isClick) {
+      this.chips = [...new Set([...this.chips, e.detail])]
+      this.inputElement.value = '';
+      this.inputValue = ''
+      this.submit();
+    } else {
+      this.inputElement.value = e.detail;
+    }
   }
 
   render() {
@@ -226,11 +253,12 @@ ${this.chips.map((chip, index) => html`
     placeholder=${'+'}
     type="text" class="form-control ${this.chips.length ? 'not-empty' : ''}" name="tag"  id="tag"  @keyup=${async (e: any) => await this.submitChip(e)}>
   </div>
-  ${this.inputValue ? html`
+  ${this.inputElement && this.inputElement.value ? html`
   <auto-complete
-  .items=${["Test", "Neu", "Test2"].filter(value => !this.chips.includes(value))}
-  .filter=${this.inputValue}
-  @selected=${(e: CustomEvent) => this.autoCompleteEvent(e.detail)}
+  .items=${this.getAllTags().filter(value => !this.chips.includes(value))}
+  .filter=${this.inputElement.value}
+  @selected=${(e: CustomEvent) => this.autoCompleteEvent(e)}
+  @clickSelected=${(e: CustomEvent) => this.autoCompleteEvent(e, true)}
   ></auto-complete>
   ` : ''}
 `;

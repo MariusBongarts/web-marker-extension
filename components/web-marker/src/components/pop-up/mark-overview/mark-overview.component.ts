@@ -162,7 +162,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
    * @memberof MarkOverviewComponent
    */
   async updateMarks(e: CustomEvent) {
-    console.log(e.detail);
     this.marks = this.marks.map(mark => {
       return {
         ...mark,

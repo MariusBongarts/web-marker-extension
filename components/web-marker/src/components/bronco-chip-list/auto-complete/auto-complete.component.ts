@@ -5,7 +5,8 @@ const componentCSS = require('./auto-complete.component.scss');
 
 @customElement('auto-complete')
 export class HeaderToggleComponent extends LitElement {
-  @query('#autoComplete') inputElement: HTMLInputElement;
+
+  listener: EventListener;
 
   @property() items: string[] = [];
   @property() filter: string;
@@ -14,9 +15,13 @@ export class HeaderToggleComponent extends LitElement {
   static styles = css`${unsafeCSS(componentCSS)}`;
 
   async firstUpdated() {
-    document.addEventListener("keydown", (e: KeyboardEvent) => {
-      e.stopPropagation();
-      let filteredItems = this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase()));
+    document.onkeydown = (e: KeyboardEvent) => {
+      let filteredItems = [];
+
+      if (this.filter) {
+        console.log(this.filter);
+        filteredItems = this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase()));
+      }
 
       // Key arrow down
       if (e.keyCode === 40 && ((this.selectedIndex + 1) < filteredItems.length)) {
@@ -30,24 +35,39 @@ export class HeaderToggleComponent extends LitElement {
 
       // Enter
       if (e.keyCode === 13 && filteredItems.length !== 0) {
-        this.emit(filteredItems[this.selectedIndex]);
-        this.selectedIndex = -1;
+        let value = filteredItems[this.selectedIndex];
+        console.log(value);
+        console.log(this.selectedIndex);
+        console.log(filteredItems);
 
-        setTimeout(() => this.filter = '', 200);
+        if (value) {
+          this.emit(value);
+          this.selectedIndex = -1;
+          setTimeout(() => this.filter = '', 200);
+        }
       }
 
       if (filteredItems.length === 0) {
         this.selectedIndex = -1;
+        this.remove();
       }
-
-
-    });
+    };
   }
 
-  emit(value: string) {
-    console.log("Ndksoifoih");
+
+  /**
+   * Remove event handler
+   *
+   * @memberof HeaderToggleComponent
+   */
+  disconnectedCallback() {
+    document.onkeydown = undefined;
+  }
+
+  emit(value: string, isClick?: boolean) {
+    this.selectedIndex = -1;
     this.dispatchEvent(
-      new CustomEvent('selected', {
+      new CustomEvent(isClick ? 'clickSelected' : 'selected', {
         bubbles: true,
         detail: value
       }));
@@ -58,9 +78,9 @@ export class HeaderToggleComponent extends LitElement {
     return html`
   ${this.filter ? html`
   <div class="auto-complete-items">
-    ${this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase())).map((item, index) =>
+    ${this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase())).slice(0, 5).map((item, index) =>
       html`
-        <bronco-chip class="${this.selectedIndex === index ? 'active' : ''}" .hideDeleteIcon=${true}>${item}</bronco-chip>
+        <bronco-chip @click=${() => this.emit(item, true)} class="${this.selectedIndex === index ? 'active' : ''}" .hideDeleteIcon=${true}>${item}</bronco-chip>
       `)}
     </div>
       ` : ''}
