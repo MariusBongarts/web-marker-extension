@@ -25,7 +25,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   bookmarks: Bookmark[] = [];
 
   @property()
-  filter = '';
+  searchValue = store.getState().searchValue;
 
   @property()
   loaded = false;
@@ -46,6 +46,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   stateChanged() {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
+    this.searchValue = store.getState().searchValue;
     this.getDistinctOrigins();
   }
 
@@ -70,9 +71,10 @@ export class TreeViewComponent extends connect(store)(LitElement) {
             <input type="radio" id="closeBtn" name="radioBtn">
           </div>
         ` : ''}
-      ${this.origins.filter(origin => origin.toLowerCase().includes(
-      this.filter))
-          .map((origin: string) => html`
+    ${this.searchValue ? html`
+    <bookmark-overview .searchFilter=${this.searchValue}></bookmark-overview>
+    ` : html`
+    ${this.origins.filter(origin => origin.includes(this.searchValue)).map((origin: string) => html`
       <div class="tab ${!this.selectedOrigin || this.selectedOrigin === origin ? '' : 'hide'}">
         <input type="radio" id="${origin}" name="radioBtn">
         <!-- setTimeout() is necessary to change selectedOrigin after radio input event -->
@@ -93,6 +95,8 @@ export class TreeViewComponent extends connect(store)(LitElement) {
         <bookmark-overview .originFilter=${this.selectedOrigin}></bookmark-overview>
       </div>
           `)}
+    `}
+
       </div>
 `;
   }

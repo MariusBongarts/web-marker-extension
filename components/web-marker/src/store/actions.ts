@@ -88,6 +88,14 @@ export function logout() {
   initMarks([]);
 }
 
+export function searchValueChanged(value: string) {
+  const reduxAction: ReduxAction = {
+    type: 'SEARCH_VALUE_CHANGED',
+    searchValue: value
+  }
+  store.dispatch(reduxAction);
+}
+
 async function initData() {
   const markService = new MarkerService();
   const bookmarkService = new BookmarkService();

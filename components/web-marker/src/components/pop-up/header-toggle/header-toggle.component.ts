@@ -1,5 +1,7 @@
+import { store } from './../../../store/store';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { searchValueChanged } from '../../../store/actions';
 
 const componentCSS = require('./header-toggle.component.scss');
 
@@ -29,12 +31,13 @@ export class HeaderToggleComponent extends LitElement {
 
   emitInput() {
     const value = this.searchElement.value.toLowerCase();
-    this.dispatchEvent(
-      new CustomEvent('inputChange', {
-        detail: value
-      }
-      )
-    )
+    searchValueChanged(value);
+    // this.dispatchEvent(
+    //   new CustomEvent('inputChange', {
+    //     detail: value
+    //   }
+    //   )
+    // )
   }
 
   render() {

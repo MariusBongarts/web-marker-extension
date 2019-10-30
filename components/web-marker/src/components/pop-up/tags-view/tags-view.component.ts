@@ -46,7 +46,7 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     this.marks.forEach(mark => {
       this.tags = [...this.tags, ...mark.tags];
     });
-    this.tags = [...new Set(this.tags)];
+    this.tags = [...new Set(this.tags)].filter(tag => tag.toLowerCase().includes(store.getState().searchValue.toLowerCase()));
     this.sortTags();
   }
 

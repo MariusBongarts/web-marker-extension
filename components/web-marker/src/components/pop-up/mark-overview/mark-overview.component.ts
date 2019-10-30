@@ -11,6 +11,7 @@ import openSocket from 'socket.io-client';
 import { environment } from '../../../environments/environment.dev';
 import { JwtService } from '../../../services/jwt.service';
 import { connect } from 'pwa-helpers';
+import { searchValueChanged } from '../../../store/actions';
 
 const componentCSS = require('./mark-overview.component.scss');
 
@@ -37,8 +38,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   @property()
   loggedUser!: JwtPayload;
 
-  @property()
-  searchValue: string;
 
   /**
    * 1 = Only marks for current page
@@ -142,7 +141,7 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   }
 
   emitTabChange(tabNr: number) {
-    this.searchValue = '';
+    searchValueChanged('');
     this.activeToggle = tabNr;
   }
 
@@ -186,7 +185,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
     <div class="header">
       <header-toggle
-      @inputChange=${(e: CustomEvent) => this.searchValue = e.detail}
       .active=${this.activeToggle}
       @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}></header-toggle>
       <search-bar></search-bar>
@@ -198,11 +196,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
       ></bookmark-element>` : ''}
       <div class="main">
 
-      ${this.searchValue ? html`
-      <search-view .searchValue=${this.searchValue}></search-view>
-      ` :
-
-          html`
       ${this.activeToggle === 0 ? html`
       <!-- Accordion view of marks for all pages -->
       <accordion-view></accordion-view>
@@ -223,10 +216,10 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
       ></mark-element>`) : html`
       `}
       ` : ''}
-      `}
+
     </div>
 
-    ${this.marks && this.marks.length === 0 && this.activeToggle === 2 && !this.searchValue && this.loggedIn ? html`
+    ${this.marks && this.marks.length === 0 && this.activeToggle === 2 && this.loggedIn ? html`
     <div class="infoContainer">
     <div class="mainInfo">
     <span>No marks made on this page</span>
@@ -248,8 +241,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     <div>
     `}
     `}
-
-
 
 </div>
 ` : ''}

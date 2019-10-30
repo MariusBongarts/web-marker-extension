@@ -67,11 +67,11 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
     filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.url.includes(this.originFilter));
 
     // Filter if search value is given
-    if (this.searchFilter) {
+    if (store.getState().searchValue) {
       filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title.toLowerCase().includes(
         this.searchFilter) ||
         this.isFilterInTagsOfBookmark(bookmark) ||
-        bookmark.url.includes(this.searchFilter));
+        bookmark.url.includes(store.getState().searchValue));
     }
 
     return filteredBookmarks;

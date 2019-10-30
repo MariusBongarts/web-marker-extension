@@ -11,12 +11,14 @@ export interface State {
   bookmarks: Bookmark[],
   lastAction?: ReduxAction
   jwtPayload?: JwtPayload | undefined;
+  searchValue: string;
 }
 
 const INITIAL_STATE: State = {
   loggedIn: false,
   marks: [],
-  bookmarks: []
+  bookmarks: [],
+  searchValue: '',
 };
 
 export type ReduxActionType =
@@ -29,7 +31,8 @@ export type ReduxActionType =
   'INIT_BOOKMARKS' |
   'UPDATE_BOOKMARK' |
   'LOGIN' |
-  'LOGOUT';
+  'LOGOUT'|
+  'SEARCH_VALUE_CHANGED';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -39,7 +42,8 @@ export interface ReduxAction {
   bookmarkId?: string,
   mark?: Mark,
   markId?: string,
-  jwtPayload?: JwtPayload | undefined;
+  jwtPayload?: JwtPayload | undefined,
+  searchValue?: string
 }
 
 
@@ -104,6 +108,11 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         ...state,
         loggedIn: false,
         jwtPayload: undefined
+      };
+    case 'SEARCH_VALUE_CHANGED':
+      return {
+        ...state,
+        searchValue: action.searchValue,
       };
     default:
       return state;
