@@ -65,8 +65,22 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   filterBookmarks() {
     let filteredBookmarks = this.bookmarks;
     filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.url.includes(this.originFilter));
-    filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title.includes(this.searchFilter));
+
+    // Filter if search value is given
+    if (this.searchFilter) {
+      filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title.toLowerCase().includes(
+        this.searchFilter) ||
+        this.isFilterInTagsOfBookmark(bookmark) ||
+        bookmark.url.includes(this.searchFilter));
+    }
+
     return filteredBookmarks;
+  }
+
+  isFilterInTagsOfBookmark(bookmark: Bookmark) {
+    let tmp = false;
+    bookmark.tags.forEach(tag => tag.toLowerCase().includes(this.searchFilter) ? tmp = true : '');
+    return tmp;
   }
 
 
@@ -82,6 +96,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
         ` : ''}
       ${this.filterBookmarks().map(bookmark => html`
       <div class="tab
+      ${this.filterBookmarks().length < 1 ? 'border-top' : ''}
       ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
 
         <input type="radio" id="${bookmark._id}" name="radioBtn">

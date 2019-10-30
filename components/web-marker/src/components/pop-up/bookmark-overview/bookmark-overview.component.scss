@@ -70,6 +70,10 @@ input {
   }
 }
 
+.tab.border-top {
+  border-top: 1px solid var(--primary-color-transparent);
+}
+
 .tab.hide {
   display: none;
 }
