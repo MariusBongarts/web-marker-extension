@@ -1,0 +1,35 @@
+@import "../../../variables.scss";
+
+:host {
+  width: 100%;
+}
+
+.toolbar {
+  margin-left: auto;
+  display: flex;
+  justify-content: left;
+  flex-direction: row-reverse;
+  width: 100%;
+}
+
+
+.icon {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  cursor: pointer;
+  padding: 2px 5px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.goToIcon:hover {
+  color: var(--primary-color);
+}
+
+.deleteIcon:hover {
+  color: var(--danger-color);
+}

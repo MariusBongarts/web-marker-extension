@@ -4,7 +4,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  padding-right: 5px;
+  padding: 5px;
+  padding-top: 10px;
+  padding-left: 0px;
 }
 
 bronco-chip {
@@ -21,8 +23,15 @@ bronco-chip {
 }
 
 .selectedChipContainer {
-  padding-right: 8px;
+  padding: 10px;
+  bronco-chip {
+    --background-color: var(--primary-dark);
+    --hover-ripple-dark: var(--secondary-dark);
+    --hover-ripple-light: var(--secondary-color);
+  }
 }
+
+
 
 .selectedChipContainer > bronco-chip {
   margin-top: 0px;

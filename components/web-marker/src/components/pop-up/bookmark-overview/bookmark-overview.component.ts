@@ -9,6 +9,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { urlToOrigin } from '../../../helper/urlHelper';
 import { store } from './../../../store/store';
 import { connect } from 'pwa-helpers';
+import { navigateExternal } from '../../../helper/router';
 
 const componentCSS = require('./bookmark-overview.component.scss');
 
@@ -140,14 +141,15 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
         this.marks.filter(mark => mark._bookmark === bookmark._id).length
         :
         html`
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <!-- Go to url of current mark or scroll -->
+        `
+
       }</span>
       </label>
 
 
       <div class="tab-content">
-
-
       ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
       <bronco-chip-list
         @tagsChanged=${async (e: CustomEvent) => this.tagsChanged(e)}

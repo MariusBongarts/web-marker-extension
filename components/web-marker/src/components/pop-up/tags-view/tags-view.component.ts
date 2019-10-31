@@ -91,15 +91,15 @@ export class TagsViewComponent extends connect(store)(LitElement) {
       .badgeValue=${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
       <div class="chipContainer">
         <span>${this.selectedTag}</span>
-      </div>
-    </bronco-chip>
-  </div>
+        </div>
+      </bronco-chip>
+    </div>
     ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).map(mark =>
       html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-element>`
     )}
     <!-- Show related tags -->
     <div class="container">
-    <hr class="divider">
+
       ${this.getRelatedTags().map(tag => html`
       <bronco-chip
         @click=${() => this.selectedTag === tag ? this.selectedTag = '' : this.selectedTag = tag}

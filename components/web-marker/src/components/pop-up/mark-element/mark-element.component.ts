@@ -27,6 +27,9 @@ class MarkElementComponent extends connect(store)(LitElement) {
   markService = new MarkerService();
 
   @property()
+  showActionToolbar = false;
+
+  @property()
   mark: Mark;
 
   @property()
@@ -56,7 +59,8 @@ class MarkElementComponent extends connect(store)(LitElement) {
     await this.markService.updateMark(this.mark);
   }
 
-  scrollToMark() {
+  scrollToMark(e: CustomEvent) {
+    e.preventDefault();
     if (this.mark.origin == location.href) {
       const scrollOptions: ScrollToOptions = {
         top: this.mark.scrollY ? this.mark.scrollY : 0,
@@ -72,29 +76,37 @@ class MarkElementComponent extends connect(store)(LitElement) {
   render() {
     return html`
     <div class="mark">
-    <div class="header" >
-      <span>${ this.headerInfo} </span>
-        <span class="timeSince" > ${ timeSinceTimestamp(this.mark.createdAt)} ago </span>
-          <span class="deleteBtn" @click=${async (e: MouseEvent) => await this.deleteMark(e)}> &times; </span>
-            </div>
-            <div class="main"  @click=${() => this.scrollToMark()}>
-              <blockquote>${ this.mark.text} </blockquote>
-                </div>
-                <div class="footer">
-                  ${this.addingTags ? html`
-                  <bronco-chip-list
-                  .hideOnOutsideClick=${false}
-                  .mark=${this.mark}></bronco-chip-list>
-                  ` : ''}
-                  ${
-      !this.addingTags ?
-      this.mark.tags.map(tag => html`
-      <bronco-chip
-      @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
-      >${tag}</bronco-chip>`) : ''
+      <div class="header" >
+          ${this.showActionToolbar ? html`
+    <action-toolbar
+    @deleted=${async (e: MouseEvent) => await this.deleteMark(e)}
+    @goToMark=${(e) => this.scrollToMark(e)}
+    ></action-toolbar>
+    ` : html`
+    <span class="timeSince" > ${ timeSinceTimestamp(this.mark.createdAt)} ago </span>
+    <span class="deleteBtn" @click=${async (e: MouseEvent) => await this.deleteMark(e)}> &times; </span>
+    `}
+              </div>
+              <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
+                <blockquote>${ this.mark.text} </blockquote>
+                  </div>
+                  <div class="footer">
+                    ${this.showActionToolbar ? html`
+                    <bronco-chip-list
+                    .hideOnOutsideClick=${false}
+                    .mark=${this.mark}></bronco-chip-list>
+                    ` : ''}
+                    ${!this.showActionToolbar ?
+        this.mark.tags.map(tag => html`
+        <bronco-chip
+        @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
+        >${tag}</bronco-chip>`) : ''
       }
         </div>
-      </div>
+
+
+
+    </div>
     `;
   }
 
