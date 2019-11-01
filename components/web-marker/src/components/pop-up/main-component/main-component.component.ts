@@ -61,6 +61,9 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   @property()
   loggedIn = false;
 
+  @property()
+  searchValue = '';
+
 
   @property()
   show = environment.production ? false : true;
@@ -88,6 +91,7 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   stateChanged(e) {
     if (store.getState().loggedIn) this.marks = store.getState().marks.filter(e => e.url === location.href);
     else this.marks = [];
+    this.searchValue = store.getState().searchValue;
     this.loggedIn = store.getState().loggedIn;
   }
 
@@ -189,12 +193,17 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
       @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}></header-toggle>
       <search-bar></search-bar>
     </div>
-    ${this.activeToggle === 2 ? html`
+    <div class="main">
+
+      ${this.searchValue ? html`
+      <search-view></search-view>
+      ` : html`
+
+      ${this.activeToggle === 2 ? html`
       <!-- Only marks for current page -->
       <bookmark-element
       @tagsChanged=${async (e: CustomEvent) => await this.updateMarks(e)}
       ></bookmark-element>` : ''}
-      <div class="main">
 
       ${this.activeToggle === 0 ? html`
       <!-- Accordion view of marks for all pages -->
@@ -217,9 +226,11 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
       `}
       ` : ''}
 
+      `}
+
     </div>
 
-    ${this.marks && this.marks.length === 0 && this.activeToggle === 2 && this.loggedIn ? html`
+    ${this.marks && this.marks.length === 0 && this.activeToggle === 2 && this.loggedIn && !this.searchValue ? html`
     <div class="infoContainer">
     <div class="mainInfo">
     <span>No marks made on this page</span>

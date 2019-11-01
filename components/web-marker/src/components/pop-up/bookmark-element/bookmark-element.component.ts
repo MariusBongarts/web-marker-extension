@@ -36,18 +36,14 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   animation = false;
 
   @property()
-  marksForBookmark: Mark[];
+  marksForBookmark: Mark[] = [];
 
   firstUpdated() {
-    console.log(this.bookmark);
+    this.marksForBookmark = store.getState().marks.filter(mark => mark._bookmark === this.bookmark._id);
   }
 
-  stateChanged() {
-
-
-    if (this.isDropdown) {
-      this.marksForBookmark = store.getState().marks.filter(mark => mark._bookmark === this.bookmark._id);
-    } else {
+  stateChanged(e) {
+    if (!store.getState().searchValue) {
       const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
       // Only set tags when bookmark is undefined
@@ -55,12 +51,11 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
         this.bookmark = bookmark
         this.bookmark ? this.tags = this.bookmark.tags : '';
       }
-
       // If bookmark got deleted, it should set bookmark to undefined
       if (!bookmark) {
         this.bookmark = undefined;
       }
-    }
+  }
   }
 
   async disconnectedCallback() {

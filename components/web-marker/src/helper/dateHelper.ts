@@ -11,8 +11,6 @@ export function timeSinceTimestamp(milliseconds: number) {
   const days = Math.round(hours / 24);
   hours = Math.round(hours % 24);
 
-  console.log(new Date(milliseconds));
-
   if (days < 1) return `${days >= 1 ? days + 'd ' : ''} ${hours >= 1 ? hours + 'h ' : ''}
   ${minutes >= 1 ? minutes + 'm ' : ''} ${seconds >= 0 ? seconds + 's' : ''}`;
 

@@ -110,12 +110,12 @@ bronco-chip-list {
 }
 
 
-.dropdown-icon {
+.dropdown-icon > svg {
   transition: all 0.25s;
   padding-right: 5px;
 }
 
-.dropdown-icon.active {
+.dropdown-icon.active > svg {
   transform: rotate(90deg);
 }
 
