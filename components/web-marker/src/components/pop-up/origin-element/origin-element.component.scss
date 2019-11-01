@@ -1,0 +1,64 @@
+@import "../../../variables.scss";
+
+:host {
+  font-family: var(--font-family);
+  --margin: 5px 0px;
+}
+
+.element {
+  background:var(--secondary-dark);
+  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.301);
+  color: var(--white-dark);
+  padding: 5px;
+  padding-left: 5px;
+  margin: var(--margin);
+  margin-top: 0;
+  margin-bottom: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+}
+
+.element:hover {
+  color: white;
+
+  .badge {
+    color: var(--primary-light);
+  }
+}
+
+.header {
+  width: 100%;
+  font-size: 9px;
+  display: flex;
+  justify-content: left;
+  margin: 0px 5px;
+}
+
+.main {
+  width: 100%;
+}
+
+.footer {
+  width: 100%;
+}
+
+.origin {
+  padding-left: 5px;
+  line-height: 100%;
+  align-self: center;
+}
+
+.badge {
+  margin-left: auto;
+}
+
+.dropdown-icon {
+  transition: all 0.25s;
+}
+
+.dropdown-icon.active {
+  transform: rotate(90deg);
+}
+
+

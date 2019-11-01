@@ -198,7 +198,7 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
       ${this.activeToggle === 0 ? html`
       <!-- Accordion view of marks for all pages -->
-      <accordion-view></accordion-view>
+      <origin-overview></origin-overview>
       ` : ''}
 
       ${this.activeToggle === 1 ? html`

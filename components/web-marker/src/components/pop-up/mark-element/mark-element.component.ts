@@ -90,7 +90,9 @@ class MarkElementComponent extends connect(store)(LitElement) {
               <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
                 <blockquote>${ this.mark.text} </blockquote>
                   </div>
-                  <div class="footer">
+                  <div class="footer"
+                  @click=${() => !this.showActionToolbar ? this.showActionToolbar = !this.showActionToolbar : ''}
+                  >
                     ${this.showActionToolbar ? html`
                     <bronco-chip-list
                     .hideOnOutsideClick=${false}
