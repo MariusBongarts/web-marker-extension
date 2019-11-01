@@ -15,6 +15,20 @@
   display: flex;
   flex-wrap: wrap;
   border-top: 1px solid var(--primary-color-transparent);
+
+  action-toolbar {
+    opacity: 0;
+  }
+}
+
+.mark:hover {
+  action-toolbar {
+    opacity: 1;
+  }
+}
+
+.mark.slide-in {
+  animation: .25s slide-top;
 }
 
 .mark:hover {
@@ -84,6 +98,7 @@ bronco-chip-list {
 
 .timeSince {
   float: right;
+  white-space: nowrap;
 }
 
 .deleteBtn {

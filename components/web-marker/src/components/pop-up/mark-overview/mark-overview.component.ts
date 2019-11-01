@@ -16,7 +16,7 @@ const componentCSS = require('./mark-overview.component.scss');
  * @class MarkOverviewComponent
  * @extends {LitElement}
  */
-@customElement('main-component')
+@customElement('mark-overview')
 class MainComponentComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
 
@@ -28,6 +28,10 @@ class MainComponentComponent extends connect(store)(LitElement) {
 
   @property()
   searchFilter = '';
+
+  firstUpdated() {
+    this.marks = store.getState().marks;
+  }
 
   stateChanged() {
     this.marks = store.getState().marks;
@@ -48,6 +52,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
         this.isFilterInTagsOfBookmark(mark) ||
         mark.url.includes(store.getState().searchValue));
     }
+    console.log(filteredMarks);
     return filteredMarks;
   }
 
@@ -59,7 +64,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div class="container">
+    <div class="markContainer">
       ${this.getFilteredMarks().map(mark => html`
       <mark-element
       .mark=${mark}></mark-element>

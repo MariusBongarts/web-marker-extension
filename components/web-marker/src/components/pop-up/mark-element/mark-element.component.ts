@@ -75,18 +75,14 @@ class MarkElementComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div class="mark">
+    <div class="mark slide-in">
       <div class="header" >
-          ${this.showActionToolbar ? html`
+    <span class="timeSince" > ${ timeSinceTimestamp(this.mark.createdAt)}</span>
     <action-toolbar
     @deleted=${async (e: MouseEvent) => await this.deleteMark(e)}
     @goToMark=${(e) => this.scrollToMark(e)}
     ></action-toolbar>
-    ` : html`
-    <span class="timeSince" > ${ timeSinceTimestamp(this.mark.createdAt)} ago </span>
-    <span class="deleteBtn" @click=${async (e: MouseEvent) => await this.deleteMark(e)}> &times; </span>
-    `}
-              </div>
+      </div>
               <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
                 <blockquote>${ this.mark.text} </blockquote>
                   </div>

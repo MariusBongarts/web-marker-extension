@@ -1798,6 +1798,66 @@
 
 /* 61 */
 
+/* 62 */
+
+/* 63 */
+
+/* 64 */
+
+/* 65 */
+
+/* 66 */
+
+/* 67 */
+
+/* 68 */
+
+/* 69 */
+
+/* 70 */
+
+/* 71 */
+
+/* 72 */
+
+/* 73 */
+
+/* 74 */
+
+/* 75 */
+
+/* 76 */
+
+/* 77 */
+
+/* 78 */
+
+/* 79 */
+
+/* 80 */
+
+/* 81 */
+
+/* 82 */
+
+/* 83 */
+
+/* 84 */
+
+/* 85 */
+
+/* 86 */
+
+/* 87 */
+
+/* 88 */
+
+/* 89 */
+
+/* 90 */
+
+/* 91 */
+
 /**
  * URL parser.
  *
@@ -1819,7 +1879,7 @@
 
 // define href
 
-/* 62 */
+/* 92 */
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -1914,7 +1974,7 @@
 	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
 	*/
 
-/* 63 */
+/* 93 */
 
 /**
  * Helpers.
@@ -1962,7 +2022,7 @@
  * @api private
  */
 
-/* 64 */
+/* 94 */
 
 /**
  * Enable namespaces listed in `localStorage.debug` initially.
@@ -1988,7 +2048,7 @@
 
 // double check webkit in userAgent just in case we are in a worker
 
-/* 65 */
+/* 95 */
 
 /**
  * Create a debugger with the given `namespace`.
@@ -2074,9 +2134,9 @@
  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
  */
 
-/* 66 */
+/* 96 */
 
-/* 67 */
+/* 97 */
 
 /*global Blob,File*/
 
@@ -2131,7 +2191,7 @@
 
 // and object
 
-/* 68 */
+/* 98 */
 
 // base64 is 4/3 + up to two characters of the original data
 
@@ -2149,11 +2209,11 @@
 
 // See: https://github.com/beatgammit/base64-js/issues/42
 
-/* 69 */
+/* 99 */
 
-/* 70 */
+/* 100 */
 
-/* 71 */
+/* 101 */
 
 /**
  * Exports parser
@@ -2162,7 +2222,7 @@
  *
  */
 
-/* 72 */
+/* 102 */
 
 /**
  * Socket constructor.
@@ -2378,7 +2438,7 @@
  *
  */
 
-/* 73 */
+/* 103 */
 
 /**
  * Module exports.
@@ -2392,7 +2452,7 @@
 
 // when trying to create
 
-/* 74 */
+/* 104 */
 
 /* global attachEvent */
 
@@ -2515,7 +2575,7 @@
  * emitted.
  */
 
-/* 75 */
+/* 105 */
 
 /**
  * Gets the keys for an object.
@@ -2524,9 +2584,9 @@
  * @api private
  */
 
-/* 76 */
+/* 106 */
 
-/* 77 */
+/* 107 */
 
 /**
  * An abstraction for slicing an arraybuffer even when
@@ -2535,13 +2595,13 @@
  * @api public
  */
 
-/* 78 */
+/* 108 */
 
 // after first error, rest are passed to err_cb
 
 // future error callbacks will go to error handler
 
-/* 79 */
+/* 109 */
 
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
@@ -2573,7 +2633,7 @@
 
 // 3-byte sequence (may include unpaired surrogates)
 
-/* 80 */
+/* 110 */
 
 /*
  * base64-arraybuffer
@@ -2585,7 +2645,7 @@
 
 // Use a lookup table to find the index.
 
-/* 81 */
+/* 111 */
 
 /**
  * Create a blob builder even when vendor prefixes exist
@@ -2605,11 +2665,11 @@
 
 // include the subarray region from the underlying buffer
 
-/* 82 */
+/* 112 */
 
-/* 83 */
+/* 113 */
 
-/* 84 */
+/* 114 */
 
 /**
  * Cached regular expressions.
@@ -2668,7 +2728,7 @@
 
 // double escaping is required for escaped new lines because unescaping of new lines can be done safely on server-side
 
-/* 85 */
+/* 115 */
 
 /**
  * Get either the `WebSocket` or `MozWebSocket` globals
@@ -2753,13 +2813,13 @@
  * @api public
  */
 
-/* 86 */
+/* 116 */
 
 /* (ignored) */
 
-/* 87 */
+/* 117 */
 
-/* 88 */
+/* 118 */
 
 /**
  * Initialize backoff timer with `opts`.
@@ -2808,59 +2868,11 @@
  * @api public
  */
 
-/* 89 */
+/* 119 */
 
-/* 90 */
+/* 120 */
 
-/* 91 */
-
-/* 92 */
-
-/* 93 */
-
-/* 94 */
-
-/* 95 */
-
-/* 96 */
-
-/* 97 */
-
-/* 98 */
-
-/* 99 */
-
-/* 100 */
-
-/* 101 */
-
-/* 102 */
-
-/* 103 */
-
-/* 104 */
-
-/* 105 */
-
-/* 106 */
-
-/* 107 */
-
-/* 108 */
-
-/* 109 */
-
-/* 110 */
-
-/* 111 */
-
-/* 112 */
-
-/* 113 */
-
-/* 114 */
-
-/* 115 */
+/* 121 */
 
 // EXTERNAL MODULE: ./src/index.scss
 
@@ -4582,116 +4594,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @extends {LitElement}
      */
 
-// CONCATENATED MODULE: ./src/components/pop-up/mark-element/mark-element.component.ts
-
-/**
- *
- * This component shows one single mark
- *
- * It allows the user to login.
- *
- * @export
- * @class MarkElementComponent
- * @extends {LitElement}
- */
-
-/**
-     *
-     * This component shows one single mark
-     *
-     * It allows the user to login.
-     *
-     * @export
-     * @class MarkElementComponent
-     * @extends {LitElement}
-     */
-
-// CONCATENATED MODULE: ./src/helper/dateHelper.ts
-
-// CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
-
-// Only set tags when bookmark is undefined
-
-// If bookmark got deleted, it should set bookmark to undefined
-
-// Prevents to update too much. Checks if update got interrupted by user input
-
-/**
-     * Creates a new bookmark when clicking on bookmark icon
-     *
-     * @memberof BookmarkElementComponent
-     */
-
-// await this.updateBookmark();
-
-// EXTERNAL MODULE: ./node_modules/socket.io-client/lib/index.js
-
-/**
- *
- * This component is the sign-in component.
- *
- * It allows the user to login.
- *
- * @export
- * @class MarkOverviewComponent
- * @extends {LitElement}
- */
-
-/**
-     *
-     * This component is the sign-in component.
-     *
-     * It allows the user to login.
-     *
-     * @export
-     * @class MarkOverviewComponent
-     * @extends {LitElement}
-     */
-
-/**
-         * 1 = Only marks for current page
-         * 2 = Accordion view of marks for all pages
-         *
-         * @memberof MarkOverviewComponent
-         */
-
-/**
-     * Function called by extended connect method from pwa-helper, when state changed
-     *
-     * @memberof MarkOverviewComponent
-     */
-
-//   this.socket.on('createMark', (createdMark: Mark) => {
-
-//     this.allMarks = [...this.allMarks, createdMark];
-
-//     if (location.href === createdMark.url) {
-
-//       this.marks = [...this.marks, createdMark];
-
-//     } else {
-
-//       // TODO: Maybe a popup to show that on different page has been added a mark?
-
-//     this.marks = this.marks.filter(mark => mark.id !== deletedMarkId);
-
-//     this.allMarks = this.allMarks.filter(mark => mark.id !== deletedMarkId);
-
-//     this.marks = this.marks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
-
-//     this.allMarks = this.allMarks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
-
-//   this.socket.on('connect', (data: string) => {
-
-//     console.log('yeah');
-
-/**
-     * Gets the tags for the bookmark and updates tags of marks for current page
-     *
-     * @param {CustomEvent} e
-     * @memberof MarkOverviewComponent
-     */
-
 // CONCATENATED MODULE: ./src/components/pop-up/app.component.ts
 
 // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
@@ -4760,8 +4662,162 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/accordion-view/accordion-view.component.ts
 
+// CONCATENATED MODULE: ./src/components/pop-up/origin-overview/origin-overview.component.ts
+
+// CONCATENATED MODULE: ./src/components/pop-up/origin-element/origin-element.component.ts
+
+/**
+     * This method toggles the dropdown icon of the element. The timeout is necessary to wait for the animation to be completed.
+     *
+     * @memberof TreeViewComponent
+     */
+
+/**
+         * This method toggles the dropdown icon of the element.
+         * Fix: If it is the fist item in the list, this is not necessary because it disappears otherwise.
+         */
+
 // CONCATENATED MODULE: ./src/components/pop-up/bookmark-overview/bookmark-overview.component.ts
 
 // Filter if search value is given
 
+// Prevents to update too much. Checks if update got interrupted by user input
+
+// CONCATENATED MODULE: ./src/components/pop-up/mark-element/mark-element.component.ts
+
+/**
+ *
+ * This component shows one single mark
+ *
+ * It allows the user to login.
+ *
+ * @export
+ * @class MarkElementComponent
+ * @extends {LitElement}
+ */
+
+/**
+     *
+     * This component shows one single mark
+     *
+     * It allows the user to login.
+     *
+     * @export
+     * @class MarkElementComponent
+     * @extends {LitElement}
+     */
+
+// CONCATENATED MODULE: ./src/helper/dateHelper.ts
+
+// CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
+
+// Only set tags when bookmark is undefined
+
+// If bookmark got deleted, it should set bookmark to undefined
+
+/**
+    * Creates a new bookmark when clicking on bookmark icon
+    *
+    * @memberof BookmarkElementComponent
+    */
+
+// await this.updateBookmark();
+
+/**
+    * This method toggles the dropdown icon of the element. The timeout is necessary to wait for the animation to be
+    completed.
+    *
+    * @memberof TreeViewComponent
+    */
+
+// CONCATENATED MODULE: ./src/components/pop-up/mark-overview/mark-overview.component.ts
+
+/**
+ *
+ * This shows all marks and can be filtered by the filterValue
+ *
+ * @export
+ * @class MarkOverviewComponent
+ * @extends {LitElement}
+ */
+
+/**
+     *
+     * This shows all marks and can be filtered by the filterValue
+     *
+     * @export
+     * @class MarkOverviewComponent
+     * @extends {LitElement}
+     */
+
+// Filter for current bookmark, if given
+
 // CONCATENATED MODULE: ./src/components/pop-up/tags-view/tags-view.component.ts
+
+// EXTERNAL MODULE: ./node_modules/socket.io-client/lib/index.js
+
+/**
+ *
+ * This component is the sign-in component.
+ *
+ * It allows the user to login.
+ *
+ * @export
+ * @class MarkOverviewComponent
+ * @extends {LitElement}
+ */
+
+/**
+     *
+     * This component is the sign-in component.
+     *
+     * It allows the user to login.
+     *
+     * @export
+     * @class MarkOverviewComponent
+     * @extends {LitElement}
+     */
+
+/**
+         * 1 = Only marks for current page
+         * 2 = Accordion view of marks for all pages
+         *
+         * @memberof MarkOverviewComponent
+         */
+
+/**
+     * Function called by extended connect method from pwa-helper, when state changed
+     *
+     * @memberof MarkOverviewComponent
+     */
+
+//   this.socket.on('createMark', (createdMark: Mark) => {
+
+//     this.allMarks = [...this.allMarks, createdMark];
+
+//     if (location.href === createdMark.url) {
+
+//       this.marks = [...this.marks, createdMark];
+
+//     } else {
+
+//       // TODO: Maybe a popup to show that on different page has been added a mark?
+
+//     this.marks = this.marks.filter(mark => mark.id !== deletedMarkId);
+
+//     this.allMarks = this.allMarks.filter(mark => mark.id !== deletedMarkId);
+
+//     this.marks = this.marks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+
+//     this.allMarks = this.allMarks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+
+//   this.socket.on('connect', (data: string) => {
+
+//     console.log('yeah');
+
+/**
+     * Gets the tags for the bookmark and updates tags of marks for current page
+     *
+     * @param {CustomEvent} e
+     * @memberof MarkOverviewComponent
+     */

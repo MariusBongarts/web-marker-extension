@@ -24,6 +24,9 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   activeDirectory = '';
 
   @property()
+  animation = false;
+
+  @property()
   marks: Mark[] = [];
 
   @property()
@@ -61,10 +64,6 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
     this.origins = this.origins.map(origin => urlToOrigin(origin));
     this.origins.sort();
     this.origins = [...new Set(this.origins.map(origin => origin))];
-  }
-
-  toggleBookmark(bookmark: Bookmark) {
-    setTimeout(() => this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark, 1);
   }
 
 
@@ -109,16 +108,34 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
     }
   }
 
+  toggleBookmark(bookmark: Bookmark) {
+    console.log(bookmark);
+    this.animation = true;
+    this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark;
+  }
+
 
   render() {
     return html`
     <div class="container">
-      ${this.getFilteredBookmarks().map(bookmark => html`
+      ${this.getFilteredBookmarks().filter(bookmark => this.selectedBookmark ? this.selectedBookmark === bookmark : true).map(bookmark => html`
       <bookmark-element
+      .active=${this.selectedBookmark && this.selectedBookmark === bookmark}
       .isDropdown=${true}
+      @selected=${() => this.toggleBookmark(bookmark)}
+      @animationFinished=${() => this.animation = false}
       .bookmark=${bookmark}></bookmark-element>
+
+      ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
+    <mark-overview
+    .bookmarkFilter=${this.selectedBookmark}></mark-overview>
+    ` : ''}
       `)}
+
+
     </div>
+
+
 `;
   }
 

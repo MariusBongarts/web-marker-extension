@@ -134,8 +134,10 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
 
 ${!this.isDropdown ? html`
 <!-- No Dropdown mode => Element is only for current page -->
-<div class="mark">
-  <div class="header">
+<div class="mark slide-in">
+  <div class="header"
+  @click=${() => this.toggleActive()}
+  >
     <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title} </span>
     <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () =>
           await this.starBookmark()}>
@@ -161,7 +163,8 @@ ${!this.isDropdown ? html`
 
 <!-- Dropdown mode -->
 ` : html`
-<div class="mark slide-in" @click=${() => this.toggleActive()}
+<div class="mark slide-in"
+@click=${() => this.toggleActive()}
   >
   <div class="header">
     <div class="dropdown-icon ${this.active ? 'active' : ''}">
@@ -180,7 +183,13 @@ ${!this.isDropdown ? html`
 
   <!-- Only show tags when current location is saved as a bookmark -->
   ${this.active ? html`
-  <div class="footer">
+  <div class="footer"
+  @click=${(e: Event) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+  }
+  >
     <bronco-chip-list @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
       .hideOnOutsideClick=${false}
       .chips=${this.bookmark.tags}></bronco-chip-list>
