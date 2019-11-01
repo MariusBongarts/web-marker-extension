@@ -14,6 +14,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   bookmarks: Bookmark[];
 
   @property()
+  selectedOrigin: string = '';
+
+  @property()
   marks: Mark[];
 
   @property()
@@ -21,6 +24,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
 
   @property()
   active = false;
+
+  @property()
+  animation = false;
 
   stateChanged() {
     this.marks = store.getState().marks.filter(mark => mark.url.includes(this.origin));
@@ -33,13 +39,20 @@ export class TreeViewComponent extends connect(store)(LitElement) {
    * @memberof TreeViewComponent
    */
   toggleActive() {
+    this.animation = true;
     this.active = !this.active;
-    setTimeout(() => this.dispatchEvent(new CustomEvent('selected')), 240);
+    this.dispatchEvent(new CustomEvent('selected'));
+    setTimeout(() => {
+      this.dispatchEvent(new CustomEvent('animationFinished'));
+      this.animation = false;
+    }, 250);
   }
 
   render() {
     return html`
-<div class="element"
+<div class="element slide-in
+${this.selectedOrigin && this.selectedOrigin !== this.origin && !this.animation ? 'slide-out' : 'slide-top'}
+"
 @click=${() => this.toggleActive() }
 >
   <div class="header">

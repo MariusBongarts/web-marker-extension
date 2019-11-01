@@ -19,6 +19,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   activeDirectory = '';
 
   @property()
+  animation = false;
+
+  @property()
   marks: Mark[] = [];
 
   @property()
@@ -31,7 +34,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   loaded = false;
 
   @property()
-  selectedOrigin!: string;
+  selectedOrigin: string = '';
 
   origins: string[] = [];
 
@@ -57,15 +60,22 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     this.origins = [...new Set(this.origins.map(origin => origin))];
   }
 
+  toggleOrigin(origin: string) {
+    this.animation = true;
+    this.selectedOrigin === origin ? this.selectedOrigin = undefined : this.selectedOrigin = origin;
+  }
+
   render() {
     return html`
     <div class="container">
-      <!-- When no origin is selected, all origins are shown. Otherwise all non selected are filtered -->
-      ${this.origins.filter(origin => !this.selectedOrigin || this.selectedOrigin === origin)
-        .map(origin => html`
+      <!-- When no origin is selected,  all origins are shown. Otherwise all non selected are filtered.
+      The filtering also waits for the animation to finish -->
+      ${this.origins.filter(origin => (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map(origin => html`
       <origin-element
       origin=${origin}
-      @selected=${() => this.selectedOrigin === origin ? this.selectedOrigin = undefined : this.selectedOrigin = origin}
+      .selectedOrigin=${this.selectedOrigin}
+      @selected=${() => this.toggleOrigin(origin)}
+      @animationFinished=${() => this.animation = false}
       .active=${this.selectedOrigin === origin}
       .bookmarks=${this.bookmarks.filter(bookmark => bookmark.url.includes(origin))}
       ></origin-element>
