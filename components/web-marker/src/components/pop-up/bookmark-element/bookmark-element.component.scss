@@ -3,11 +3,12 @@
 :host {
   font-family: var(--font-family);
   --margin: 5px 0px;
+  --bg-color: var(--secondary-color);
 }
 
 .mark {
   //background: linear-gradient(to top right, var(--primary-dark) 0%, var(--primary-color) 100%);
-  background:var(--secondary-color);
+  background: var(--bg-color);
   box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.301);
   color: var(--white-dark);
   padding: 5px;
@@ -17,10 +18,19 @@
   margin-bottom: 0px;
   display: flex;
   flex-wrap: wrap;
+  cursor: default;
+}
+
+.mark.slide-in {
+  animation: .25s slide-in;
 }
 
 .mark:hover {
   color: white;
+
+  .badge {
+    color: var(--primary-light);
+  }
 
   blockquote {
     border-left: solid 3px var(--primary-color);
@@ -31,14 +41,13 @@
     --background-color: var(--primary-color);
     --color: white;
   }
-
 }
 
 .header {
   width: 100%;
   font-size: 9px;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   margin: 0px 5px;
 }
 
@@ -49,8 +58,6 @@
 .footer {
   width: 100%;
 }
-
-
 
 blockquote {
   border-left: solid 3px var(--primary-dark);
@@ -92,6 +99,7 @@ bronco-chip-list {
 
 .favoriteIcon {
   cursor: pointer;
+  margin-left: auto;
 }
 
 .favoriteIcon.active {
@@ -99,4 +107,19 @@ bronco-chip-list {
     color: var(--primary-color);
     fill: var(--primary-color);
   }
+}
+
+
+.dropdown-icon {
+  transition: all 0.25s;
+  padding-right: 5px;
+}
+
+.dropdown-icon.active {
+  transform: rotate(90deg);
+}
+
+.badge {
+  margin-left: auto;
+  margin-right: 0px;
 }

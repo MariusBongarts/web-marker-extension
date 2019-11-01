@@ -45,8 +45,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
 
   async firstUpdated() {
-
-
+    console.log(this.originFilter);
   }
 
   stateChanged() {
@@ -69,7 +68,7 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   }
 
 
-  filterBookmarks() {
+  getFilteredBookmarks() {
     let filteredBookmarks = this.bookmarks;
     filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.url.includes(this.originFilter));
 
@@ -113,59 +112,13 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    ${this.marks && this.bookmarks ? html`
-    <div class="tabs">
-          <!-- Close placeholder -->
-          ${this.selectedBookmark ? html`
-          <div>
-            <input type="radio" id="closeBtn" name="radioBtn">
-          </div>
-        ` : ''}
-      ${this.filterBookmarks().map(bookmark => html`
-      <div class="tab
-      ${!this.searchFilter || this.filterBookmarks().length > 1 ? 'border-top' : ''}
-      ${!this.selectedBookmark || this.selectedBookmark === bookmark ? '' : 'hide'}">
-
-        <input type="radio" id="${bookmark._id}" name="radioBtn">
-        <!-- setTimeout() is necessary to change selectedOrigin after radio input event -->
-        <label class="tab-label
-          ${this.marks.filter(mark => mark._bookmark === bookmark._id).length ? '' : 'hide-dropdown'}
-        " for="${this.selectedBookmark && this.selectedBookmark === bookmark ? 'closeBtn' : bookmark._id}"
-        @click=${(e) => this.toggleBookmark(bookmark)}
-        >
-        <span class="bookmarkHeader">${bookmark.title}</span>
-
-        <!-- Show either bookmark icon if there are no marks or number if marks for bookmark -->
-        <span class="badge">
-        ${this.marks.filter(mark => mark._bookmark === bookmark._id).length ?
-        this.marks.filter(mark => mark._bookmark === bookmark._id).length
-        :
-        html`
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-        <!-- Go to url of current mark or scroll -->
-        `
-
-      }</span>
-      </label>
-
-
-      <div class="tab-content">
-      ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
-      <bronco-chip-list
-        @tagsChanged=${async (e: CustomEvent) => this.tagsChanged(e)}
-        .hideOnOutsideClick=${false}
-        .chips=${bookmark.tags}></bronco-chip-list>
-        ` : ''}
-
-        ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
-        ${mark ? html`
-        <mark-element .mark=${mark} .headerInfo=${mark.origin.split(bookmark.origin)[1].substring(0, 20)}></mark-element>
-        ` : ''}
-        `)}
-      </div>
-          `)}
-      </div>
-        ` : html`Loading...`}
+    <div class="container">
+      ${this.getFilteredBookmarks().map(bookmark => html`
+      <bookmark-element
+      .isDropdown=${true}
+      .bookmark=${bookmark}></bookmark-element>
+      `)}
+    </div>
 `;
   }
 

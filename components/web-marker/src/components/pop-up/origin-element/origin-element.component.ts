@@ -46,11 +46,15 @@ export class TreeViewComponent extends connect(store)(LitElement) {
       this.dispatchEvent(new CustomEvent('animationFinished'));
       this.animation = false;
     }, 250);
+
+    // Remove element when it got selected to hide it during selection. After that it will be added again from the origin-overview
+    if(this.active) this.remove();
   }
 
   render() {
     return html`
 <div class="element slide-in
+${this.active ? 'active' : ''}
 ${this.selectedOrigin && this.selectedOrigin !== this.origin && !this.animation ? 'slide-out' : 'slide-top'}
 "
 @click=${() => this.toggleActive() }
@@ -63,10 +67,11 @@ ${this.selectedOrigin && this.selectedOrigin !== this.origin && !this.animation 
     </svg>
   </div>
     <span class="origin">${this.origin} </span>
-      <!-- Show either bookmark icon if there are no marks or number if marks for bookmark -->
+      <!-- Show either bookmark icon if there are no marks or number if marks for bookmark. Hide when active -->
+  ${!this.active ? html`
   <span class="badge">
-    ${this.marks.length ?
-        this.marks.length
+    ${!this.selectedOrigin || this.animation ?
+        this.bookmarks.length
         :
         html` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -74,12 +79,12 @@ ${this.selectedOrigin && this.selectedOrigin !== this.origin && !this.animation 
       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
     </svg>`
       }</span>
+  ` : ''}
   </div>
   <div class="main">
   </div>
-
-
 </div>
+
 `;
   }
 

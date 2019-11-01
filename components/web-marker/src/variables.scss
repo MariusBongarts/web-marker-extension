@@ -55,3 +55,35 @@ hr.divider {
   margin: 10px auto;
   border: solid 0.2px var(--secondary-light);
 }
+
+
+// KEYFRAMES START
+
+@keyframes slide-out {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-top {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+// KEYFRAMES END

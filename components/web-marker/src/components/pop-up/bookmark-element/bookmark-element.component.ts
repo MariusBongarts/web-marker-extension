@@ -1,3 +1,4 @@
+import { Mark } from './../../../models/mark';
 import { Bookmark } from './../../../models/bookmark';
 import { State } from './../../../store/reducer';
 import { connect } from 'pwa-helpers';
@@ -20,27 +21,45 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   tags = [];
 
   @property()
+  isDropdown = false;
+
+  @property()
   isFavorite = false;
 
   @property()
   bookmark!: Bookmark;
+
+  @property()
+  active = false;
+
+  @property()
+  animation = false;
+
+  @property()
+  marksForBookmark: Mark[];
 
   firstUpdated() {
     console.log(this.bookmark);
   }
 
   stateChanged() {
-    const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
-    // Only set tags when bookmark is undefined
-    if (!this.bookmark && bookmark) {
-      this.bookmark = bookmark
-      this.bookmark ? this.tags = this.bookmark.tags : '';
-    }
 
-    // If bookmark got deleted, it should set bookmark to undefined
-    if (!bookmark) {
-      this.bookmark = undefined;
+    if (this.isDropdown) {
+      this.marksForBookmark = store.getState().marks.filter(mark => mark._bookmark === this.bookmark._id);
+    } else {
+      const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+
+      // Only set tags when bookmark is undefined
+      if (!this.bookmark && bookmark) {
+        this.bookmark = bookmark
+        this.bookmark ? this.tags = this.bookmark.tags : '';
+      }
+
+      // If bookmark got deleted, it should set bookmark to undefined
+      if (!bookmark) {
+        this.bookmark = undefined;
+      }
     }
   }
 
@@ -50,7 +69,6 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
 
 
   async tagsChanged(e: CustomEvent) {
-    console.log("isahosssssssiaioh")
     this.updateStarted ? this.stopUpdate = true : '';
     if (this.bookmark.tags.length != e.detail.chips.length) {
       this.bookmark = { ...this.bookmark, tags: e.detail.chips };
@@ -65,7 +83,6 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
       setTimeout(async () => {
         this.updateStarted = true;
         if (!this.stopUpdate) await this.updateBookmark();
-        console.log("isahoiaioh")
         this.stopUpdate = false;
       }, 1500);
     }
@@ -79,10 +96,10 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
 
 
   /**
-   * Creates a new bookmark when clicking on bookmark icon
-   *
-   * @memberof BookmarkElementComponent
-   */
+  * Creates a new bookmark when clicking on bookmark icon
+  *
+  * @memberof BookmarkElementComponent
+  */
   async starBookmark() {
     if (this.bookmark) {
       this.bookmark = { ...this.bookmark, isStarred: !this.bookmark.isStarred };
@@ -96,29 +113,82 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     // await this.updateBookmark();
   }
 
+  /**
+  * This method toggles the dropdown icon of the element. The timeout is necessary to wait for the animation to be
+  completed.
+  *
+  * @memberof TreeViewComponent
+  */
+  toggleActive() {
+    this.animation = true;
+    this.active = !this.active;
+    this.dispatchEvent(new CustomEvent('selected'));
+    setTimeout(() => {
+      this.dispatchEvent(new CustomEvent('animationFinished'));
+      this.animation = false;
+    }, 250);
+  }
+
   render() {
     return html`
-    <div class="mark">
-      <div class="header" >
-        <span>${document.title} </span>
-        <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () => await this.starBookmark()}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-        </div>
-      </div>
-      <div class="main">
-      </div>
 
-      <!-- Only show tags when current location is saved as a bookmark -->
-      ${this.bookmark ? html`
-      <div class="footer">
-        <bronco-chip-list
-        @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
-        .hideOnOutsideClick=${false}
-        .chips=${this.bookmark.tags}></bronco-chip-list>
-      </div>
-      ` : ''}
+${!this.isDropdown ? html`
+<!-- No Dropdown mode => Element is only for current page -->
+<div class="mark">
+  <div class="header">
+    <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title} </span>
+    <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () =>
+          await this.starBookmark()}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="feather feather-bookmark">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
     </div>
-    `;
+  </div>
+  <div class="main">
+  </div>
+
+  <!-- Only show tags when current location is saved as a bookmark -->
+  ${this.bookmark ? html`
+  <div class="footer">
+    <bronco-chip-list @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
+      .hideOnOutsideClick=${false}
+      .chips=${this.bookmark.tags}></bronco-chip-list>
+  </div>
+  ` : ''}
+</div>
+
+<!-- Dropdown mode -->
+` : html`
+<div class="mark slide-in" @click=${() => this.toggleActive()}
+  >
+  <div class="header">
+    <div class="dropdown-icon ${this.active ? 'active' : ''}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </div>
+    <span class="origin">${this.bookmark.title} </span>
+    <span class="badge">
+      ${this.marksForBookmark.length}</span>
+  </div>
+  <div class="main">
+  </div>
+
+  <!-- Only show tags when current location is saved as a bookmark -->
+  ${this.active ? html`
+  <div class="footer">
+    <bronco-chip-list @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
+      .hideOnOutsideClick=${false}
+      .chips=${this.bookmark.tags}></bronco-chip-list>
+  </div>
+  ` : ''}
+</div>
+`}
+`;
   }
 
 }
