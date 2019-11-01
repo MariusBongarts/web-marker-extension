@@ -26,6 +26,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   active = false;
 
   @property()
+  index: number = -1;
+
+  @property()
   animation = false;
 
   stateChanged() {
@@ -47,8 +50,11 @@ export class TreeViewComponent extends connect(store)(LitElement) {
       this.animation = false;
     }, 250);
 
-    // Remove element when it got selected to hide it during selection. After that it will be added again from the origin-overview
-    if(this.active) this.remove();
+  /**
+   * This method toggles the dropdown icon of the element.
+   * Fix: If it is the fist item in the list, this is not necessary because it disappears otherwise.
+   */
+    if(this.active && this.index !== 0) this.remove();
   }
 
   render() {

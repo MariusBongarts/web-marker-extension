@@ -9,7 +9,6 @@ import { MarkerService } from './../../services/marker.service';
 import { JwtService } from './../../services/jwt.service';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import './sign-in/sign-in.component.ts';
-import './mark-overview/mark-overview.component.ts';
 
 const componentCSS = require('./app.component.scss');
 
@@ -58,10 +57,10 @@ export class PopUpComponent extends connect(store)(LitElement) {
   render() {
     return html`
     ${this.loaded ? html`
-    <mark-overview
+    <main-component
     @openLobby=${() => this.showAccountPopup = true}
     .loggedUser=${this.loggedUser}
-    ></mark-overview>
+    ></main-component>
       ${this.showAccountPopup && this.loggedUser && this.loggedUser.email ? html`
       <account-overview @logout=${() => this.logout()} .loggedUser=${this.loggedUser}></account-overview>
       ` : html`

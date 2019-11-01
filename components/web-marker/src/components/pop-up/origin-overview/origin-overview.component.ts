@@ -70,9 +70,10 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     <div class="container">
       <!-- When no origin is selected,  all origins are shown. Otherwise all non selected are filtered.
       The filtering also waits for the animation to finish -->
-      ${this.origins.filter(origin => origin.includes(this.searchValue) && (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map(origin => html`
+      ${this.origins.filter(origin => origin.includes(this.searchValue) && (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map((origin, index) => html`
       <origin-element
       origin=${origin}
+      .index=${index}
       .selectedOrigin=${this.selectedOrigin}
       @selected=${() => this.toggleOrigin(origin)}
       @animationFinished=${() => this.animation = false}
@@ -85,12 +86,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     ` : ''}
 
       `)}
-
-
-
     </div>
-
-
 `;
   }
 
