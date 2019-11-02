@@ -71,6 +71,7 @@ ${this.loaded ? html`
 
 <!-- If no tag is selected -->
 ${!this.selectedTag ? html`
+<div class="container">
 
 <!-- Info text if there are no tags yet -->
   ${this.tags.length === 0 ? html`
@@ -85,7 +86,6 @@ ${!this.selectedTag ? html`
   ` : html`
   ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter)).map(tag =>
   html`
-  <div class="container">
   <bronco-chip @click=${()=> this.selectedTag === tag ? this.selectedTag = '' : this.selectedTag = tag}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
