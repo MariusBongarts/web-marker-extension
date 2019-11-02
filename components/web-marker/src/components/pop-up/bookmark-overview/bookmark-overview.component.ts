@@ -48,7 +48,6 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
 
 
   async firstUpdated() {
-    console.log(this.originFilter);
   }
 
   stateChanged() {
@@ -109,7 +108,6 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
   }
 
   toggleBookmark(bookmark: Bookmark) {
-    console.log(bookmark);
     this.animation = true;
     this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark;
   }

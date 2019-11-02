@@ -19,7 +19,6 @@ export class HeaderToggleComponent extends LitElement {
       let filteredItems = [];
 
       if (this.filter) {
-        console.log(this.filter);
         filteredItems = this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase()));
       }
 
@@ -36,9 +35,6 @@ export class HeaderToggleComponent extends LitElement {
       // Enter
       if (e.keyCode === 13 && filteredItems.length !== 0) {
         let value = filteredItems[this.selectedIndex];
-        console.log(value);
-        console.log(this.selectedIndex);
-        console.log(filteredItems);
 
         if (value) {
           this.emit(value);

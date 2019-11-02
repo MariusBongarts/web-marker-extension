@@ -4715,9 +4715,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
 
-// Only set tags when bookmark is undefined
+//   if (!store.getState().searchValue) {
 
-// If bookmark got deleted, it should set bookmark to undefined
+//     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+
+//     // Only set tags when bookmark is undefined
+
+//     if (!this.bookmark && bookmark) {
+
+//       this.bookmark = bookmark
+
+//       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === bookmark.url);
+
+//       this.bookmark ? this.tags = this.bookmark.tags : '';
+
+//     // If bookmark got deleted, it should set bookmark to undefined
+
+//     if (!bookmark) {
+
+//       this.bookmark = undefined;
 
 /**
     * Creates a new bookmark when clicking on bookmark icon

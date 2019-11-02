@@ -39,24 +39,32 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   marksForBookmark: Mark[] = [];
 
   firstUpdated() {
-    this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
+    try {
+      this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
+    } catch (error) {
+      //
+    }
   }
 
   stateChanged(e) {
-  //   if (!store.getState().searchValue) {
-  //     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+    if (!store.getState().searchValue) {
+      const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
-  //     // Only set tags when bookmark is undefined
-  //     if (!this.bookmark && bookmark) {
-  //       this.bookmark = bookmark
-  //       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === bookmark.url);
-  //       this.bookmark ? this.tags = this.bookmark.tags : '';
-  //     }
-  //     // If bookmark got deleted, it should set bookmark to undefined
-  //     if (!bookmark) {
-  //       this.bookmark = undefined;
-  //     }
-  // }
+      // Only set tags when bookmark is undefined
+      if (!this.bookmark && bookmark) {
+        this.bookmark = bookmark
+        try {
+          this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
+        } catch (error) {
+          //
+        }
+        this.bookmark ? this.tags = this.bookmark.tags : '';
+      }
+      // If bookmark got deleted, it should set bookmark to undefined
+      if (!bookmark) {
+        this.bookmark = undefined;
+      }
+  }
   }
 
   async disconnectedCallback() {

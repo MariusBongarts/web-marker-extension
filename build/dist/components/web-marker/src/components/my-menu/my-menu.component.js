@@ -89,7 +89,6 @@ let MyMarkElement = class MyMarkElement extends LitElement {
             startOffset: range.startOffset,
             endOffset: range.endOffset,
         };
-        console.log(mark);
         return mark;
     }
     getDefaultMarks() {
