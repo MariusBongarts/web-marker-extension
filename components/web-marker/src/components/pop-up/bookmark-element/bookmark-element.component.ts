@@ -39,23 +39,24 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   marksForBookmark: Mark[] = [];
 
   firstUpdated() {
-    this.marksForBookmark = store.getState().marks.filter(mark => mark._bookmark === this.bookmark._id);
+    this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
   }
 
   stateChanged(e) {
-    if (!store.getState().searchValue) {
-      const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+  //   if (!store.getState().searchValue) {
+  //     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
-      // Only set tags when bookmark is undefined
-      if (!this.bookmark && bookmark) {
-        this.bookmark = bookmark
-        this.bookmark ? this.tags = this.bookmark.tags : '';
-      }
-      // If bookmark got deleted, it should set bookmark to undefined
-      if (!bookmark) {
-        this.bookmark = undefined;
-      }
-  }
+  //     // Only set tags when bookmark is undefined
+  //     if (!this.bookmark && bookmark) {
+  //       this.bookmark = bookmark
+  //       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === bookmark.url);
+  //       this.bookmark ? this.tags = this.bookmark.tags : '';
+  //     }
+  //     // If bookmark got deleted, it should set bookmark to undefined
+  //     if (!bookmark) {
+  //       this.bookmark = undefined;
+  //     }
+  // }
   }
 
   async disconnectedCallback() {
@@ -133,7 +134,7 @@ ${!this.isDropdown ? html`
   <div class="header"
   @click=${() => this.toggleActive()}
   >
-    <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title} </span>
+    <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title}</span>
     <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () =>
           await this.starBookmark()}>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -169,7 +170,7 @@ ${!this.isDropdown ? html`
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </div>
-    <span class="origin">${this.bookmark.title} </span>
+    <span class="origin">${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title}</span>
     <span class="badge">
       ${this.marksForBookmark.length}</span>
   </div>
