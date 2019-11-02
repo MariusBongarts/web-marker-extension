@@ -9,13 +9,13 @@ import { connect } from 'pwa-helpers';
 const componentCSS = require('./mark-overview.component.scss');
 
 /**
- *
- * This shows all marks and can be filtered by the filterValue
- *
- * @export
- * @class MarkOverviewComponent
- * @extends {LitElement}
- */
+*
+* This shows all marks and can be filtered by the filterValue
+*
+* @export
+* @class MarkOverviewComponent
+* @extends {LitElement}
+*/
 @customElement('mark-overview')
 class MainComponentComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
@@ -29,19 +29,39 @@ class MainComponentComponent extends connect(store)(LitElement) {
   @property()
   searchFilter = '';
 
+
+  /**
+   * When set to true, only marks for current page are shown
+   *
+   * @memberof MainComponentComponent
+   */
+  @property()
+  isCurrentPageMode = false;
+
   firstUpdated() {
     this.marks = store.getState().marks;
+    this.filterMarks();
   }
 
   stateChanged() {
     this.marks = store.getState().marks;
+    this.filterMarks();
+  }
+
+  filterMarks() {
+    // Filter for current page if mode is set to currentPage
+    if (this.isCurrentPageMode) {
+      this.marks = this.marks.filter(mark => mark.url === location.href);
+    } else {
+      this.marks = this.getFilteredMarks();
+    }
   }
 
   getFilteredMarks() {
     let filteredMarks = this.marks;
 
     // Filter for current bookmark, if given
-    if(this.bookmarkFilter) {
+    if (this.bookmarkFilter) {
       filteredMarks = filteredMarks.filter(mark => mark._bookmark === this.bookmarkFilter._id);
     }
 
@@ -52,6 +72,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
         this.isFilterInTagsOfBookmark(mark) ||
         mark.url.includes(store.getState().searchValue));
     }
+
     return filteredMarks;
   }
 
@@ -63,12 +84,22 @@ class MainComponentComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div class="markContainer">
-      ${this.getFilteredMarks().map(mark => html`
-      <mark-element
-      .mark=${mark}></mark-element>
-      `)}
-    </div>
-  `
+${this.marks.length === 0 && !this.searchFilter && this.isCurrentPageMode ? html`
+<div class="infoContainer">
+  <div class="mainInfo">
+    <span>No marks made on this page</span>
+  </div>
+  <div class="subInfo">
+    <span>Select text on this page to add new highlights.</span>
+  </div>
+</div>
+` : html`
+<div class="markContainer">
+  ${this.marks.map(mark => html`
+  <mark-element .mark=${mark}></mark-element>
+  `)}
+</div>
+`}
+`
   }
 }

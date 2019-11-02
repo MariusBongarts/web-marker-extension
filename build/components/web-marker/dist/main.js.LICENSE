@@ -4715,25 +4715,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
 
-//   if (!store.getState().searchValue) {
+// Only set tags when bookmark is undefined
 
-//     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
-
-//     // Only set tags when bookmark is undefined
-
-//     if (!this.bookmark && bookmark) {
-
-//       this.bookmark = bookmark
-
-//       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === bookmark.url);
-
-//       this.bookmark ? this.tags = this.bookmark.tags : '';
-
-//     // If bookmark got deleted, it should set bookmark to undefined
-
-//     if (!bookmark) {
-
-//       this.bookmark = undefined;
+// If bookmark got deleted, it should set bookmark to undefined
 
 /**
     * Creates a new bookmark when clicking on bookmark icon
@@ -4753,22 +4737,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // CONCATENATED MODULE: ./src/components/pop-up/mark-overview/mark-overview.component.ts
 
 /**
- *
- * This shows all marks and can be filtered by the filterValue
- *
- * @export
- * @class MarkOverviewComponent
- * @extends {LitElement}
- */
+*
+* This shows all marks and can be filtered by the filterValue
+*
+* @export
+* @class MarkOverviewComponent
+* @extends {LitElement}
+*/
 
 /**
-     *
-     * This shows all marks and can be filtered by the filterValue
-     *
-     * @export
-     * @class MarkOverviewComponent
-     * @extends {LitElement}
-     */
+    *
+    * This shows all marks and can be filtered by the filterValue
+    *
+    * @export
+    * @class MarkOverviewComponent
+    * @extends {LitElement}
+    */
+
+/**
+         * When set to true, only marks for current page are shown
+         *
+         * @memberof MainComponentComponent
+         */
+
+// Filter for current page if mode is set to currentPage
 
 // Filter for current bookmark, if given
 
@@ -4779,67 +4771,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // EXTERNAL MODULE: ./node_modules/socket.io-client/lib/index.js
 
 /**
- *
- * This component is the sign-in component.
- *
- * It allows the user to login.
- *
- * @export
- * @class MarkOverviewComponent
- * @extends {LitElement}
- */
+*
+* This component is the sign-in component.
+*
+* It allows the user to login.
+*
+* @export
+* @class MarkOverviewComponent
+* @extends {LitElement}
+*/
 
 /**
-     *
-     * This component is the sign-in component.
-     *
-     * It allows the user to login.
-     *
-     * @export
-     * @class MarkOverviewComponent
-     * @extends {LitElement}
-     */
+    *
+    * This component is the sign-in component.
+    *
+    * It allows the user to login.
+    *
+    * @export
+    * @class MarkOverviewComponent
+    * @extends {LitElement}
+    */
 
 /**
-         * 1 = Only marks for current page
-         * 2 = Accordion view of marks for all pages
-         *
-         * @memberof MarkOverviewComponent
-         */
+        * 1 = Only marks for current page
+        * 2 = Accordion view of marks for all pages
+        *
+        * @memberof MarkOverviewComponent
+        */
 
 /**
-     * Function called by extended connect method from pwa-helper, when state changed
-     *
-     * @memberof MarkOverviewComponent
-     */
+    * Function called by extended connect method from pwa-helper, when state changed
+    *
+    * @memberof MarkOverviewComponent
+    */
 
-//   this.socket.on('createMark', (createdMark: Mark) => {
+// this.socket.on('createMark', (createdMark: Mark) => {
 
-//     this.allMarks = [...this.allMarks, createdMark];
+// this.allMarks = [...this.allMarks, createdMark];
 
-//     if (location.href === createdMark.url) {
+// if (location.href === createdMark.url) {
 
-//       this.marks = [...this.marks, createdMark];
+// this.marks = [...this.marks, createdMark];
 
-//     } else {
+// } else {
 
-//       // TODO: Maybe a popup to show that on different page has been added a mark?
+// // TODO: Maybe a popup to show that on different page has been added a mark?
 
-//     this.marks = this.marks.filter(mark => mark.id !== deletedMarkId);
+// });
 
-//     this.allMarks = this.allMarks.filter(mark => mark.id !== deletedMarkId);
+// this.socket.on('deleteMark', (deletedMarkId: string) => {
 
-//     this.marks = this.marks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+// this.marks = this.marks.filter(mark => mark.id !== deletedMarkId);
 
-//     this.allMarks = this.allMarks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+// this.allMarks = this.allMarks.filter(mark => mark.id !== deletedMarkId);
 
-//   this.socket.on('connect', (data: string) => {
+// this.socket.on('updateMark', (updatedMark: Mark) => {
 
-//     console.log('yeah');
+// this.marks = this.marks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+
+// this.allMarks = this.allMarks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
+
+// this.socket.on('connect', (data: string) => {
+
+// console.log('yeah');
 
 /**
-     * Gets the tags for the bookmark and updates tags of marks for current page
-     *
-     * @param {CustomEvent} e
-     * @memberof MarkOverviewComponent
-     */
+    * Gets the tags for the bookmark and updates tags of marks for current page
+    *
+    * @param {CustomEvent} e
+    * @memberof MarkOverviewComponent
+    */

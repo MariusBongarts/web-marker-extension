@@ -68,6 +68,18 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   render() {
     return html`
     <div class="container">
+
+    <!-- Info text if no marks or bookmarks are created yet -->
+    ${this.origins.length === 0 ? html`
+    <div class="infoContainer">
+    <div class="mainInfo">
+      <span>There are no bookmarks or marks yet</span>
+    </div>
+    <div class="subInfo">
+      <span>Select text on pages or add bookmarks to see them here.</span>
+    </div>
+  </div>
+    ` : html`
       <!-- When no origin is selected,  all origins are shown. Otherwise all non selected are filtered.
       The filtering also waits for the animation to finish -->
       ${this.origins.filter(origin => origin.includes(this.searchValue) && (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map((origin, index) => html`
@@ -86,6 +98,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     ` : ''}
 
       `)}
+      `}
     </div>
 `;
   }

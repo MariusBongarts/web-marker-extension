@@ -47,6 +47,7 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   }
 
   stateChanged(e) {
+    console.log(store.getState().marks);
     if (!store.getState().searchValue) {
       const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
