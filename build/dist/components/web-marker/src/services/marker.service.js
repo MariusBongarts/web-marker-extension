@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { store } from './../store/store';
 import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
@@ -35,6 +36,7 @@ export class MarkerService {
     }
     createMark(mark) {
         return __awaiter(this, void 0, void 0, function* () {
+            mark = this.addTagsOfBookmark(mark);
             addMark(mark);
             //await this.emitSocket('createMark', mark);
             const response = yield this.httpClient.post('/marks', mark);
@@ -64,6 +66,23 @@ export class MarkerService {
             const mark = yield response.json();
             return mark;
         });
+    }
+    /**
+     * Adds the tags of the current bookmark to the created mark
+     *
+     * @param {Mark} mark
+     * @memberof MarkerService
+     */
+    addTagsOfBookmark(mark) {
+        try {
+            const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === mark.url);
+            if (bookmark && bookmark.tags)
+                mark.tags = [...new Set([...mark.tags, ...bookmark.tags])];
+        }
+        catch (error) {
+            //
+        }
+        return mark;
     }
 }
 //# sourceMappingURL=marker.service.js.map

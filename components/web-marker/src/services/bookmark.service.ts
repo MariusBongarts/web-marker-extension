@@ -1,3 +1,4 @@
+import { store } from './../store/store';
 import { Bookmark } from './../models/bookmark';
 import { JwtService } from './jwt.service';
 import { Mark } from './../models/mark';
@@ -5,6 +6,7 @@ import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
 import { updateBookmark, addBookmark, removeBookmark, initBookmarks } from '../store/actions';
 import { v4 as uuid } from 'uuid';
+import { MarkerService } from './marker.service';
 
 
 export class BookmarkService {
@@ -47,6 +49,9 @@ export class BookmarkService {
   async updateBookmark(bookmark: Bookmark): Promise<void> {
     // Update redux
     updateBookmark(bookmark);
+
+    //await this.updateTagsOfRelatedMarks(bookmark);
+
     await this.httpClient.put(this.BASE_URL, bookmark);
 
     // Update bookmarks for store
@@ -70,6 +75,23 @@ export class BookmarkService {
       origin: location.origin
     } as Bookmark;
 
+  }
+
+
+  /**
+   * When the tags of a bookmarks change. The tags are also being added to the related marks.
+   *
+   * @memberof BookmarkService
+   */
+  async updateTagsOfRelatedMarks(bookmark: Bookmark) {
+    const markService = new MarkerService();
+    const marks = store.getState().marks.filter(mark => mark.url === bookmark.url)
+    .map(mark => {
+      return {...mark, tags: [...new Set([...mark.tags, ...bookmark.tags])]};
+      }
+      );
+    console.log(marks);
+    marks.forEach(async (mark) => await markService.updateMark(mark));
   }
 
 }

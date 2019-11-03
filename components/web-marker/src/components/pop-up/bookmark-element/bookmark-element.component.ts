@@ -1,3 +1,4 @@
+import { MarkerService } from './../../../services/marker.service';
 import { Mark } from './../../../models/mark';
 import { Bookmark } from './../../../models/bookmark';
 import { State } from './../../../store/reducer';
@@ -41,31 +42,29 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   firstUpdated() {
     try {
       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
+      console.log(this.marksForBookmark);
     } catch (error) {
       //
     }
   }
 
-  stateChanged(e) {
-    console.log(store.getState().marks);
+  stateChanged() {
     if (!store.getState().searchValue) {
-      const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
 
-      // Only set tags when bookmark is undefined
-      if (!this.bookmark && bookmark) {
-        this.bookmark = bookmark
-        try {
-          this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
-        } catch (error) {
-          //
-        }
-        this.bookmark ? this.tags = this.bookmark.tags : '';
+      if (!this.isDropdown) {
+        const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === location.href);
+        this.bookmark = bookmark;
       }
-      // If bookmark got deleted, it should set bookmark to undefined
-      if (!bookmark) {
-        this.bookmark = undefined;
+
+      try {
+        this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
+      } catch (error) {
+        //
       }
-  }
+
+      //this.bookmark ? this.tags = this.bookmark.tags : '';
+
+    }
   }
 
   async disconnectedCallback() {
@@ -77,25 +76,22 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     this.updateStarted ? this.stopUpdate = true : '';
     if (this.bookmark.tags.length != e.detail.chips.length) {
       this.bookmark = { ...this.bookmark, tags: e.detail.chips };
-      this.dispatchEvent(
-        new CustomEvent('tagsChanged', {
-          bubbles: true,
-          detail: e.detail
-        })
-      );
-
-      // Prevents to update too much. Checks if update got interrupted by user input
-      setTimeout(async () => {
-        this.updateStarted = true;
-        if (!this.stopUpdate) await this.updateBookmark();
-        this.stopUpdate = false;
-      }, 1500);
+      await this.updateBookmark();
     }
   }
 
   async updateBookmark() {
     if (this.bookmark) {
       await this.bookmarkService.updateBookmark(this.bookmark);
+    }
+  }
+
+  async updateMarks() {
+    if (this.marksForBookmark) {
+      const markService = new MarkerService();
+      this.marksForBookmark.forEach(async (mark) => {
+        await markService.updateMark(mark);
+      })
     }
   }
 
@@ -179,7 +175,9 @@ ${!this.isDropdown ? html`
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </div>
-    <span class="origin">${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title}</span>
+    ${this.bookmark ? html`
+    <span class="origin">${this.bookmark.title}</span>
+    ` : ''}
     <span class="badge">
       ${this.marksForBookmark.length}</span>
   </div>
@@ -190,16 +188,18 @@ ${!this.isDropdown ? html`
   ${this.active ? html`
   <div class="footer"
   @click=${(e: Event) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-  }
-  }
+              e.preventDefault();
+              e.stopImmediatePropagation();
+            }
+            }
   >
-    <bronco-chip-list @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
+    <bronco-chip-list
+    @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
       .hideOnOutsideClick=${false}
       .chips=${this.bookmark.tags}></bronco-chip-list>
   </div>
   ` : ''}
+
 </div>
 `}
 `;

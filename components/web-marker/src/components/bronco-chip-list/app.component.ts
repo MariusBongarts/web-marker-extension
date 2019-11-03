@@ -51,7 +51,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   @property()
-  focused = true;
+  focused = false;
 
   /**
    * Property to prevent to fast deleting. So that user has to click backspace twice.
@@ -92,7 +92,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
   stateChanged(e: State) {
     if (this.mark && store.getState().lastAction === 'UPDATE_MARK') {
       this.mark = e.marks.find(e => e.id === this.mark.id);
-      this.chips = this.mark.tags;
+      this.chips = this.mark && this.mark.tags ? this.mark.tags : [];
     }
   }
 

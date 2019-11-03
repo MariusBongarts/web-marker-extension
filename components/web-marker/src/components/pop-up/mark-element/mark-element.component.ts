@@ -11,15 +11,15 @@ import { navigateExternal } from '../../../helper/router';
 const componentCSS = require('./mark-element.component.scss');
 
 /**
- *
- * This component shows one single mark
- *
- * It allows the user to login.
- *
- * @export
- * @class MarkElementComponent
- * @extends {LitElement}
- */
+*
+* This component shows one single mark
+*
+* It allows the user to login.
+*
+* @export
+* @class MarkElementComponent
+* @extends {LitElement}
+*/
 
 @customElement('mark-element')
 class MarkElementComponent extends connect(store)(LitElement) {
@@ -42,9 +42,24 @@ class MarkElementComponent extends connect(store)(LitElement) {
   headerInfo: string;
 
   stateChanged(e: State) {
-    if (store.getState().lastAction === 'UPDATE_MARK') {
-      this.mark = e.marks.find(e => e.id === this.mark.id);
-      this.requestUpdate();
+    try {
+      if (store.getState().lastAction === 'UPDATE_MARK') {
+        const mark = e.marks.find(e => e.id === this.mark.id);
+        mark.tags = [...new Set([...mark.tags])];
+        this.mark = mark;
+        console.log(this.mark);
+        this.requestUpdate();
+      }
+      if (store.getState().lastAction === 'UPDATE_BOOKMARK') {
+        this.mark = {...this.mark,
+          tags:
+          [...new Set([...this.mark.tags,
+                 ...e.bookmarks.find(bookmark => bookmark.url === this.mark.url).tags])]
+                }
+        this.requestUpdate();
+      }
+    } catch (error) {
+      //
     }
   }
 
@@ -75,37 +90,33 @@ class MarkElementComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div class="mark slide-in">
-      <div class="header" >
-    <span class="timeSince" > ${ timeSinceTimestamp(this.mark.createdAt)}</span>
-    <action-toolbar
-    @deleted=${async (e: MouseEvent) => await this.deleteMark(e)}
-    @goToMark=${(e) => this.scrollToMark(e)}
-    ></action-toolbar>
-      </div>
-              <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
-                <blockquote>${ this.mark.text} </blockquote>
-                  </div>
-                  <div class="footer"
-                  @click=${() => !this.showActionToolbar ? this.showActionToolbar = !this.showActionToolbar : ''}
-                  >
-                    ${this.showActionToolbar ? html`
-                    <bronco-chip-list
-                    .hideOnOutsideClick=${false}
-                    .mark=${this.mark}></bronco-chip-list>
-                    ` : ''}
-                    ${!this.showActionToolbar ?
-        this.mark.tags.map(tag => html`
-        <bronco-chip
-        @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
-        >${tag}</bronco-chip>`) : ''
-      }
-        </div>
-
-
-
+${this.mark ? html`
+<div class="mark slide-in">
+  <div class="header">
+    <span class="timeSince"> ${ timeSinceTimestamp(this.mark.createdAt)}</span>
+    <action-toolbar @deleted=${async (e: MouseEvent) => await this.deleteMark(e)}
+        @goToMark=${(e) => this.scrollToMark(e)}
+      ></action-toolbar>
+  </div>
+  <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
+      <blockquote>${ this.mark.text} </blockquote>
     </div>
-    `;
+    <div class="footer" @click=${() => !this.showActionToolbar ? this.showActionToolbar = !this.showActionToolbar : ''}
+        >
+
+        <!-- Show either only tags or also input field to add tags -->
+        ${this.showActionToolbar ? html`
+        <bronco-chip-list .hideOnOutsideClick=${false} .mark=${this.mark}></bronco-chip-list>
+        ` : ''}
+        ${!this.showActionToolbar ?
+        this.mark.tags.map(tag => html`
+    <bronco-chip @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
+    >${tag}</bronco-chip>`) : ''
+      }
+  </div>
+</div>
+` : ''}
+`;
   }
 
 }

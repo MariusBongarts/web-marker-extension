@@ -7,11 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { store } from './../store/store';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
 import { updateBookmark, addBookmark, removeBookmark, initBookmarks } from '../store/actions';
 import { v4 as uuid } from 'uuid';
+import { MarkerService } from './marker.service';
 export class BookmarkService {
     constructor() {
         this.jwtService = new JwtService();
@@ -53,6 +55,7 @@ export class BookmarkService {
         return __awaiter(this, void 0, void 0, function* () {
             // Update redux
             updateBookmark(bookmark);
+            //await this.updateTagsOfRelatedMarks(bookmark);
             yield this.httpClient.put(this.BASE_URL, bookmark);
             // Update bookmarks for store
             yield this.getBookmarks();
@@ -75,6 +78,22 @@ export class BookmarkService {
             title: document.title,
             origin: location.origin
         };
+    }
+    /**
+     * When the tags of a bookmarks change. The tags are also being added to the related marks.
+     *
+     * @memberof BookmarkService
+     */
+    updateTagsOfRelatedMarks(bookmark) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const markService = new MarkerService();
+            const marks = store.getState().marks.filter(mark => mark.url === bookmark.url)
+                .map(mark => {
+                return Object.assign(Object.assign({}, mark), { tags: [...new Set([...mark.tags, ...bookmark.tags])] });
+            });
+            console.log(marks);
+            marks.forEach((mark) => __awaiter(this, void 0, void 0, function* () { return yield markService.updateMark(mark); }));
+        });
     }
 }
 //# sourceMappingURL=bookmark.service.js.map

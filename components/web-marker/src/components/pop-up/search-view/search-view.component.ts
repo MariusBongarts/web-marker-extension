@@ -23,6 +23,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   @property()
   searchFilter = '';
 
+  @property()
+  selectedBookmark = undefined;
+
   async firstUpdated() {
     this.bookmarks = store.getState().bookmarks;
     this.marks = store.getState().marks;
@@ -62,9 +65,25 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   render() {
     return html`
     <div class="container">
+    ${this.getFilteredBookmarks().map(bookmark => html`
+      <bookmark-element
+      @click=${() => this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark}
+      .active=${this.selectedBookmark === bookmark}
+      .isDropdown=${true}
+      .bookmark=${bookmark}></bookmark-element>
+      ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
+      ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
+      <mark-element .mark=${mark}></mark-element>`)}
+      ` : ''}
+      `)}
+
+
+      <!-- Hide when bookmark is selected -->
+      ${!this.selectedBookmark ? html`
       ${this.getFilteredMarks().map(mark => html`
       <mark-element .mark=${mark}></mark-element>
       `)}
+      ` : ''}
     </div>
 `;
   }

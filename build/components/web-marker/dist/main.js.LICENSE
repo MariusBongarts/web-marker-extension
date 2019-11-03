@@ -2999,13 +2999,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // EXTERNAL MODULE: ./node_modules/uuid/index.js
 
+// CONCATENATED MODULE: ./src/services/marker.service.ts
+
+//await this.emitSocket('createMark', mark);
+
+/**
+     * Adds the tags of the current bookmark to the created mark
+     *
+     * @param {Mark} mark
+     * @memberof MarkerService
+     */
+
 // CONCATENATED MODULE: ./src/services/bookmark.service.ts
 
 // Update redux
 
-// CONCATENATED MODULE: ./src/services/marker.service.ts
-
-//await this.emitSocket('createMark', mark);
+/**
+     * When the tags of a bookmarks change. The tags are also being added to the related marks.
+     *
+     * @memberof BookmarkService
+     */
 
 // CONCATENATED MODULE: ./src/store/actions.ts
 
@@ -4690,34 +4703,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // CONCATENATED MODULE: ./src/components/pop-up/mark-element/mark-element.component.ts
 
 /**
- *
- * This component shows one single mark
- *
- * It allows the user to login.
- *
- * @export
- * @class MarkElementComponent
- * @extends {LitElement}
- */
+*
+* This component shows one single mark
+*
+* It allows the user to login.
+*
+* @export
+* @class MarkElementComponent
+* @extends {LitElement}
+*/
 
 /**
-     *
-     * This component shows one single mark
-     *
-     * It allows the user to login.
-     *
-     * @export
-     * @class MarkElementComponent
-     * @extends {LitElement}
-     */
+    *
+    * This component shows one single mark
+    *
+    * It allows the user to login.
+    *
+    * @export
+    * @class MarkElementComponent
+    * @extends {LitElement}
+    */
 
 // CONCATENATED MODULE: ./src/helper/dateHelper.ts
 
 // CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
 
-// Only set tags when bookmark is undefined
-
-// If bookmark got deleted, it should set bookmark to undefined
+//this.bookmark ? this.tags = this.bookmark.tags : '';
 
 /**
     * Creates a new bookmark when clicking on bookmark icon
@@ -4834,10 +4845,3 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // this.socket.on('connect', (data: string) => {
 
 // console.log('yeah');
-
-/**
-    * Gets the tags for the bookmark and updates tags of marks for current page
-    *
-    * @param {CustomEvent} e
-    * @memberof MarkOverviewComponent
-    */

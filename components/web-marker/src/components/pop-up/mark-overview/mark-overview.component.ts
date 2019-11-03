@@ -72,7 +72,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
         this.isFilterInTagsOfBookmark(mark) ||
         mark.url.includes(store.getState().searchValue));
     }
-
+    console.log(filteredMarks);
     return filteredMarks;
   }
 

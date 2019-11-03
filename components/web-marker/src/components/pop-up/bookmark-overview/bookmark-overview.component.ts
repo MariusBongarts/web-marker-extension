@@ -118,23 +118,20 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
     <div class="container">
       ${this.getFilteredBookmarks().filter(bookmark => this.selectedBookmark ? this.selectedBookmark === bookmark : true).map(bookmark => html`
       <bookmark-element
+      .selected=${this.selectedBookmark === bookmark}
       .active=${this.selectedBookmark && this.selectedBookmark === bookmark}
       .isDropdown=${true}
       @selected=${() => this.toggleBookmark(bookmark)}
       @animationFinished=${() => this.animation = false}
       .bookmark=${bookmark}></bookmark-element>
-
       ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
-    <mark-overview
-    .bookmarkFilter=${this.selectedBookmark}></mark-overview>
-    ` : ''}
+      ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
+      <mark-element .mark=${mark}></mark-element>`)}
+      ` : ''}
       `)}
 
-
     </div>
-
-
-`;
+`
   }
 
 }
