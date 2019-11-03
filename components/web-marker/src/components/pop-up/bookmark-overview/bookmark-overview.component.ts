@@ -124,10 +124,12 @@ export class BookmarkOverviewComponent extends connect(store)(LitElement) {
       @selected=${() => this.toggleBookmark(bookmark)}
       @animationFinished=${() => this.animation = false}
       .bookmark=${bookmark}></bookmark-element>
+      <div>
       ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
       ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
       <mark-element .mark=${mark}></mark-element>`)}
       ` : ''}
+      </div>
       `)}
 
     </div>
