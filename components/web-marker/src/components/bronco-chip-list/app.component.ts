@@ -130,6 +130,9 @@ export class BroncoChipList extends connect(store)(LitElement) {
     store.getState().marks.forEach(mark => {
       tags = [...tags, ...mark.tags];
     });
+    store.getState().bookmarks.forEach(bookmark => {
+      tags = [...tags, ...bookmark.tags];
+    });
     tags = [...new Set(tags)];
     tags.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
     return tags;

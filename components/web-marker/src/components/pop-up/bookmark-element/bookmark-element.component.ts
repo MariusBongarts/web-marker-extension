@@ -8,6 +8,7 @@ import { JwtPayload } from './../../../models/jwtPayload';
 import { css, customElement, html, LitElement, query, property, unsafeCSS } from 'lit-element';
 import { timeSinceTimestamp } from '../../../helper/dateHelper';
 import { BookmarkService } from '../../../services/bookmark.service';
+import { navigateExternal } from '../../../helper/router';
 
 const componentCSS = require('./bookmark-element.component.scss');
 
@@ -178,6 +179,9 @@ ${!this.isDropdown ? html`
     ${this.bookmark ? html`
     <span class="origin">${this.bookmark.title}</span>
     ` : ''}
+    <action-toolbar
+  .hideDeleteIcon=${true}
+  @goToMark=${() => navigateExternal(this.bookmark.url)}></action-toolbar>
     <span class="badge">
       ${this.marksForBookmark.length}</span>
   </div>
@@ -193,6 +197,7 @@ ${!this.isDropdown ? html`
             }
             }
   >
+
     <bronco-chip-list
     @tagsChanged=${async (e: CustomEvent) => await this.tagsChanged(e)}
       .hideOnOutsideClick=${false}
