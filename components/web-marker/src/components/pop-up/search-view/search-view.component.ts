@@ -64,27 +64,47 @@ export class TreeViewComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div class="container">
-    ${this.getFilteredBookmarks().map(bookmark => html`
-      <bookmark-element
-      @click=${() => this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark}
-      .active=${this.selectedBookmark === bookmark}
-      .isDropdown=${this.marks.filter(mark => mark.url === bookmark.url).length > 0}
-      .bookmark=${bookmark}></bookmark-element>
-      ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
-      ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
-      <mark-element .mark=${mark}></mark-element>`)}
-      ` : ''}
-      `)}
+<div class="container">
 
+  <!-- Show bookmarks icon if there are bookmarks for selected tag -->
+  ${this.getFilteredBookmarks().length ? html`
+  <div class="bookmark-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark">
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </div>
+  ` : ''}
+  ${this.getFilteredBookmarks()
+    .filter(bookmark => !this.selectedBookmark || this.selectedBookmark === bookmark)
+    .map(bookmark => html`
+  <bookmark-element @click=${() => this.selectedBookmark === bookmark ? this.selectedBookmark = undefined :
+        this.selectedBookmark = bookmark}
+    .active=${this.selectedBookmark === bookmark}
+    .isDropdown=${true}
+    .bookmark=${bookmark}></bookmark-element>
+  ${this.selectedBookmark && this.selectedBookmark === bookmark ? html`
+  ${this.marks.filter(mark => mark._bookmark === bookmark._id).map(mark => html`
+  <mark-element .mark=${mark}></mark-element>`)}
+  ` : ''}
+  `)}
 
-      <!-- Hide when bookmark is not selected -->
-      ${!this.selectedBookmark ? html`
-      ${this.getFilteredMarks().map(mark => html`
-      <mark-element .mark=${mark}></mark-element>
-      `)}
-      ` : ''}
-    </div>
+  <!-- Hide when a bookmark is selected -->
+  ${!this.selectedBookmark ? html`
+  <!-- Show marks icon if there are marks for selected tag -->
+  ${this.getFilteredMarks().length ? html`
+  <div class="mark-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 544 512">
+      <path
+        d="M0 479.98L99.92 512l35.45-35.45-67.04-67.04L0 479.98zm124.61-240.01a36.592 36.592 0 0 0-10.79 38.1l13.05 42.83-50.93 50.94 96.23 96.23 50.86-50.86 42.74 13.08c13.73 4.2 28.65-.01 38.15-10.78l35.55-41.64-173.34-173.34-41.52 35.44zm403.31-160.7l-63.2-63.2c-20.49-20.49-53.38-21.52-75.12-2.35L190.55 183.68l169.77 169.78L530.27 154.4c19.18-21.74 18.15-54.63-2.35-75.13z" />
+      </svg>
+  </div>
+  ` : ''}
+  ${this.getFilteredMarks().map(mark => html`
+  <mark-element .mark=${mark}></mark-element>
+  `)}
+  ` : ''}
+</div>
 `;
   }
 

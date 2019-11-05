@@ -4641,6 +4641,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/action-toolbar/action-toolbar.component.ts
 
+/**
+         * When set to true, it hides the delete icon
+         *
+         * @memberof BookmarkElementComponent
+         */
+
+/**
+     * Either @event goToMatk or @event deleted
+     *
+     * @param {string} eventName
+     * @memberof BookmarkElementComponent
+     */
+
 // CONCATENATED MODULE: ./src/components/pop-up/lobby-container/app.component.ts
 
 /**

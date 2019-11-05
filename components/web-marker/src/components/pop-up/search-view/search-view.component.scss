@@ -1,1 +1,22 @@
 @import "../../../variables.scss";
+
+bookmark-element {
+  --bg-color: var(--secondary-dark);
+}
+
+.bookmark-icon, .mark-icon {
+  background: var(--secondary-dark);
+  display: flex;
+  margin-top: 10px;
+}
+
+.bookmark-icon svg, .mark-icon svg {
+  color: var(--primary-color);
+  fill: var(--primary-color);
+  margin-left: auto;
+  padding: 5px 20px;
+}
+
+bookmark-element {
+  --bg-color: var(--secondary-dark);
+}

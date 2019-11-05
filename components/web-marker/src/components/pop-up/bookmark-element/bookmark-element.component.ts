@@ -68,11 +68,6 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     }
   }
 
-  async disconnectedCallback() {
-    await this.updateBookmark();
-  }
-
-
   async tagsChanged(e: CustomEvent) {
     this.updateStarted ? this.stopUpdate = true : '';
     if (this.bookmark.tags.length != e.detail.chips.length) {
@@ -143,6 +138,7 @@ ${!this.isDropdown ? html`
     <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title}</span>
     <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () =>
           await this.starBookmark()}>
+      <!-- Bookmark Icon -->
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="feather feather-bookmark">
