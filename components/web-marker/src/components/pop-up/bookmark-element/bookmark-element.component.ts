@@ -43,7 +43,6 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   firstUpdated() {
     try {
       this.marksForBookmark = store.getState().marks.filter(mark => mark.url === this.bookmark.url);
-      console.log(this.marksForBookmark);
     } catch (error) {
       //
     }

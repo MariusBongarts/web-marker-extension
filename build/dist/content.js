@@ -19,13 +19,6 @@ chrome.runtime.onMessage.addListener((request) => __awaiter(void 0, void 0, void
         popup.showAccountPopup ? popup.showAccountPopup = false : popup.showAccountPopup = true;
     }
     ;
-    if (request.id === 'contextMenu') {
-        console.log(request);
-        // const mark = createMark();
-        // highlightText(null, mark);
-        // TODO: Save in database
-    }
-    ;
 }));
 function closePopupOnOutsideClick() {
     document.body.onclick = (e) => {

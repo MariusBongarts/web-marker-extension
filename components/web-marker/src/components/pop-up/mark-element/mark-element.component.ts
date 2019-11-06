@@ -59,8 +59,6 @@ class MarkElementComponent extends connect(store)(LitElement) {
                  ...e.bookmarks.find(bookmark => bookmark._id === this.mark._bookmark).tags])]
                 }
                 if (oldTags !== this.mark.tags) {
-                  console.log("Updated mark");
-                  console.log(this.mark);
                   await this.markService.updateMark(this.mark);
 
                 }

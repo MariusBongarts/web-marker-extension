@@ -44,7 +44,6 @@ export class WebMarker extends connect(store)(LitElement) {
       chrome.runtime.onMessage.addListener(async (request) => {
 
         if (request.id === 'contextMenu') {
-          console.log(request);
           const mark = createMark();
           highlightText(null, mark);
           await this.markerService.createMark(mark);

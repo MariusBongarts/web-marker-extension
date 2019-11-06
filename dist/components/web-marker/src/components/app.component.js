@@ -44,7 +44,6 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
         try {
             chrome.runtime.onMessage.addListener((request) => __awaiter(this, void 0, void 0, function* () {
                 if (request.id === 'contextMenu') {
-                    console.log(request);
                     const mark = createMark();
                     highlightText(null, mark);
                     yield this.markerService.createMark(mark);
