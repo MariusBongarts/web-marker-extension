@@ -56,17 +56,6 @@ export class MyMarkerElement extends connect(store)(LitElement) {
       this.mark = e.marks.find(e => this.mark && e.id === this.mark.id);
       this.requestUpdate();
     }
-    if (store.getState().lastAction === 'REMOVE_MARK') {
-      try {
-        const marks = e.marks as Mark[];
-        if (!marks.includes(this.mark)) {
-          this.emitDeleted();
-        }
-      } catch(error) {
-        //
-      }
-
-    }
   }
 
 
