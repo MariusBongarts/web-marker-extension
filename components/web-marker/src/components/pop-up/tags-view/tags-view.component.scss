@@ -36,16 +36,19 @@ bronco-chip {
 }
 
 .bookmark-icon, .mark-icon {
-  background: var(--secondary-dark);
+  background: var(--primary-color);
   display: flex;
   margin-top: 10px;
 }
 
 .bookmark-icon svg, .mark-icon svg {
-  color: var(--primary-color);
+  color: white;
   fill: var(--primary-color);
   margin-left: auto;
-  padding: 5px 20px;
+  padding: 2px 20px;
+}
+.mark-icon svg {
+  fill: white;
 }
 
 bookmark-element {

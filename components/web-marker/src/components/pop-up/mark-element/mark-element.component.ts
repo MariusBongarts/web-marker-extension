@@ -41,7 +41,7 @@ class MarkElementComponent extends connect(store)(LitElement) {
   @property()
   headerInfo: string;
 
-  stateChanged(e: State) {
+  async stateChanged(e: State) {
     try {
       if (store.getState().lastAction === 'UPDATE_MARK') {
         const mark = e.marks.find(e => e.id === this.mark.id);
@@ -51,12 +51,20 @@ class MarkElementComponent extends connect(store)(LitElement) {
         this.requestUpdate();
       }
       if (store.getState().lastAction === 'UPDATE_BOOKMARK') {
+        console.log("Updated mark");
+        const oldTags = this.mark.tags;
         this.mark = {...this.mark,
           tags:
           [...new Set([...this.mark.tags,
-                 ...e.bookmarks.find(bookmark => bookmark.url === this.mark.url).tags])]
+                 ...e.bookmarks.find(bookmark => bookmark._id === this.mark._bookmark).tags])]
                 }
-        this.requestUpdate();
+                if (oldTags !== this.mark.tags) {
+                  console.log("Updated mark");
+                  console.log(this.mark);
+                  await this.markService.updateMark(this.mark);
+
+                }
+      this.requestUpdate();
       }
     } catch (error) {
       //

@@ -8,7 +8,6 @@ import { Mark } from './../../models/mark';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 const componentCSS = require('./my-marker.component.scss');
 import openSocket from 'socket.io-client';
-import { deleteMarkFromDom } from '../../helper/markerHelper';
 
 @customElement('my-marker')
 export class MyMarkerElement extends connect(store)(LitElement) {
@@ -183,11 +182,11 @@ export class MyMarkerElement extends connect(store)(LitElement) {
    *
    * @memberof MyMarkerElement
    */
-  emitDeleted() {
+  emitDeleted(e: CustomEvent) {
     this.dispatchEvent(
       new CustomEvent('deleted', {
         bubbles: true,
-        detail: this.mark.id
+        detail: e.detail
       })
     );
   }
@@ -211,7 +210,7 @@ export class MyMarkerElement extends connect(store)(LitElement) {
     ` : ''}
     <div class="markContainer">
       <my-menu .menuWidth=${this.menuWidth} class="${this.animation}"
-      @deleted=${() => this.emitDeleted()}
+      @deleted=${(e: CustomEvent) => this.emitDeleted(e)}
       @editTags=${async () => this.editTags ? this.updateTags() : this.editTags = true}
       .editTags=${this.editTags}
       .mark=${this.mark}></my-menu>

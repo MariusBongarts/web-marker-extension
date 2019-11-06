@@ -23,6 +23,7 @@ export function highlightText(range?: Range, mark?: Mark) {
 function createMarkElement(range?: Range, mark?: Mark) {
   mark ? range = recreateRange(mark) : range = range;
   const markElement = document.createElement('mark');
+  markElement.setAttribute('markId', mark ? mark.id : '');
   markElement.appendChild(range.extractContents());
   range.insertNode(markElement);
   return markElement;
@@ -37,11 +38,14 @@ function createMarkElement(range?: Range, mark?: Mark) {
 function createMyMarkerComponent(markElement: HTMLElement, mark: Mark) {
   const myMarkElement = document.createElement('my-marker') as MyMarkerElement;
   myMarkElement.mark = mark;
+  myMarkElement.setAttribute('markId', mark.id);
   markElement.appendChild(myMarkElement);
 
   myMarkElement.addEventListener('deleted', (e: CustomEvent) => {
-    myMarkElement.remove();
-    deleteMarkFromDom(markElement);
+    if (e.detail === mark.id) {
+      myMarkElement.remove();
+      deleteMarkFromDom(markElement);
+    }
   });
 
 }

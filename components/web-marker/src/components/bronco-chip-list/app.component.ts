@@ -179,12 +179,13 @@ export class BroncoChipList extends connect(store)(LitElement) {
 
   }
 
+  // Fix: Is this necessary (Danger of bad fix)
   submit() {
-    this.dispatchEvent(
-      new CustomEvent('submitTriggered', {
-        bubbles: true,
-        detail: [...new Set(this.chips)]
-      }));
+    // this.dispatchEvent(
+    //   new CustomEvent('submitTriggered', {
+    //     bubbles: true,
+    //     detail: [...new Set(this.chips)]
+    //   }));
   }
 
   /**
@@ -218,7 +219,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
 
   async filterChips(chip: string) {
     this.chips = this.chips.filter(e => e !== chip);
-    await this.emit(chip);
+    this.emit();
   }
 
 
@@ -233,11 +234,12 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   autoCompleteEvent(e: CustomEvent, isClick?: boolean) {
+    console.log(e);
     if (isClick) {
       this.chips = [...new Set([...this.chips, e.detail])]
       this.inputElement.value = '';
       this.inputValue = ''
-      this.submit();
+      this.emit();
     } else {
       this.inputElement.value = e.detail;
     }
