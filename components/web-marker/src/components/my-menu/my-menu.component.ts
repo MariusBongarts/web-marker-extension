@@ -97,18 +97,12 @@ export class MyMarkElement extends LitElement {
   }
 
   /**
-   *  First dispatches event to delete mark in client,
-   *  then deletes it in server.
+   * Deletes the mark in state manegement. The markerHelper is listening for
+   * state changes to remove the mark from the DOM
    *
    * @memberof MyMarkElement
    */
   async deleteMark() {
-    this.dispatchEvent(
-      new CustomEvent('deleted', {
-        bubbles: true,
-        detail: this.mark.id
-      })
-    );
     try {
       await this.markerService.deleteMark(this.mark.id);
     } catch (error) {

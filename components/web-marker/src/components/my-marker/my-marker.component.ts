@@ -177,19 +177,6 @@ export class MyMarkerElement extends connect(store)(LitElement) {
     });
   }
 
-  /**
-   *  Cascading event to trigger delete in root component
-   *
-   * @memberof MyMarkerElement
-   */
-  emitDeleted(e: CustomEvent) {
-    this.dispatchEvent(
-      new CustomEvent('deleted', {
-        bubbles: true,
-        detail: e.detail
-      })
-    );
-  }
 
   async updateTags() {
     this.editTags = false;
@@ -210,7 +197,6 @@ export class MyMarkerElement extends connect(store)(LitElement) {
     ` : ''}
     <div class="markContainer">
       <my-menu .menuWidth=${this.menuWidth} class="${this.animation}"
-      @deleted=${(e: CustomEvent) => this.emitDeleted(e)}
       @editTags=${async () => this.editTags ? this.updateTags() : this.editTags = true}
       .editTags=${this.editTags}
       .mark=${this.mark}></my-menu>

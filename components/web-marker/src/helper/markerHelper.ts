@@ -1,3 +1,4 @@
+import { store } from './../store/store';
 import { MyMarkerElement } from './../components/my-marker/my-marker.component';
 import { Mark } from './../models/mark';
 
@@ -41,13 +42,16 @@ function createMyMarkerComponent(markElement: HTMLElement, mark: Mark) {
   myMarkElement.setAttribute('markId', mark.id);
   markElement.appendChild(myMarkElement);
 
-  myMarkElement.addEventListener('deleted', (e: CustomEvent) => {
-    if (e.detail === mark.id) {
-      myMarkElement.remove();
-      deleteMarkFromDom(markElement);
+  // Listen for state changes and delete mark from DOM if it got removed
+  store.subscribe(() => {
+    const lastAction = store.getState().lastAction;
+    if (lastAction === 'REMOVE_MARK') {
+      if (!store.getState().marks.find(e => e.id === mark.id)) {
+        myMarkElement.remove();
+        deleteMarkFromDom(markElement);
+      }
     }
   });
-
 }
 
 export function deleteMarkFromDom(markElement: HTMLElement) {
