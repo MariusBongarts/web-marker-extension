@@ -18,7 +18,7 @@ import { connect } from 'pwa-helpers';
 import { store } from './../store/store';
 import { MarkerService } from './../services/marker.service';
 import { css, customElement, html, LitElement, property, unsafeCSS } from 'lit-element';
-import { highlightText } from '../helper/markerHelper';
+import { highlightText, createMark } from '../helper/markerHelper';
 const componentCSS = require('./app.component.scss');
 let WebMarker = class WebMarker extends connect(store)(LitElement) {
     constructor() {
@@ -37,7 +37,24 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
         return __awaiter(this, void 0, void 0, function* () {
             this.listenToShowMarker();
             yield this.highlightMarks();
+            this.listenForContextMenu();
         });
+    }
+    listenForContextMenu() {
+        try {
+            chrome.runtime.onMessage.addListener((request) => __awaiter(this, void 0, void 0, function* () {
+                if (request.id === 'contextMenu') {
+                    console.log(request);
+                    const mark = createMark();
+                    highlightText(null, mark);
+                    yield this.markerService.createMark(mark);
+                }
+                ;
+            }));
+        }
+        catch (error) {
+            // Chrome extension not available
+        }
     }
     stateChanged() {
         return __awaiter(this, void 0, void 0, function* () {

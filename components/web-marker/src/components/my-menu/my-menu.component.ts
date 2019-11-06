@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4';
 import { MarkerService } from './../../services/marker.service';
 import { Mark } from './../../models/mark';
 import { css, customElement, html, LitElement, property, unsafeCSS } from 'lit-element';
-import { highlightText } from '../../helper/markerHelper';
+import { highlightText, createMark } from '../../helper/markerHelper';
 import { navigateExternal } from '../../helper/router';
 const componentCSS = require('./my-menu.component.scss');
 
@@ -54,41 +54,10 @@ export class MyMarkElement extends LitElement {
    */
   async saveMark() {
     this.show = false;
-    const mark = this.createMark();
+    const mark = createMark();
     highlightText(null, mark);
     window.getSelection().empty();
     await this.markerService.createMark(mark);
-  }
-
-  /**
-   * Created mark to save it in database.
-   * Attributes of the range are saved to recreate it later.
-   *
-   * @returns {Mark}
-   * @memberof MyMarkElement
-   */
-  public createMark(): Mark {
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    const mark: Mark = {
-      id: uuidv4(),
-      url: location.href,
-      origin: location.href,
-      tags: [],
-      text: selection.toString(),
-      title: document.title,
-      anchorOffset: selection.anchorOffset,
-      createdAt: new Date().getTime(),
-      nodeData: range.startContainer.nodeValue,
-      completeText: range.startContainer.parentElement.innerText,
-      nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
-      startContainerText: range.startContainer.textContent,
-      endContainerText: range.endContainer.textContent,
-      startOffset: range.startOffset,
-      endOffset: range.endOffset,
-      scrollY: window.scrollY
-    };
-    return mark;
   }
 
   getDefaultMarks() {

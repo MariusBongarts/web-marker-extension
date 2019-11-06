@@ -95,14 +95,14 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
 
 // Sends message to current contentScript when context menu is clicked
-chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData, tab) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+// chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData, tab) => {
+//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 
-    chrome.tabs.sendMessage(tabs[0].id, {
-      id: 'create'
-    });
-  });
-});
+//     chrome.tabs.sendMessage(tabs[0].id, {
+//       id: 'create'
+//     });
+//   });
+// });
 
 // END CHROME STUFF
 //+++++++++++++++++++++++

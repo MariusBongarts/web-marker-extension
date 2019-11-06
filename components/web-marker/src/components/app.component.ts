@@ -4,7 +4,7 @@ import { store } from './../store/store';
 import { MarkerService } from './../services/marker.service';
 import { Mark } from './../models/mark';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
-import { highlightText } from '../helper/markerHelper';
+import { highlightText, createMark } from '../helper/markerHelper';
 import { initMarks } from '../store/actions';
 
 const componentCSS = require('./app.component.scss');
@@ -36,6 +36,24 @@ export class WebMarker extends connect(store)(LitElement) {
   async firstUpdated() {
     this.listenToShowMarker();
     await this.highlightMarks();
+    this.listenForContextMenu();
+  }
+
+  listenForContextMenu() {
+    try {
+      chrome.runtime.onMessage.addListener(async (request) => {
+
+        if (request.id === 'contextMenu') {
+          console.log(request);
+          const mark = createMark();
+          highlightText(null, mark);
+          await this.markerService.createMark(mark);
+        };
+      });
+    } catch (error) {
+      // Chrome extension not available
+    }
+
   }
 
   async stateChanged() {
@@ -71,7 +89,7 @@ export class WebMarker extends connect(store)(LitElement) {
       startContainerText: range ? range.startContainer.textContent : text,
       endContainerText: range ? range.endContainer.textContent : text,
       startOffset: range ? range.startOffset : 0,
-      endOffset: range ? range.endOffset: 0,
+      endOffset: range ? range.endOffset : 0,
       scrollY: window.scrollY
     };
     range ? highlightText(range, mark) : '';

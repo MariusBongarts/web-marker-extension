@@ -1,3 +1,5 @@
+import { store } from './../store/store';
+import uuidv4 from 'uuid/v4';
 export function highlightText(range, mark) {
     try {
         const markElement = createMarkElement(range, mark);
@@ -7,6 +9,29 @@ export function highlightText(range, mark) {
     catch (error) {
         //
     }
+}
+export function createMark() {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    const mark = {
+        id: uuidv4(),
+        url: location.href,
+        origin: location.href,
+        tags: [],
+        text: selection.toString(),
+        title: document.title,
+        anchorOffset: selection.anchorOffset,
+        createdAt: new Date().getTime(),
+        nodeData: range.startContainer.nodeValue,
+        completeText: range.startContainer.parentElement.innerText,
+        nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
+        startContainerText: range.startContainer.textContent,
+        endContainerText: range.endContainer.textContent,
+        startOffset: range.startOffset,
+        endOffset: range.endOffset,
+        scrollY: window.scrollY
+    };
+    return mark;
 }
 /**
  * Creates the mark element to highlight text
@@ -18,6 +43,7 @@ export function highlightText(range, mark) {
 function createMarkElement(range, mark) {
     mark ? range = recreateRange(mark) : range = range;
     const markElement = document.createElement('mark');
+    markElement.setAttribute('markId', mark ? mark.id : '');
     markElement.appendChild(range.extractContents());
     range.insertNode(markElement);
     return markElement;
@@ -31,10 +57,17 @@ function createMarkElement(range, mark) {
 function createMyMarkerComponent(markElement, mark) {
     const myMarkElement = document.createElement('my-marker');
     myMarkElement.mark = mark;
+    myMarkElement.setAttribute('markId', mark.id);
     markElement.appendChild(myMarkElement);
-    myMarkElement.addEventListener('deleted', (e) => {
-        myMarkElement.remove();
-        deleteMarkFromDom(markElement);
+    // Listen for state changes and delete mark from DOM if it got removed
+    store.subscribe(() => {
+        const lastAction = store.getState().lastAction;
+        if (lastAction === 'REMOVE_MARK') {
+            if (!store.getState().marks.find(e => e.id === mark.id)) {
+                myMarkElement.remove();
+                deleteMarkFromDom(markElement);
+            }
+        }
     });
 }
 export function deleteMarkFromDom(markElement) {

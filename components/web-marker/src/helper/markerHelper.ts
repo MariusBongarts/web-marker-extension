@@ -1,6 +1,7 @@
 import { store } from './../store/store';
 import { MyMarkerElement } from './../components/my-marker/my-marker.component';
 import { Mark } from './../models/mark';
+import uuidv4 from 'uuid/v4';
 
 export function highlightText(range?: Range, mark?: Mark) {
 
@@ -12,6 +13,28 @@ export function highlightText(range?: Range, mark?: Mark) {
   } catch (error) {
     //
   }
+}  export function createMark(): Mark {
+  const selection = window.getSelection();
+  const range = selection.getRangeAt(0);
+  const mark: Mark = {
+    id: uuidv4(),
+    url: location.href,
+    origin: location.href,
+    tags: [],
+    text: selection.toString(),
+    title: document.title,
+    anchorOffset: selection.anchorOffset,
+    createdAt: new Date().getTime(),
+    nodeData: range.startContainer.nodeValue,
+    completeText: range.startContainer.parentElement.innerText,
+    nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
+    startContainerText: range.startContainer.textContent,
+    endContainerText: range.endContainer.textContent,
+    startOffset: range.startOffset,
+    endOffset: range.endOffset,
+    scrollY: window.scrollY
+  };
+  return mark;
 }
 
 /**

@@ -20,7 +20,10 @@ chrome.runtime.onMessage.addListener((request) => __awaiter(void 0, void 0, void
     }
     ;
     if (request.id === 'contextMenu') {
-        marker.newContextMark = request.detail;
+        console.log(request);
+        // const mark = createMark();
+        // highlightText(null, mark);
+        // TODO: Save in database
     }
     ;
 }));

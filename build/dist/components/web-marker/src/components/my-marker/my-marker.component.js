@@ -50,17 +50,6 @@ let MyMarkerElement = class MyMarkerElement extends connect(store)(LitElement) {
             this.mark = e.marks.find(e => this.mark && e.id === this.mark.id);
             this.requestUpdate();
         }
-        if (store.getState().lastAction === 'REMOVE_MARK') {
-            try {
-                const marks = e.marks;
-                if (!marks.includes(this.mark)) {
-                    this.emitDeleted();
-                }
-            }
-            catch (error) {
-                //
-            }
-        }
     }
     // async initSocket() {
     //   const jwt = await this.jwtService.getJwt();
@@ -160,17 +149,6 @@ let MyMarkerElement = class MyMarkerElement extends connect(store)(LitElement) {
             }, 500);
         });
     }
-    /**
-     *  Cascading event to trigger delete in root component
-     *
-     * @memberof MyMarkerElement
-     */
-    emitDeleted() {
-        this.dispatchEvent(new CustomEvent('deleted', {
-            bubbles: true,
-            detail: this.mark.id
-        }));
-    }
     updateTags() {
         return __awaiter(this, void 0, void 0, function* () {
             this.editTags = false;
@@ -191,7 +169,6 @@ let MyMarkerElement = class MyMarkerElement extends connect(store)(LitElement) {
     ` : ''}
     <div class="markContainer">
       <my-menu .menuWidth=${this.menuWidth} class="${this.animation}"
-      @deleted=${() => this.emitDeleted()}
       @editTags=${() => __awaiter(this, void 0, void 0, function* () { return this.editTags ? this.updateTags() : this.editTags = true; })}
       .editTags=${this.editTags}
       .mark=${this.mark}></my-menu>
