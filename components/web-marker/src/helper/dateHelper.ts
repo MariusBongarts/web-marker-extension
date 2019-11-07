@@ -14,7 +14,7 @@ export function timeSinceTimestamp(milliseconds: number) {
   if (days < 1) return `${days >= 1 ? days + 'd ' : ''} ${hours >= 1 ? hours + 'h ' : ''}
   ${minutes >= 1 ? minutes + 'm ' : ''} ${seconds >= 0 ? seconds + 's' : ''}`;
 
-  if(days < 7) return `${days >= 1 ? days < 2 ? 'day' : 'days' : ''} ${hours >= 1 ? hours + 'h ' : ''} ago`;
+  if(days < 7) return `${days >= 1 ? days < 2 ? days + ' day' : days + ' days' : ''} ${hours >= 1 ? hours + 'h ' : ''} ago`;
 
   return `${new Date(milliseconds).getDate()}.${new Date(milliseconds).getMonth() + 1}.${new Date(milliseconds).getFullYear()}`;
 
