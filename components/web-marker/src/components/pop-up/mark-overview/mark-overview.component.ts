@@ -44,6 +44,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
   }
 
   stateChanged() {
+    console.log("Change")
     this.marks = store.getState().marks;
     this.filterMarks();
   }
@@ -62,7 +63,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
 
     // Filter for current bookmark, if given
     if (this.bookmarkFilter) {
-      filteredMarks = filteredMarks.filter(mark => mark._bookmark === this.bookmarkFilter._id);
+      filteredMarks = filteredMarks.filter(mark => mark.url === this.bookmarkFilter.url);
     }
 
     // Filter if search value is given

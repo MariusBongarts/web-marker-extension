@@ -32,6 +32,12 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   @property()
   bookmark!: Bookmark;
 
+
+  /**
+   * Either the dropdown is active or not
+   *
+   * @memberof BookmarkElementComponent
+   */
   @property()
   active = false;
 
@@ -202,8 +208,12 @@ ${!this.isDropdown ? html`
       .chips=${this.bookmark.tags}></bronco-chip-list>
   </div>
   ` : ''}
-
 </div>
+
+<!-- Show related marks when dropdown is activated -->
+${this.active ? html`
+<mark-overview .bookmarkFilter=${this.bookmark}></mark-overview>
+` : ''}
 `}
 `;
   }
