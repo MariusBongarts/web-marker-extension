@@ -50,6 +50,15 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
 
   /**
+   * If true, the animation is active
+   *
+   * @memberof MarkOverviewComponent
+   */
+  @property()
+  animation = false;
+
+
+  /**
   * Only marks fur current url
   *
   * @type {Mark[]}
@@ -75,8 +84,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     } catch (error) {
       this.emitLogout();
     }
-
-    setTimeout(() => this.test = true, 2000);
 
     //await this.initSocket();
     //this.handleSockets();
@@ -158,24 +165,33 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   }
 
 
-  getInfoText() {
+  /**
+   * Wati for animation of side-menu to finish
+   *
+   * @memberof MarkOverviewComponent
+   */
+  toggleShow() {
+    this.animation = true;
+    this.show = !this.show;
+    setTimeout(() => {
+      this.animation = false;
+    }, 300);
 
   }
 
-  @property()
-  test = false;
-
   render() {
     return html`
-<button class="hideShow ${this.show ? 'active' : ''}" @click=${() => this.show ? this.show = false : this.show =
-        true}>${this.show ?
+    <!-- Button to toggle side-bar. It hides when animation is active -->
+<button class="hideShow ${this.animation ? 'hide' : ''} ${this.show && !this.animation ? 'active' : ''}" @click=${() => this.toggleShow()}>${this.show ?
           html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
     stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left">
     <polyline points="15 18 9 12 15 6"></polyline>
   </svg>`
           : html`<mark-badge>${this.marks ? this.marks.length : 0}</mark-badge>`}</button>
-${this.show ? html`
-<div class="container">
+${this.show || this.animation ? html`
+<div class="container
+${this.animation && this.show ? 'slide-in' : ''}
+${this.animation && !this.show ? 'slide-out' : ''}">
 
   <div class="header">
     <header-toggle .active=${this.activeToggle} @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}>

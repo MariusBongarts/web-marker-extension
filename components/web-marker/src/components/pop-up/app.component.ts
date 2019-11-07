@@ -33,7 +33,7 @@ export class PopUpComponent extends connect(store)(LitElement) {
 
   stateChanged() {
     if (!store.getState().loggedIn) this.loggedUser = undefined;
-	}
+  }
 
   async firstUpdated() {
     await this.loadUserData();

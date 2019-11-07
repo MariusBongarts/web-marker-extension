@@ -536,7 +536,7 @@ ${this.selectedOrigin&&this.selectedOrigin!==this.origin&&!this.animation?"slide
 ${this.mark?rt`
 <div class="mark slide-in">
   <div class="header">
-    <span class="timeSince"> ${function(t){let e=((new Date).getTime()-t)/1e3,n=e/60;e=Math.round(e%60);let r=n/60;n=Math.round(n%60);const i=Math.round(r/24);return r=Math.round(r%24),i<1?`${i>=1?i+"d ":""} ${r>=1?r+"h ":""}\n  ${n>=1?n+"m ":""} ${e>=0?e+"s":""}`:i<7?`${i>=1?i<2?"day":"days":""} ${r>=1?r+"h ":""} ago`:`${new Date(t).getDate()}.${new Date(t).getMonth()+1}.${new Date(t).getFullYear()}`}(this.mark.createdAt)}</span>
+    <span class="timeSince"> ${function(t){let e=((new Date).getTime()-t)/1e3,n=e/60;e=Math.round(e%60);let r=n/60;n=Math.round(n%60);const i=Math.round(r/24);return r=Math.round(r%24),i<1?`${i>=1?i+"d ":""} ${r>=1?r+"h ":""}\n  ${n>=1?n+"m ":""} ${e>=0?e+"s":""}`:i<7?`${i>=1?i<2?i+" day":i+" days":""} ${r>=1?r+"h ":""} ago`:`${new Date(t).getDate()}.${new Date(t).getMonth()+1}.${new Date(t).getFullYear()}`}(this.mark.createdAt)}</span>
     <action-toolbar @deleted=${t=>pn(this,void 0,void 0,function*(){return yield this.deleteMark(t)})}
         @goToMark=${t=>this.scrollToMark(t)}
       ></action-toolbar>
