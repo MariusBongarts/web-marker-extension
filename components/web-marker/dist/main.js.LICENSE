@@ -4771,6 +4771,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/bookmark-element/bookmark-element.component.ts
 
+/**
+         * Either the dropdown is active or not
+         *
+         * @memberof BookmarkElementComponent
+         */
+
 //this.bookmark ? this.tags = this.bookmark.tags : '';
 
 /**
@@ -4819,6 +4825,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // Filter for current bookmark, if given
 
 // CONCATENATED MODULE: ./src/components/pop-up/tags-view/tags-view.component.ts
+
+/**
+     * Find related tags, which are inserted in combination with selected tag
+     *
+     * @returns
+     * @memberof TagsViewComponent
+     */
+
+/**
+     * Toggle selected tag and set selectedBookmark to undefined
+     *
+     * @param {string} tag
+     * @memberof TagsViewComponent
+     */
 
 // CONCATENATED MODULE: ./src/components/pop-up/search-view/search-view.component.ts
 

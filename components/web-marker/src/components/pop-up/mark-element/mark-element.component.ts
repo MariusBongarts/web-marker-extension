@@ -56,7 +56,7 @@ class MarkElementComponent extends connect(store)(LitElement) {
         this.mark = {...this.mark,
           tags:
           [...new Set([...this.mark.tags,
-                 ...e.bookmarks.find(bookmark => bookmark._id === this.mark._bookmark).tags])]
+                 ...e.bookmarks.find(bookmark => bookmark.url === this.mark.url).tags])]
                 }
                 if (oldTags !== this.mark.tags) {
                   await this.markService.updateMark(this.mark);
