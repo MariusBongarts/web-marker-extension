@@ -4874,6 +4874,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         */
 
 /**
+         * If true, the animation is active
+         *
+         * @memberof MarkOverviewComponent
+         */
+
+/**
     * Function called by extended connect method from pwa-helper, when state changed
     *
     * @memberof MarkOverviewComponent
@@ -4908,3 +4914,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // this.socket.on('connect', (data: string) => {
 
 // console.log('yeah');
+
+/**
+     * Wati for animation of side-menu to finish
+     *
+     * @memberof MarkOverviewComponent
+     */

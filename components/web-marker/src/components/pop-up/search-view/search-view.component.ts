@@ -76,13 +76,14 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   </div>
   ` : ''}
   ${this.getFilteredBookmarks()
-    .filter(bookmark => !this.selectedBookmark || this.selectedBookmark === bookmark)
     .map(bookmark => html`
+    ${!this.selectedBookmark || this.selectedBookmark === bookmark ? html`
   <bookmark-element @click=${() => this.selectedBookmark === bookmark ? this.selectedBookmark = undefined :
         this.selectedBookmark = bookmark}
     .active=${this.selectedBookmark === bookmark}
     .isDropdown=${true}
     .bookmark=${bookmark}></bookmark-element>
+  ` : ''}
   `)}
 
   <!-- Hide when a bookmark is selected -->
