@@ -346,12 +346,6 @@
 
 /* 5 */
 
-// Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-// Copy bytes to buffer, if provided
-
-/* 6 */
-
 /* WEBPACK VAR INJECTION */
 
 /* eslint-env browser */
@@ -460,7 +454,7 @@
  * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
  */
 
-/* 7 */
+/* 6 */
 
 /**
  * Compiles a querystring
@@ -477,9 +471,15 @@
  * @api private
  */
 
+/* 7 */
+
 /* 8 */
 
 /* 9 */
+
+// Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+// Copy bytes to buffer, if provided
 
 /* 10 */
 
@@ -2880,10 +2880,6 @@
 
 // EXTERNAL MODULE: ./src/index.scss
 
-// EXTERNAL MODULE: ./node_modules/uuid/v4.js
-
-/*#__PURE__*/
-
 // CONCATENATED MODULE: C:/Users/mariu/Projekte/chromeExtensions/web-marker/extension/node_modules/pwa-helpers/connect-mixin.js
 
 /**
@@ -2993,6 +2989,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // EXTERNAL MODULE: ./node_modules/jwt-decode/lib/index.js
 
+/*#__PURE__*/
+
 // tslint:disable-next-line: no-empty
 
 // CONCATENATED MODULE: ./src/environments/environment.dev.ts
@@ -3009,6 +3007,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @param {Mark} mark
      * @memberof MarkerService
      */
+
+// CONCATENATED MODULE: ./src/helper/bookmarkHelper.ts
+
+// Check if URL is pdf format => Return the filename by splitting the URL
+
+// Split by forward- or backslash
+
+// Remove spaces %20 for windows
 
 // CONCATENATED MODULE: ./src/services/bookmark.service.ts
 
@@ -4164,7 +4170,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * it will not needlessly try to `finalize`.
  */
 
+/**
+ * Render method used to render the lit-html TemplateResult to the element's
+ * DOM.
+ * @param {TemplateResult} Template to render.
+ * @param {Element|DocumentFragment} Node into which to render.
+ * @param {String} Element name.
+ * @nocollapse
+ */
+
+// When performing first scope render,
+
+// (1) We've rendered into a fragment so that there's a chance to
+
+// `prepareTemplateStyles` before sub-elements hit the DOM
+
+// (which might cause them to render based on a common pattern of
+
+// rendering in a custom element's `connectedCallback`);
+
+// (2) Scope the template with ShadyCSS one time only for this scope.
+
+// (3) Render the fragment into the container and make sure the
+
+// container knows its `part` is the one we just rendered. This ensures
+
+// DOM will be re-used on subsequent renders.
+
+// After elements have hit the DOM, update styling if this is the
+
+// initial render to this container.
+
+// This is needed whenever dynamic changes are made so it would be
+
+// safest to do every render; however, this would regress performance
+
+// so we leave it up to the user to call `ShadyCSSS.styleElement`
+
+// for dynamic changes.
+
 //# sourceMappingURL=lit-element.js.map
+
+// EXTERNAL MODULE: ./node_modules/uuid/v4.js
 
 // CONCATENATED MODULE: ./src/helper/markerHelper.ts
 
@@ -4209,6 +4256,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // remove the empty element
 
 /**
+ * If @param text is given the mark is created by the context menu
+ *
+ * @export
+ * @param {string} [text]
+ * @returns {Mark}
+ */
+
+// If selection is made by my-menu popup
+
+// Mark is created by context menu
+
+/**
+ * Creates a mark from the context-menu by handing text instead of using getSelection()
+ *
+ * @export
+ * @param {string} text
+ * @returns {Mark}
+ */
+
+/**
  * Returns all text nodes under an element
  *
  * @export
@@ -4217,45 +4284,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 // tslint:disable-next-line: prefer-for-of
-
-/**
- * Render method used to render the lit-html TemplateResult to the element's
- * DOM.
- * @param {TemplateResult} Template to render.
- * @param {Element|DocumentFragment} Node into which to render.
- * @param {String} Element name.
- * @nocollapse
- */
-
-// When performing first scope render,
-
-// (1) We've rendered into a fragment so that there's a chance to
-
-// `prepareTemplateStyles` before sub-elements hit the DOM
-
-// (which might cause them to render based on a common pattern of
-
-// rendering in a custom element's `connectedCallback`);
-
-// (2) Scope the template with ShadyCSS one time only for this scope.
-
-// (3) Render the fragment into the container and make sure the
-
-// container knows its `part` is the one we just rendered. This ensures
-
-// DOM will be re-used on subsequent renders.
-
-// After elements have hit the DOM, update styling if this is the
-
-// initial render to this container.
-
-// This is needed whenever dynamic changes are made so it would be
-
-// safest to do every render; however, this would regress performance
-
-// so we leave it up to the user to call `ShadyCSSS.styleElement`
-
-// for dynamic changes.
 
 /**
          * Set width of menu in px to calculate center.

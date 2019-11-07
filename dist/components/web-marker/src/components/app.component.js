@@ -13,7 +13,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import uuidv4 from 'uuid/v4';
 import { connect } from 'pwa-helpers';
 import { store } from './../store/store';
 import { MarkerService } from './../services/marker.service';
@@ -43,8 +42,8 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
     listenForContextMenu() {
         try {
             chrome.runtime.onMessage.addListener((request) => __awaiter(this, void 0, void 0, function* () {
-                if (request.id === 'contextMenu') {
-                    const mark = createMark();
+                if (request.id === 'contextMenu' && request.detail) {
+                    const mark = createMark(request.detail);
                     highlightText(null, mark);
                     yield this.markerService.createMark(mark);
                 }
@@ -58,45 +57,6 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
     stateChanged() {
         return __awaiter(this, void 0, void 0, function* () {
             this.marks = store.getState().marks;
-        });
-    }
-    updated(changedValues) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.newContextMark) {
-                yield this.createContextMark(this.newContextMark);
-                this.newContextMark = undefined;
-            }
-        });
-    }
-    createContextMark(text) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const selection = window.getSelection();
-            let range = undefined;
-            try {
-                range = selection.getRangeAt(0);
-            }
-            catch (error) {
-            }
-            const mark = {
-                id: uuidv4(),
-                url: location.href,
-                origin: location.href,
-                tags: [],
-                text: text,
-                title: document.title,
-                anchorOffset: selection.anchorOffset,
-                createdAt: new Date().getTime(),
-                nodeData: range ? range.startContainer.nodeValue : text,
-                completeText: range ? range.startContainer.parentElement.innerText : text,
-                nodeTagName: range ? range.startContainer.parentElement.tagName.toLowerCase() : text,
-                startContainerText: range ? range.startContainer.textContent : text,
-                endContainerText: range ? range.endContainer.textContent : text,
-                startOffset: range ? range.startOffset : 0,
-                endOffset: range ? range.endOffset : 0,
-                scrollY: window.scrollY
-            };
-            range ? highlightText(range, mark) : '';
-            yield this.markerService.createMark(mark);
         });
     }
     /**

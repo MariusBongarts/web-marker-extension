@@ -1,5 +1,6 @@
 import { store } from './../store/store';
 import uuidv4 from 'uuid/v4';
+import { getTitleForBookmark } from './bookmarkHelper';
 export function highlightText(range, mark) {
     try {
         const markElement = createMarkElement(range, mark);
@@ -10,25 +11,75 @@ export function highlightText(range, mark) {
         //
     }
 }
-export function createMark() {
+/**
+ * If @param text is given the mark is created by the context menu
+ *
+ * @export
+ * @param {string} [text]
+ * @returns {Mark}
+ */
+export function createMark(text) {
     const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
+    console.log(selection.toString());
+    // If selection is made by my-menu popup
+    if (selection.toString()) {
+        const range = selection.getRangeAt(0);
+        const mark = {
+            id: uuidv4(),
+            url: location.href,
+            origin: location.href,
+            tags: [],
+            text: selection.toString(),
+            title: getTitleForBookmark(),
+            anchorOffset: selection.anchorOffset,
+            createdAt: new Date().getTime(),
+            nodeData: range.startContainer.nodeValue,
+            completeText: range.startContainer.parentElement.innerText,
+            nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
+            startContainerText: range.startContainer.textContent,
+            endContainerText: range.endContainer.textContent,
+            startOffset: range.startOffset,
+            endOffset: range.endOffset,
+            scrollY: window.scrollY
+        };
+        return mark;
+    }
+    // Mark is created by context menu
+    else if (text) {
+        return createContextMark(text);
+    }
+}
+/**
+ * Creates a mark from the context-menu by handing text instead of using getSelection()
+ *
+ * @export
+ * @param {string} text
+ * @returns {Mark}
+ */
+export function createContextMark(text) {
+    const selection = window.getSelection();
+    let range = undefined;
+    try {
+        range = selection.getRangeAt(0);
+    }
+    catch (error) {
+    }
     const mark = {
         id: uuidv4(),
         url: location.href,
         origin: location.href,
         tags: [],
-        text: selection.toString(),
-        title: document.title,
+        text: text,
+        title: getTitleForBookmark(),
         anchorOffset: selection.anchorOffset,
         createdAt: new Date().getTime(),
-        nodeData: range.startContainer.nodeValue,
-        completeText: range.startContainer.parentElement.innerText,
-        nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
-        startContainerText: range.startContainer.textContent,
-        endContainerText: range.endContainer.textContent,
-        startOffset: range.startOffset,
-        endOffset: range.endOffset,
+        nodeData: range ? range.startContainer.nodeValue : text,
+        completeText: range ? range.startContainer.parentElement.innerText : text,
+        nodeTagName: range ? range.startContainer.parentElement.tagName.toLowerCase() : text,
+        startContainerText: range ? range.startContainer.textContent : text,
+        endContainerText: range ? range.endContainer.textContent : text,
+        startOffset: range ? range.startOffset : 0,
+        endOffset: range ? range.endOffset : 0,
         scrollY: window.scrollY
     };
     return mark;

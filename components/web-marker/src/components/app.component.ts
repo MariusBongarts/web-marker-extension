@@ -43,11 +43,12 @@ export class WebMarker extends connect(store)(LitElement) {
     try {
       chrome.runtime.onMessage.addListener(async (request) => {
 
-        if (request.id === 'contextMenu') {
-          const mark = createMark();
+        if (request.id === 'contextMenu' && request.detail) {
+          const mark = createMark(request.detail);
           highlightText(null, mark);
           await this.markerService.createMark(mark);
         };
+        
       });
     } catch (error) {
       // Chrome extension not available
@@ -57,42 +58,6 @@ export class WebMarker extends connect(store)(LitElement) {
 
   async stateChanged() {
     this.marks = store.getState().marks;
-  }
-
-  async updated(changedValues: Map<string | number | symbol, unknown>) {
-    if (this.newContextMark) {
-      await this.createContextMark(this.newContextMark);
-      this.newContextMark = undefined;
-    }
-  }
-
-  async createContextMark(text: string) {
-    const selection = window.getSelection();
-    let range = undefined;
-    try {
-      range = selection.getRangeAt(0);
-    } catch (error) {
-    }
-    const mark: Mark = {
-      id: uuidv4(),
-      url: location.href,
-      origin: location.href,
-      tags: [],
-      text: text,
-      title: document.title,
-      anchorOffset: selection.anchorOffset,
-      createdAt: new Date().getTime(),
-      nodeData: range ? range.startContainer.nodeValue : text,
-      completeText: range ? range.startContainer.parentElement.innerText : text,
-      nodeTagName: range ? range.startContainer.parentElement.tagName.toLowerCase() : text,
-      startContainerText: range ? range.startContainer.textContent : text,
-      endContainerText: range ? range.endContainer.textContent : text,
-      startOffset: range ? range.startOffset : 0,
-      endOffset: range ? range.endOffset : 0,
-      scrollY: window.scrollY
-    };
-    range ? highlightText(range, mark) : '';
-    await this.markerService.createMark(mark);
   }
 
   /**

@@ -7,6 +7,7 @@ import { environment } from '../environments/environment.dev';
 import { updateBookmark, addBookmark, removeBookmark, initBookmarks } from '../store/actions';
 import { v4 as uuid } from 'uuid';
 import { MarkerService } from './marker.service';
+import { getTitleForBookmark } from '../helper/bookmarkHelper';
 
 
 export class BookmarkService {
@@ -71,10 +72,9 @@ export class BookmarkService {
       url: location.href,
       isStarred: isStarred,
       tags: [],
-      title: document.title,
+      title: getTitleForBookmark(),
       origin: location.origin
     } as Bookmark;
-
   }
 
 

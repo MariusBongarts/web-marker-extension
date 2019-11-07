@@ -9,6 +9,7 @@ import { css, customElement, html, LitElement, query, property, unsafeCSS } from
 import { timeSinceTimestamp } from '../../../helper/dateHelper';
 import { BookmarkService } from '../../../services/bookmark.service';
 import { navigateExternal } from '../../../helper/router';
+import { getTitleForBookmark } from '../../../helper/bookmarkHelper';
 
 const componentCSS = require('./bookmark-element.component.scss');
 
@@ -129,12 +130,14 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     return html`
 
 ${!this.isDropdown ? html`
+
 <!-- No Dropdown mode => Element is only for current page -->
 <div class="mark slide-in">
   <div class="header"
   @click=${() => this.toggleActive()}
   >
-    <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : document.title}</span>
+    <!-- Shows title of bookmark is given, otherwise title of document -->
+    <span>${this.bookmark && this.bookmark.title ? this.bookmark.title : getTitleForBookmark()}</span>
     <div class="favoriteIcon ${this.bookmark && this.bookmark.isStarred === true ? 'active' : ''}" @click=${async () =>
           await this.starBookmark()}>
       <!-- Bookmark Icon -->
