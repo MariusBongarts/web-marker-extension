@@ -24,6 +24,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     window.marks.push(request.selection);
     sendResponse(window.marks);
 });
+chrome.runtime.onStartup.addListener(() => {
+    // Listen for context menu to create mark
+    chrome.contextMenus.onClicked.addListener((e) => __awaiter(this, void 0, void 0, function* () {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                id: 'contextMenu',
+                detail: e.selectionText
+            });
+        });
+    }));
+});
 // Sends message to current contentScript when page changes
 chrome.tabs.onUpdated.addListener(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -35,21 +46,11 @@ chrome.tabs.onUpdated.addListener(() => {
     });
 });
 chrome.runtime.onInstalled.addListener(function () {
-    // chrome.storage.sync.set({jwt_key: 'mySecretKey'});
     chrome.contextMenus.create({
         id: "selection",
         title: "Save: ' %s '",
         contexts: ["selection"]
     });
-    // Listen for context menu to create mark
-    chrome.contextMenus.onClicked.addListener((e) => __awaiter(this, void 0, void 0, function* () {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                id: 'contextMenu',
-                detail: e.selectionText
-            });
-        });
-    }));
 });
 chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

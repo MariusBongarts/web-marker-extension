@@ -41,28 +41,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   sendResponse(window.marks);
 })
 
-
-
-// Sends message to current contentScript when page changes
-chrome.tabs.onUpdated.addListener(() => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const marks = window.marks.filter(mark => mark.url === tabs[0].url);
-    chrome.tabs.sendMessage(tabs[0].id, {
-      id: 'init',
-      marks: marks
-    });
-  });
-});
-
-chrome.runtime.onInstalled.addListener(function () {
-
-  // chrome.storage.sync.set({jwt_key: 'mySecretKey'});
-
-  chrome.contextMenus.create({
-    id: "selection",
-    title: "Save: ' %s '",
-    contexts: ["selection"]
-  });
+chrome.runtime.onStartup.addListener(() => {
 
   // Listen for context menu to create mark
   chrome.contextMenus.onClicked.addListener(async (e) => {
@@ -73,6 +52,34 @@ chrome.runtime.onInstalled.addListener(function () {
       });
     });
   });
+
+});
+
+
+
+// Sends message to current contentScript when page changes
+chrome.tabs.onUpdated.addListener(() => {
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const marks = window.marks.filter(mark => mark.url === tabs[0].url);
+    chrome.tabs.sendMessage(tabs[0].id, {
+      id: 'init',
+      marks: marks
+    });
+  });
+
+});
+
+
+
+chrome.runtime.onInstalled.addListener(function () {
+
+  chrome.contextMenus.create({
+    id: "selection",
+    title: "Save: ' %s '",
+    contexts: ["selection"]
+  });
+
 
 });
 
