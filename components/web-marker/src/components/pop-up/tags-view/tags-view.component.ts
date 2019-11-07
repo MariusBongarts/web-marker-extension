@@ -155,13 +155,14 @@ ${this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).le
 ` : ''}
 <!-- Show bookmarks for selected tag -->
 ${this.bookmarks.filter(bookmark =>
-bookmark.tags.includes(this.selectedTag) &&
-(!this.selectedBookmark || this.selectedBookmark === bookmark)
-).map(bookmark => html`
+bookmark.tags.includes(this.selectedTag)).map(bookmark => html`
+<!-- Hide bookmark, when a bookmark got selected and it is not the selected one -->
+${!this.selectedBookmark || this.selectedBookmark === bookmark ? html`
 <bookmark-element
 @click=${() => this.selectedBookmark && this.selectedBookmark === bookmark ? this.selectedBookmark = undefined : this.selectedBookmark = bookmark}
 .bookmark=${bookmark}
 .isDropdown=${true}></bookmark-element>
+` : ''}
 `)}
 
 <!-- Show marks icon if there are marks for selected tag. Hide when bookmark is selected -->
