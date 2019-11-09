@@ -165,7 +165,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
       }
     }
 
-    if (target.value && (e.key === 'Enter' || e.code === 'Space')) {
+    if (target.value && (e.key === 'Enter')) {
       this.addChip(target);
       this.markedToSubmit = false;
     }
@@ -196,13 +196,13 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   addChip(target: HTMLInputElement) {
-    const tags = target.value.split(' ').filter(e => e.length > 1 && !this.chips.includes(e));
-    this.chips = [...this.chips, ...tags];
+    // Map array to lower case to check case insensitive if tag already exists
+    !this.chips.map(chip => chip.toLowerCase()).includes(target.value.toLowerCase().trim()) ? this.chips = [...this.chips, target.value.trim()] : '';
     target.value = '';
   }
 
   /**
-   * Deletes a tag if it is already markes as deleted.
+   * Deletes a tag if it is already marked as deleted.
    *
    * @param {HTMLInputElement} target
    * @memberof BroncoChipList

@@ -4576,6 +4576,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof BroncoChipList
      */
 
+//const tags = target.value.split(' ').filter(e => e.length > 1 && !this.chips.includes(e));
+
 /**
      * Deletes a tag if it is already markes as deleted.
      *
