@@ -4657,12 +4657,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/app.component.ts
 
-/**
-   * Hides the icon on fullscreen mode
-   *
-   * @memberof WebMarker
-   */
-
 // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
 
 // CONCATENATED MODULE: ./src/components/pop-up/tab-bar/tab-bar.component.ts
@@ -4898,6 +4892,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          *
          * @memberof MarkOverviewComponent
          */
+
+/**
+       * Can be set to true to hide side-bar icon. E.g. in full screen mode
+       *
+       * @memberof WebMarker
+       */
+
+/**
+  * Hides the icon on fullscreen mode
+  *
+  * @memberof WebMarker
+  */
 
 /**
     * Function called by extended connect method from pwa-helper, when state changed

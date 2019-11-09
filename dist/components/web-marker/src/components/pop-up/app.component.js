@@ -29,12 +29,6 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
         this.markService = new MarkerService();
         this.userService = new UserService();
         this.loaded = false;
-        /**
-         * Can be set to true to hide side-bar icon. E.g. in full screen mode
-         *
-         * @memberof WebMarker
-         */
-        this.hide = false;
         this.showAccountPopup = environment.production ? false : true;
     }
     stateChanged() {
@@ -45,20 +39,6 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.loadUserData();
             this.loaded = true;
-            this.listenForFullscreen();
-        });
-    }
-    /**
-   * Hides the icon on fullscreen mode
-   *
-   * @memberof WebMarker
-   */
-    listenForFullscreen() {
-        window.addEventListener("resize", () => {
-            this.hide = false;
-            if (window.innerHeight == screen.height) {
-                this.hide = true;
-            }
         });
     }
     loadUserData() {
@@ -77,7 +57,7 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
     }
     render() {
         return html `
-    ${this.loaded && !this.hide ? html `
+    ${this.loaded ? html `
     <main-component
     @openLobby=${() => this.showAccountPopup = true}
     .loggedUser=${this.loggedUser}
@@ -99,9 +79,6 @@ PopUpComponent.styles = css `${unsafeCSS(componentCSS)}`;
 __decorate([
     property()
 ], PopUpComponent.prototype, "loaded", void 0);
-__decorate([
-    property()
-], PopUpComponent.prototype, "hide", void 0);
 __decorate([
     property()
 ], PopUpComponent.prototype, "showAccountPopup", void 0);

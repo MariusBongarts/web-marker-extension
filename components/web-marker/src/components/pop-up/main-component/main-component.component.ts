@@ -57,6 +57,14 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   @property()
   animation = false;
 
+  /**
+ * Can be set to true to hide side-bar icon. E.g. in full screen mode
+ *
+ * @memberof WebMarker
+ */
+  @property()
+  hide = false;
+
 
   /**
   * Only marks fur current url
@@ -84,11 +92,25 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     } catch (error) {
       this.emitLogout();
     }
-
-    //await this.initSocket();
-    //this.handleSockets();
+    this.listenForFullscreen();
 
   }
+
+      /**
+    * Hides the icon on fullscreen mode
+    *
+    * @memberof WebMarker
+    */
+  listenForFullscreen() {
+    window.addEventListener("resize", () => {
+      if (window.innerHeight == screen.height) {
+        this.hide = true;
+      } else {
+        this.hide = false;
+      }
+    });
+  }
+
 
   /**
   * Function called by extended connect method from pwa-helper, when state changed
@@ -182,13 +204,13 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   render() {
     return html`
     <!-- Button to toggle side-bar. It hides when animation is active -->
-<button class="hideShow ${this.animation ? 'hide' : ''} ${this.show && !this.animation ? 'active' : ''}" @click=${() => this.toggleShow()}>${this.show ?
-          html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<button class="hideShow ${this.animation || this.hide ? 'hide' : ''} ${this.show && !this.animation ? 'active' : ''}" @click=${() => this.toggleShow()}>${this.show ?
+        html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
     stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left">
     <polyline points="15 18 9 12 15 6"></polyline>
   </svg>`
-          : html`<mark-badge>${this.marks ? this.marks.length : 0}</mark-badge>`}</button>
-${this.show || this.animation ? html`
+        : html`<mark-badge>${this.marks ? this.marks.length : 0}</mark-badge>`}</button>
+${(this.show && !this.hide) || this.animation ? html`
 <div class="container
 ${this.animation && this.show ? 'slide-in' : ''}
 ${this.animation && !this.show ? 'slide-out' : ''}">
