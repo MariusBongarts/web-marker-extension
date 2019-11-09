@@ -7,7 +7,6 @@ document.body.appendChild(marker);
 const popup = document.createElement("pop-up") as PopUpComponent;
 document.body.appendChild(popup);
 
-
 // Listens for messages from background script
 chrome.runtime.onMessage.addListener(async (request) => {
   closePopupOnOutsideClick();

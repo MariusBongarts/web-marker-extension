@@ -24,6 +24,12 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
         super(...arguments);
         this.show = false;
         /**
+         * Can be set to true to hide side-bar icon. E.g. in full screen mode
+         *
+         * @memberof WebMarker
+         */
+        this.hide = false;
+        /**
          * Set width of menu in px to calculate center.
          * Only for making new marks.
          *
@@ -37,6 +43,20 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
             this.listenToShowMarker();
             yield this.highlightMarks();
             this.listenForContextMenu();
+            this.listenForFullscreen();
+        });
+    }
+    /**
+     * Hides the icon on fullscreen mode
+     *
+     * @memberof WebMarker
+     */
+    listenForFullscreen() {
+        window.addEventListener("resize", () => {
+            this.hide = false;
+            if (window.innerHeight == screen.height) {
+                this.hide = true;
+            }
         });
     }
     listenForContextMenu() {
@@ -137,7 +157,9 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
     }
     render() {
         return html `
+  ${!this.hide ? html `
   <my-marker .show=${this.show} .menuWidth=${this.menuWidth}></my-marker>
+  ` : ''}
   `;
     }
 };
@@ -148,6 +170,9 @@ __decorate([
 __decorate([
     property()
 ], WebMarker.prototype, "show", void 0);
+__decorate([
+    property()
+], WebMarker.prototype, "hide", void 0);
 __decorate([
     property()
 ], WebMarker.prototype, "newContextMark", void 0);

@@ -22,6 +22,14 @@ export class PopUpComponent extends connect(store)(LitElement) {
   @property()
   loaded = false;
 
+  /**
+   * Can be set to true to hide side-bar icon. E.g. in full screen mode
+   *
+   * @memberof WebMarker
+   */
+  @property()
+  hide = false;
+
   @property()
   showAccountPopup = environment.production ? false : true;
 
@@ -38,7 +46,23 @@ export class PopUpComponent extends connect(store)(LitElement) {
   async firstUpdated() {
     await this.loadUserData();
     this.loaded = true;
+    this.listenForFullscreen();
   }
+
+    /**
+   * Hides the icon on fullscreen mode
+   *
+   * @memberof WebMarker
+   */
+  listenForFullscreen() {
+    window.addEventListener("resize", () => {
+      this.hide = false;
+      if (window.innerHeight == screen.height) {
+        this.hide = true;
+      }
+    });
+  }
+
 
   async loadUserData() {
     try {
@@ -56,7 +80,7 @@ export class PopUpComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    ${this.loaded ? html`
+    ${this.loaded && !this.hide ? html`
     <main-component
     @openLobby=${() => this.showAccountPopup = true}
     .loggedUser=${this.loggedUser}

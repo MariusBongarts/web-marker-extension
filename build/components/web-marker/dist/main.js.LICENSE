@@ -4286,11 +4286,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // tslint:disable-next-line: prefer-for-of
 
 /**
+         * Can be set to true to hide side-bar icon. E.g. in full screen mode
+         *
+         * @memberof WebMarker
+         */
+
+/**
          * Set width of menu in px to calculate center.
          * Only for making new marks.
          *
          * @memberof WebMarker
          */
+
+/**
+     * Hides the icon on fullscreen mode
+     *
+     * @memberof WebMarker
+     */
 
 // Chrome extension not available
 
@@ -4576,10 +4588,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof BroncoChipList
      */
 
-//const tags = target.value.split(' ').filter(e => e.length > 1 && !this.chips.includes(e));
+// Map array to lower case to check case insensitive if tag already exists
 
 /**
-     * Deletes a tag if it is already markes as deleted.
+     * Deletes a tag if it is already marked as deleted.
      *
      * @param {HTMLInputElement} target
      * @memberof BroncoChipList
@@ -4644,6 +4656,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
 
 // CONCATENATED MODULE: ./src/components/pop-up/app.component.ts
+
+/**
+   * Hides the icon on fullscreen mode
+   *
+   * @memberof WebMarker
+   */
 
 // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
 

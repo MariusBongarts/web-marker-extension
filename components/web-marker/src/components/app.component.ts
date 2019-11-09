@@ -19,6 +19,14 @@ export class WebMarker extends connect(store)(LitElement) {
   @property()
   show = false;
 
+  /**
+   * Can be set to true to hide side-bar icon. E.g. in full screen mode
+   *
+   * @memberof WebMarker
+   */
+  @property()
+  hide = false;
+
   @property()
   newContextMark!: string;
 
@@ -37,6 +45,22 @@ export class WebMarker extends connect(store)(LitElement) {
     this.listenToShowMarker();
     await this.highlightMarks();
     this.listenForContextMenu();
+    this.listenForFullscreen();
+  }
+
+
+  /**
+   * Hides the icon on fullscreen mode
+   *
+   * @memberof WebMarker
+   */
+  listenForFullscreen() {
+    window.addEventListener("resize", () => {
+      this.hide = false;
+      if (window.innerHeight == screen.height) {
+        this.hide = true;
+      }
+    });
   }
 
   listenForContextMenu() {
@@ -48,7 +72,7 @@ export class WebMarker extends connect(store)(LitElement) {
           highlightText(null, mark);
           await this.markerService.createMark(mark);
         };
-        
+
       });
     } catch (error) {
       // Chrome extension not available
@@ -143,8 +167,9 @@ export class WebMarker extends connect(store)(LitElement) {
 
   render() {
     return html`
+  ${!this.hide ? html`
   <my-marker .show=${this.show} .menuWidth=${this.menuWidth}></my-marker>
+  ` : ''}
   `;
   }
-
 }
