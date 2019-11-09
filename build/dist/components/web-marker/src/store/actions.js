@@ -66,6 +66,21 @@ export function updateBookmark(bookmark) {
     };
     store.dispatch(reduxAction);
 }
+/**
+ * Hand a tab as a param to set selected tag
+ *
+ * @export
+ * @param {Tab} activeView
+ * @param {string} [tag]
+ */
+export function navigateToTab(activeView, tag) {
+    const reduxAction = {
+        type: 'CHANGE_VIEW',
+        activeView: activeView,
+        activeTag: tag ? tag : ''
+    };
+    store.dispatch(reduxAction);
+}
 export function login(jwtPayload) {
     return __awaiter(this, void 0, void 0, function* () {
         const reduxAction = {

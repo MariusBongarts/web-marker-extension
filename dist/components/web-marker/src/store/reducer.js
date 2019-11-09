@@ -5,6 +5,8 @@ const INITIAL_STATE = {
     marks: [],
     bookmarks: [],
     searchValue: '',
+    activeView: 'mark-view',
+    activeTag: ''
 };
 export const reducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -23,6 +25,7 @@ export const reducer = (state = INITIAL_STATE, action) => {
         case 'REMOVE_BOOKMARK':
             return Object.assign(Object.assign({}, state), { bookmarks: state.bookmarks.filter(e => e.id !== action.bookmarkId), lastAction: action.type });
         case 'UPDATE_BOOKMARK':
+            // Old bookmark is necessary to identify if tag was removed or added
             const oldBookmark = state.bookmarks.find(bookmark => bookmark.id === action.bookmark.id);
             const newBookmark = action.bookmark;
             const type = oldBookmark.tags.length > newBookmark.tags.length ? 'removedTag' : 'addedTag';
@@ -40,6 +43,8 @@ export const reducer = (state = INITIAL_STATE, action) => {
             return Object.assign(Object.assign({}, state), { loggedIn: true, jwtPayload: action.jwtPayload });
         case 'LOGOUT':
             return Object.assign(Object.assign({}, state), { loggedIn: false, jwtPayload: undefined });
+        case 'CHANGE_VIEW':
+            return Object.assign(Object.assign({}, state), { activeView: action.activeView, activeTag: action.activeTag ? action.activeTag : '' });
         case 'SEARCH_VALUE_CHANGED':
             return Object.assign(Object.assign({}, state), { searchValue: action.searchValue });
         default:

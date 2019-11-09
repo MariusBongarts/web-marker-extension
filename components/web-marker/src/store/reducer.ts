@@ -108,6 +108,7 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       };
 
     case 'UPDATE_BOOKMARK':
+      // Old bookmark is necessary to identify if tag was removed or added
       const oldBookmark = state.bookmarks.find(bookmark => bookmark.id === action.bookmark.id);
       const newBookmark = action.bookmark;
 

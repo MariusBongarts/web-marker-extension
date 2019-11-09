@@ -1,3 +1,4 @@
+import { TagsService } from './../../../services/tags.service';
 import { Bookmark } from './../../../models/bookmark';
 import { Mark } from './../../../models/mark';
 import { store } from './../../../store/store';
@@ -11,6 +12,7 @@ const componentCSS = require('./tags-view.component.scss');
 @customElement('tags-view')
 export class TagsViewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
+  tagsService = new TagsService();
 
   @property()
   activeDirectory = '';
@@ -38,37 +40,21 @@ export class TagsViewComponent extends connect(store)(LitElement) {
 
 
   async firstUpdated() {
-    this.marks = store.getState().marks;
-    this.bookmarks = store.getState().bookmarks;
-    this.selectedTag = store.getState().activeTag;
-    console.log(this.selectedTag);
-    this.loadDistinctTags();
-    this.loaded = true;
+    this.loadData();
   }
 
   stateChanged() {
+    this.loadData();
+  }
+
+  loadData() {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
-    this.loadDistinctTags();
+    this.selectedTag = store.getState().activeTag;
+    this.tags = this.tagsService.getTags();
+    this.selectedBookmark = undefined;
+    this.loaded = true;
   }
-
-  loadDistinctTags() {
-    this.tags = [];
-    this.marks.forEach(mark => {
-      this.tags = [...this.tags, ...mark.tags];
-    });
-    this.bookmarks.forEach(bookmark => {
-      this.tags = [...this.tags, ...bookmark.tags];
-    });
-    this.tags = [...new Set(this.tags)].filter(tag =>
-      tag.toLowerCase().includes(store.getState().searchValue.toLowerCase()));
-    this.sortTags();
-  }
-
-  sortTags() {
-    this.tags.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
-  }
-
 
   /**
    * Find related tags, which are inserted in combination with selected tag
@@ -88,7 +74,6 @@ export class TagsViewComponent extends connect(store)(LitElement) {
       this.bookmarks.filter(bookmark => bookmark.tags.includes(tag)).length > 0);
     return tags;
   }
-
 
   /**
    * Toggle selected tag and set selectedBookmark to undefined

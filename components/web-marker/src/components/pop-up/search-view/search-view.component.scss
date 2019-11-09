@@ -4,19 +4,52 @@ bookmark-element {
   --bg-color: var(--secondary-dark);
 }
 
-.bookmark-icon, .mark-icon {
+.bookmark-icon, .mark-icon, .tag-icon {
   background: var(--secondary-dark);
   display: flex;
   margin-top: 10px;
 }
 
-.bookmark-icon svg, .mark-icon svg {
+.bookmark-icon svg, .mark-icon svg, .tag-icon svg {
   color: var(--primary-color);
   fill: var(--primary-color);
   margin-left: auto;
   padding: 5px 20px;
+  width: 16px;
+  height: 16px;
 }
 
 bookmark-element {
   --bg-color: var(--secondary-dark);
+}
+
+
+.tagContainer {
+  background-color: var(--secondary-dark);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 5px;
+  padding-top: 10px;
+  padding-left: 0px;
+}
+
+bronco-chip {
+  flex: 1 auto;
+  margin: 2px;
+  margin-right: 5px;
+  --height: 20px;
+  --background-color: var(--primary-dark);
+  --hover-ripple-dark: var(--secondary-light);
+  --font-size: 12px;
+}
+
+.chipContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.selectedChipContainer > bronco-chip {
+  margin-top: 0px;
 }

@@ -58,6 +58,7 @@ export class BookmarkService {
             updateBookmark(bookmark);
             //await this.updateTagsOfRelatedMarks(bookmark);
             yield this.httpClient.put(this.BASE_URL, bookmark);
+            yield this.updateRelatedMarks(bookmark);
             // Update bookmarks for store
             yield this.getBookmarks();
         });
@@ -81,18 +82,15 @@ export class BookmarkService {
         };
     }
     /**
-     * When the tags of a bookmarks change. The tags are also being added to the related marks.
+     * If tags of bookmark are changing they also have to be stored and saved in mark
      *
+     * @param {Bookmark} bookmark
      * @memberof BookmarkService
      */
-    updateTagsOfRelatedMarks(bookmark) {
+    updateRelatedMarks(bookmark) {
         return __awaiter(this, void 0, void 0, function* () {
             const markService = new MarkerService();
-            const marks = store.getState().marks.filter(mark => mark.url === bookmark.url)
-                .map(mark => {
-                return Object.assign(Object.assign({}, mark), { tags: [...new Set([...mark.tags, ...bookmark.tags])] });
-            });
-            console.log(marks);
+            const marks = store.getState().marks.filter(mark => mark.url === bookmark.url);
             marks.forEach((mark) => __awaiter(this, void 0, void 0, function* () { return yield markService.updateMark(mark); }));
         });
     }

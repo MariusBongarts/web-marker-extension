@@ -78,6 +78,7 @@
 }
 .ripple:hover {
   background: var(--hover-ripple-dark) radial-gradient(circle, transparent 1%, var(--hover-ripple-light) 1%) center/15000%;
+  transform: scale(1.01);
 }
 .ripple:active {
   background-color: rgba(199, 199, 199, 0.589);

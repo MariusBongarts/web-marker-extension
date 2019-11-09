@@ -3021,8 +3021,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // Update redux
 
 /**
-     * When the tags of a bookmarks change. The tags are also being added to the related marks.
+ * Hand a tab as a param to set selected tag
+ *
+ * @export
+ * @param {Tab} activeView
+ * @param {string} [tag]
+ */
+
+/**
+     * If tags of bookmark are changing they also have to be stored and saved in mark
      *
+     * @param {Bookmark} bookmark
      * @memberof BookmarkService
      */
 
@@ -3150,6 +3159,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * @param {String} message The warning message.
  * @returns {void}
  */
+
+// Old bookmark is necessary to identify if tag was removed or added
 
 // If tag was removed
 
@@ -4887,8 +4898,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     */
 
 /**
-        * 1 = Only marks for current page
-        * 2 = Accordion view of marks for all pages
+        * Current active Tab, saved in store
         *
         * @memberof MarkOverviewComponent
         */

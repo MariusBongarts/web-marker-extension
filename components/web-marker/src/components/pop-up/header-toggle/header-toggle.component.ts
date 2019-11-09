@@ -22,7 +22,13 @@ export class HeaderToggleComponent extends connect(store)(LitElement) {
   searchActive = false;
 
   stateChanged() {
-    this.activeView = store.getState().activeView;
+    if (!store.getState().searchValue) {
+      if (this.searchElement && this.searchElement.value) {
+        this.searchElement && this.searchElement.value ? this.searchElement.value = store.getState().searchValue : '';
+        this.activeView = store.getState().activeView;
+        this.searchActive = false;
+      }
+    }
   }
 
   emitChange(newView: Tab) {
