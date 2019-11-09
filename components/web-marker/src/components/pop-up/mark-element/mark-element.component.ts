@@ -43,27 +43,10 @@ class MarkElementComponent extends connect(store)(LitElement) {
 
   async stateChanged(e: State) {
     try {
-      if (store.getState().lastAction === 'UPDATE_MARK') {
-        const mark = e.marks.find(e => e.id === this.mark.id);
-        mark.tags = [...new Set([...mark.tags])];
-        this.mark = mark;
-        console.log(this.mark);
-        this.requestUpdate();
-      }
-      if (store.getState().lastAction === 'UPDATE_BOOKMARK') {
-        console.log("Updated mark");
-        const oldTags = this.mark.tags;
-        this.mark = {...this.mark,
-          tags:
-          [...new Set([...this.mark.tags,
-                 ...e.bookmarks.find(bookmark => bookmark.url === this.mark.url).tags])]
-                }
-                if (oldTags !== this.mark.tags) {
-                  await this.markService.updateMark(this.mark);
-
-                }
+      const mark = e.marks.find(e => e.id === this.mark.id);
+      mark.tags = [...new Set([...mark.tags])];
+      this.mark = mark;
       this.requestUpdate();
-      }
     } catch (error) {
       //
     }
@@ -119,10 +102,10 @@ ${this.mark ? html`
         <bronco-chip-list .hideOnOutsideClick=${false} .mark=${this.mark}></bronco-chip-list>
         ` : ''}
         ${!this.showActionToolbar ?
-        this.mark.tags.map(tag => html`
+          this.mark.tags.map(tag => html`
     <bronco-chip @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
     >${tag}</bronco-chip>`) : ''
-      }
+        }
   </div>
 </div>
 ` : ''}

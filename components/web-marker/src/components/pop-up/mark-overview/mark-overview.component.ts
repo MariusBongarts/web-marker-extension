@@ -43,7 +43,7 @@ class MainComponentComponent extends connect(store)(LitElement) {
     this.filterMarks();
   }
 
-  stateChanged() {
+  stateChanged(e) {
     this.marks = store.getState().marks;
     this.filterMarks();
   }
