@@ -16,7 +16,13 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
   @property()
   hideDeleteIcon = false;
 
-
+  /**
+   * When set to true, it hides the delete icon
+   *
+   * @memberof BookmarkElementComponent
+   */
+  @property()
+  hideGoToIcon = false;
 
   /**
    * Either @event goToMatk or @event deleted
@@ -33,10 +39,10 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     return html`
 <div class="toolbar">
 
-<!-- Go to url of current mark or scroll -->
+<!-- Go to url of current mark or scroll. Can be hidden by attribute hideGoToIcon -->
+  ${!this.hideGoToIcon ? html`
   <div class="icon goToIcon" @click=${() => this.emit('goToMark')}>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
+  <svg xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -55,6 +61,7 @@ class BookmarkElementComponent extends connect(store)(LitElement) {
     <line x1="10" y1="14" x2="21" y2="3"></line>
   </svg>
   </div>
+  ` : ''}
 
   <!-- Hide delete Icon when hideDeleteIcon is true -->
   ${!this.hideDeleteIcon ? html`

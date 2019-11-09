@@ -44,7 +44,6 @@ class MainComponentComponent extends connect(store)(LitElement) {
   }
 
   stateChanged() {
-    console.log("Change")
     this.marks = store.getState().marks;
     this.filterMarks();
   }
@@ -73,7 +72,6 @@ class MainComponentComponent extends connect(store)(LitElement) {
         this.isFilterInTagsOfBookmark(mark) ||
         mark.url.includes(store.getState().searchValue));
     }
-    console.log(filteredMarks);
     return filteredMarks;
   }
 

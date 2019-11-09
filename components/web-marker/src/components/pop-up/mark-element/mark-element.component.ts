@@ -102,16 +102,20 @@ ${this.mark ? html`
     <span class="timeSince"> ${ timeSinceTimestamp(this.mark.createdAt)}</span>
     <action-toolbar @deleted=${async (e: MouseEvent) => await this.deleteMark(e)}
         @goToMark=${(e) => this.scrollToMark(e)}
+        .hideGoToIcon=${true}
       ></action-toolbar>
   </div>
-  <div class="main" @click=${() => this.showActionToolbar = !this.showActionToolbar}>
+  <div class="main"
+  @dblclick=${(e) => this.scrollToMark(e)}
+  @click=${() => this.showActionToolbar = false}
+  >
       <blockquote>${ this.mark.text} </blockquote>
     </div>
     <div class="footer" @click=${() => !this.showActionToolbar ? this.showActionToolbar = !this.showActionToolbar : ''}
         >
 
         <!-- Show either only tags or also input field to add tags -->
-        ${this.showActionToolbar ? html`
+        ${this.showActionToolbar || this.mark.tags.length === 0 ? html`
         <bronco-chip-list .hideOnOutsideClick=${false} .mark=${this.mark}></bronco-chip-list>
         ` : ''}
         ${!this.showActionToolbar ?
