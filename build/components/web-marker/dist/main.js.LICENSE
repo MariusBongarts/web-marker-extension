@@ -3151,6 +3151,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * @returns {void}
  */
 
+// If tag was removed
+
+// If tag was added
+
+// Update tags of mark
+
 // @ts-ignore
 
 /**

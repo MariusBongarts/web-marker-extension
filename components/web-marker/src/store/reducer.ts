@@ -106,6 +106,7 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       const type = oldBookmark.tags.length > newBookmark.tags.length ? 'removedTag' : 'addedTag';
 
       let changedTag = '';
+
       // If tag was removed
       if (oldBookmark.tags.length > newBookmark.tags.length) changedTag = oldBookmark.tags.find(tag => !newBookmark.tags.includes(tag));
 
@@ -118,7 +119,7 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         // Update tags of mark
         marks: state.marks.map(mark => mark.url === oldBookmark.url ? {
           ...mark,
-          tags: type === 'addedTag' ? [...new Set([...mark.tags, changedTag])] : mark.tags.filter(tag => tag !== changedTag)
+          tags: changedTag ? type === 'addedTag' ? [...new Set([...mark.tags, changedTag])] : mark.tags.filter(tag => tag !== changedTag) : mark.tags
         } : mark),
         lastAction: action.type
       };

@@ -23,7 +23,19 @@ export const reducer = (state = INITIAL_STATE, action) => {
         case 'REMOVE_BOOKMARK':
             return Object.assign(Object.assign({}, state), { bookmarks: state.bookmarks.filter(e => e.id !== action.bookmarkId), lastAction: action.type });
         case 'UPDATE_BOOKMARK':
-            return Object.assign(Object.assign({}, state), { bookmarks: state.bookmarks.map(bookmark => bookmark.id === action.bookmark.id ? action.bookmark : bookmark), lastAction: action.type });
+            const oldBookmark = state.bookmarks.find(bookmark => bookmark.id === action.bookmark.id);
+            const newBookmark = action.bookmark;
+            const type = oldBookmark.tags.length > newBookmark.tags.length ? 'removedTag' : 'addedTag';
+            let changedTag = '';
+            // If tag was removed
+            if (oldBookmark.tags.length > newBookmark.tags.length)
+                changedTag = oldBookmark.tags.find(tag => !newBookmark.tags.includes(tag));
+            // If tag was added
+            if (oldBookmark.tags.length < newBookmark.tags.length)
+                changedTag = newBookmark.tags.find(tag => !oldBookmark.tags.includes(tag));
+            return Object.assign(Object.assign({}, state), { bookmarks: state.bookmarks.map(bookmark => bookmark.id === action.bookmark.id ? action.bookmark : bookmark), 
+                // Update tags of mark
+                marks: state.marks.map(mark => mark.url === oldBookmark.url ? Object.assign(Object.assign({}, mark), { tags: type === 'addedTag' ? [...new Set([...mark.tags, changedTag])] : mark.tags.filter(tag => tag !== changedTag) }) : mark), lastAction: action.type });
         case 'LOGIN':
             return Object.assign(Object.assign({}, state), { loggedIn: true, jwtPayload: action.jwtPayload });
         case 'LOGOUT':
