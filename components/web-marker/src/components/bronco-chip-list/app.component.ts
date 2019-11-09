@@ -6,7 +6,7 @@ import { MarkerService } from './../../services/marker.service';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import './../bronco-chip/app.component';
-import { updateMark } from '../../store/actions';
+import { updateMark, navigateToTab } from '../../store/actions';
 
 const componentCSS = require('./app.component.scss');
 
@@ -251,7 +251,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
 ${this.chips.map((chip, index) => html`
 <bronco-chip .deleteMode="${this.markedToDelete && index === this.chips.length - 1}"
 @deleted=${async () => await this.filterChips(chip)}
-
+@click=${() => navigateToTab('tags-view', chip)}
 >${chip}</bronco-chip>
 `)}
     <input

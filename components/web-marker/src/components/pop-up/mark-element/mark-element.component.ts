@@ -7,6 +7,7 @@ import { css, customElement, html, LitElement, query, property, unsafeCSS } from
 import { timeSinceTimestamp } from '../../../helper/dateHelper';
 import { MarkerService } from '../../../services/marker.service';
 import { navigateExternal } from '../../../helper/router';
+import { navigateToTab } from '../../../store/actions';
 
 const componentCSS = require('./mark-element.component.scss');
 
@@ -103,7 +104,9 @@ ${this.mark ? html`
         ` : ''}
         ${!this.showActionToolbar ?
           this.mark.tags.map(tag => html`
-    <bronco-chip @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
+    <bronco-chip
+    @click=${() => navigateToTab('tags-view', tag)}
+    @deleted=${async (e: MouseEvent) => await this.deleteTag(e, tag)}
     >${tag}</bronco-chip>`) : ''
         }
   </div>

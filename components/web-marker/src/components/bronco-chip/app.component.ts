@@ -1,5 +1,6 @@
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { navigateToTab } from '../../store/actions';
 
 const componentCSS = require('./app.component.scss');
 
@@ -79,10 +80,17 @@ export class BroncoChip extends LitElement {
   render() {
     return html`
 <div class="chip ripple
-${this.deleteMode ? 'delete-mode' : ''}">
+${this.deleteMode ? 'delete-mode' : ''}"
+>
   <div class="chip-content"><slot></slot></div>
   ${this.hideDeleteIcon ? '' : html`
-  <div class="chip-close" @click=${() => this.emitDeleted()}>
+  <!-- Prevent default for deleting to supress navigating to tag -->
+  <div class="chip-close" @click=${(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.emitDeleted();
+  }
+  }>
       <!-- <svg class="chip-svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg> -->
       <svg class="chip-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>

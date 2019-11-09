@@ -1,3 +1,4 @@
+import { Tab } from './../models/tabs';
 import { Bookmark } from './../models/bookmark';
 import { JwtService } from './../services/jwt.service';
 import { JwtPayload } from './../models/jwtPayload';
@@ -12,6 +13,8 @@ export interface State {
   lastAction?: ReduxAction
   jwtPayload?: JwtPayload | undefined;
   searchValue: string;
+  activeView: Tab;
+  activeTag: string;
 }
 
 const INITIAL_STATE: State = {
@@ -19,6 +22,8 @@ const INITIAL_STATE: State = {
   marks: [],
   bookmarks: [],
   searchValue: '',
+  activeView: 'mark-view',
+  activeTag: ''
 };
 
 export type ReduxActionType =
@@ -32,7 +37,8 @@ export type ReduxActionType =
   'UPDATE_BOOKMARK' |
   'LOGIN' |
   'LOGOUT' |
-  'SEARCH_VALUE_CHANGED';
+  'SEARCH_VALUE_CHANGED' |
+  'CHANGE_VIEW';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -43,7 +49,9 @@ export interface ReduxAction {
   mark?: Mark,
   markId?: string,
   jwtPayload?: JwtPayload | undefined,
-  searchValue?: string
+  searchValue?: string,
+  activeView?: Tab,
+  activeTag?: string
 }
 
 
@@ -136,6 +144,13 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         ...state,
         loggedIn: false,
         jwtPayload: undefined
+      };
+
+    case 'CHANGE_VIEW':
+      return {
+        ...state,
+        activeView: action.activeView,
+        activeTag: action.activeTag ? action.activeTag : ''
       };
 
     case 'SEARCH_VALUE_CHANGED':

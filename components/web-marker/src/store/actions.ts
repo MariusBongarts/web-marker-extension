@@ -1,3 +1,4 @@
+import { Tab } from './../models/tabs';
 import { BookmarkService } from './../services/bookmark.service';
 import { Bookmark } from './../models/bookmark';
 import { MarkerService } from './../services/marker.service';
@@ -67,6 +68,23 @@ export function updateBookmark(bookmark: Bookmark) {
   const reduxAction: ReduxAction = {
     type: 'UPDATE_BOOKMARK',
     bookmark: bookmark
+  }
+  store.dispatch(reduxAction);
+}
+
+
+/**
+ * Hand a tab as a param to set selected tag
+ *
+ * @export
+ * @param {Tab} activeView
+ * @param {string} [tag]
+ */
+export function navigateToTab(activeView: Tab, tag?: string) {
+  const reduxAction: ReduxAction = {
+    type: 'CHANGE_VIEW',
+    activeView: activeView,
+    activeTag: tag ? tag : ''
   }
   store.dispatch(reduxAction);
 }

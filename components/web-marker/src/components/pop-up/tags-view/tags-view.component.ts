@@ -31,7 +31,7 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   loaded = false;
 
   @property()
-  selectedTag = '';
+  selectedTag = store.getState().activeTag;
 
   @property()
   tags: string[] = [];
@@ -40,7 +40,8 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   async firstUpdated() {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
-
+    this.selectedTag = store.getState().activeTag;
+    console.log(this.selectedTag);
     this.loadDistinctTags();
     this.loaded = true;
   }

@@ -1,3 +1,4 @@
+import { Tab } from './../../../models/tabs';
 import { store } from './../../../store/store';
 import { MarkerService } from './../../../services/marker.service';
 import { Mark } from './../../../models/mark';
@@ -40,13 +41,12 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
 
   /**
-  * 1 = Only marks for current page
-  * 2 = Accordion view of marks for all pages
+  * Current active Tab, saved in store
   *
   * @memberof MarkOverviewComponent
   */
   @property()
-  activeToggle = 2;
+  activeView: Tab = store.getState().activeView;
 
 
   /**
@@ -120,6 +120,7 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   stateChanged(e) {
     if (store.getState().loggedIn) this.marks = store.getState().marks.filter(e => e.url === location.href);
     else this.marks = [];
+    this.activeView = store.getState().activeView;
     this.searchValue = store.getState().searchValue;
     this.loggedIn = store.getState().loggedIn;
   }
@@ -175,7 +176,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
   emitTabChange(tabNr: number) {
     searchValueChanged('');
-    this.activeToggle = tabNr;
   }
 
   openLobbyContainer() {
@@ -216,7 +216,7 @@ ${this.animation && this.show ? 'slide-in' : ''}
 ${this.animation && !this.show ? 'slide-out' : ''}">
 
   <div class="header">
-    <header-toggle .active=${this.activeToggle} @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}>
+    <header-toggle @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}>
     </header-toggle>
     <search-bar></search-bar>
   </div>
@@ -228,7 +228,7 @@ ${this.animation && !this.show ? 'slide-out' : ''}">
     <search-view></search-view>
     ` : html`
 
-    ${this.activeToggle === 2 ? html`
+    ${this.activeView === 'mark-view' ? html`
     <!-- Only marks for current page -->
     <bookmark-element></bookmark-element>
 
@@ -236,12 +236,12 @@ ${this.animation && !this.show ? 'slide-out' : ''}">
     <mark-overview .isCurrentPageMode=${true}></mark-overview>
     ` : ''}
 
-    ${this.activeToggle === 0 ? html`
+    ${this.activeView === 'accordion-view' ? html`
     <!-- Accordion view of marks for all pages -->
     <origin-overview></origin-overview>
     ` : ''}
 
-    ${this.activeToggle === 1 ? html`
+    ${this.activeView === 'tags-view' ? html`
     <!-- Accordion view of marks for all pages -->
     <tags-view></tags-view>
     ` : ''}
