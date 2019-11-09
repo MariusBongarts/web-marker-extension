@@ -45,7 +45,6 @@ export class HeaderToggleComponent extends LitElement {
 
       if (filteredItems.length === 0) {
         this.selectedIndex = -1;
-        this.remove();
       }
     };
   }
