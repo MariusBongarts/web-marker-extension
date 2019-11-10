@@ -4860,18 +4860,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // CONCATENATED MODULE: ./src/components/pop-up/tags-view/tags-view.component.ts
 
 /**
-     * Find related tags, which are inserted in combination with selected tag
-     *
-     * @returns
-     * @memberof TagsViewComponent
-     */
+    * Find related tags, which are inserted in combination with selected tag
+    *
+    * @returns
+    * @memberof TagsViewComponent
+    */
 
 /**
-     * Toggle selected tag and set selectedBookmark to undefined
-     *
-     * @param {string} tag
-     * @memberof TagsViewComponent
-     */
+    * Toggle selected tag and set selectedBookmark to undefined
+    *
+    * @param {string} tag
+    * @memberof TagsViewComponent
+    */
 
 // CONCATENATED MODULE: ./src/components/pop-up/search-view/search-view.component.ts
 

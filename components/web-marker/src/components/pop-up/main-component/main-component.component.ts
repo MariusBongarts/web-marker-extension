@@ -216,7 +216,9 @@ ${this.animation && this.show ? 'slide-in' : ''}
 ${this.animation && !this.show ? 'slide-out' : ''}">
 
   <div class="header">
-    <header-toggle @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}>
+    <header-toggle
+    .activeView=${this.activeView}
+    @toggleChanged=${(e: CustomEvent) => this.emitTabChange(e.detail)}>
     </header-toggle>
     <search-bar></search-bar>
   </div>
