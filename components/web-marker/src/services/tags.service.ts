@@ -38,6 +38,5 @@ export class TagsService {
     } catch (error) {
       //
     }
-
   }
 }

@@ -5,6 +5,7 @@ import { Bookmark } from './../models/bookmark';
 import { JwtService } from './../services/jwt.service';
 import { JwtPayload } from './../models/jwtPayload';
 import { Mark } from './../models/mark';
+import { addTag } from './actions';
 
 const jwtService = new JwtService();
 
@@ -49,7 +50,9 @@ export type ReduxActionType =
   'ADD_DIRECTORY' |
   'REMOVE_DIRECTORY' |
   'UPDATE_DIRECTORY' |
-  'INIT_TAGS';
+  'INIT_TAGS' |
+  'ADD_TAG' |
+  'REMOVE_TAG';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -66,7 +69,8 @@ export interface ReduxAction {
   directories?: Directory[],
   directory?: Directory,
   directoryId?: string,
-  tags?: Tag[]
+  tags?: Tag[],
+  tagName?: string
 }
 
 
@@ -87,6 +91,21 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         lastAction: action.type
       };
 
+    case 'ADD_TAG':
+      const tag: Tag = { name: action.tagName };
+      return {
+        ...state,
+        tags: [...state.tags, tag],
+        lastAction: action.type
+      };
+
+    case 'REMOVE_TAG':
+      return {
+        ...state,
+        marks: state.tags.filter(e => e.name !== action.tagName),
+        lastAction: action.type
+      };
+
     case 'ADD_MARK':
       return {
         ...state,
@@ -102,9 +121,18 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       };
 
     case 'UPDATE_MARK':
+
+      // Update tags in store
+      let tags = state.tags;
+      action.mark.tags.forEach(tag => {
+        if(!tags.includes(tag => tag.name === tag)) {
+          tags = [...state.tags, {name: tag}];
+        }
+      });
       return {
         ...state,
         marks: state.marks.map(mark => mark.id === action.mark.id ? action.mark : mark),
+        tags: tags,
         lastAction: action.type
       };
 
@@ -172,8 +200,20 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       // If tag was added
       if (oldBookmark.tags.length < newBookmark.tags.length) changedTag = newBookmark.tags.find(tag => !oldBookmark.tags.includes(tag));
 
+
+      // Update tags in store
+      let newTags: Tag[] = state.tags;
+      if (type === 'addedTag' && !state.tags.includes(tag => tag.name === changedTag)) {
+        newTags = [...state.tags, {name: changedTag} as Tag];
+      }
+      if (type === 'removedTag') {
+        // TODO: Deleting tags should be done in server
+      }
+
+
       return {
         ...state,
+        tags: newTags,
         bookmarks: state.bookmarks.map(bookmark => bookmark.id === action.bookmark.id ? action.bookmark : bookmark),
         // Update tags of mark
         marks: state.marks.map(mark => mark.url === oldBookmark.url ? {

@@ -52,6 +52,23 @@ export function initTags(tags: Tag[]) {
   store.dispatch(reduxAction);
 }
 
+export function addTag(tagName: string) {
+  console.log(tagName);
+  const reduxAction: ReduxAction = {
+    type: 'ADD_TAG',
+    tagName: tagName
+  }
+  store.dispatch(reduxAction);
+}
+
+export function removeTag(tagName: string) {
+  const reduxAction: ReduxAction = {
+    type: 'REMOVE_TAG',
+    tagName: tagName
+  }
+  store.dispatch(reduxAction);
+}
+
 export function initDirectories(directories: Directory[]) {
   const reduxAction: ReduxAction = {
     type: 'INIT_DIRECTORIES',
