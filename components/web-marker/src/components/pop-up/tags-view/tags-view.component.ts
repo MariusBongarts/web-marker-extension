@@ -51,7 +51,7 @@ loadData() {
 this.marks = store.getState().marks;
 this.bookmarks = store.getState().bookmarks;
 this.selectedTag = store.getState().activeTag;
-this.tags = this.tagsService.getTags();
+this.tags = this.tagsService.getTagsFromMarksAndBookmarks();
 this.selectedBookmark = undefined;
 this.loaded = true;
 }

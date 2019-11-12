@@ -1,9 +1,6 @@
 import { TagsService } from './../../../services/tags.service';
 import { Bookmark } from './../../../models/bookmark';
 import { Mark } from './../../../models/mark';
-import { JwtPayload } from './../../../models/jwtPayload';
-import { JwtService } from './../../../services/jwt.service';
-import { MarkerService } from './../../../services/marker.service';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { store } from './../../../store/store';
@@ -35,7 +32,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
   async firstUpdated() {
     this.bookmarks = store.getState().bookmarks;
     this.marks = store.getState().marks;
-    this.tags = this.tagsService.getTags();
+    this.tags = this.tagsService.getTagsFromMarksAndBookmarks();
   }
 
   stateChanged() {

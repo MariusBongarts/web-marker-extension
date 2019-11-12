@@ -1,3 +1,5 @@
+import { Tag } from './../models/tag';
+import { Directory } from './../models/directory';
 import { Tab } from './../models/tabs';
 import { Bookmark } from './../models/bookmark';
 import { JwtService } from './../services/jwt.service';
@@ -15,6 +17,8 @@ export interface State {
   searchValue: string;
   activeView: Tab;
   activeTag: string;
+  directories: Directory[],
+  tags: Tag[]
 }
 
 const INITIAL_STATE: State = {
@@ -23,7 +27,9 @@ const INITIAL_STATE: State = {
   bookmarks: [],
   searchValue: '',
   activeView: 'mark-view',
-  activeTag: ''
+  activeTag: '',
+  directories: [],
+  tags: [],
 };
 
 export type ReduxActionType =
@@ -38,7 +44,12 @@ export type ReduxActionType =
   'LOGIN' |
   'LOGOUT' |
   'SEARCH_VALUE_CHANGED' |
-  'CHANGE_VIEW';
+  'CHANGE_VIEW' |
+  'INIT_DIRECTORIES' |
+  'ADD_DIRECTORY' |
+  'REMOVE_DIRECTORY' |
+  'UPDATE_DIRECTORY' |
+  'INIT_TAGS';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -51,7 +62,11 @@ export interface ReduxAction {
   jwtPayload?: JwtPayload | undefined,
   searchValue?: string,
   activeView?: Tab,
-  activeTag?: string
+  activeTag?: string,
+  directories?: Directory[],
+  directory?: Directory,
+  directoryId?: string,
+  tags?: Tag[]
 }
 
 
@@ -62,6 +77,13 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       return {
         ...state,
         marks: action.marks,
+        lastAction: action.type
+      };
+
+    case 'INIT_TAGS':
+      return {
+        ...state,
+        tags: action.tags,
         lastAction: action.type
       };
 
@@ -83,6 +105,34 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       return {
         ...state,
         marks: state.marks.map(mark => mark.id === action.mark.id ? action.mark : mark),
+        lastAction: action.type
+      };
+
+    case 'INIT_DIRECTORIES':
+      return {
+        ...state,
+        directories: action.directories,
+        lastAction: action.type
+      };
+
+    case 'ADD_DIRECTORY':
+      return {
+        ...state,
+        directories: [...state.directories, action.directory],
+        lastAction: action.type
+      };
+
+    case 'REMOVE_DIRECTORY':
+      return {
+        ...state,
+        directories: state.directories.filter(e => e.id !== action.directoryId),
+        lastAction: action.type
+      };
+
+    case 'UPDATE_DIRECTORY':
+      return {
+        ...state,
+        directories: state.directories.map(directory => directory.id === action.directory.id ? action.directory : directory),
         lastAction: action.type
       };
 

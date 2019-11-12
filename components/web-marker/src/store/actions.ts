@@ -1,3 +1,7 @@
+import { TagsService } from './../services/tags.service';
+import { DirectoryService } from './../services/directory.service';
+import { Tag } from './../models/tag';
+import { Directory } from './../models/directory';
 import { Tab } from './../models/tabs';
 import { BookmarkService } from './../services/bookmark.service';
 import { Bookmark } from './../models/bookmark';
@@ -36,6 +40,46 @@ export function updateMark(mark: Mark) {
   const reduxAction: ReduxAction = {
     type: 'UPDATE_MARK',
     mark: mark
+  }
+  store.dispatch(reduxAction);
+}
+
+export function initTags(tags: Tag[]) {
+  const reduxAction: ReduxAction = {
+    type: 'INIT_TAGS',
+    tags: tags
+  }
+  store.dispatch(reduxAction);
+}
+
+export function initDirectories(directories: Directory[]) {
+  const reduxAction: ReduxAction = {
+    type: 'INIT_DIRECTORIES',
+    directories: directories
+  }
+  store.dispatch(reduxAction);
+}
+
+export function addDirectory(directory: Directory) {
+  const reduxAction: ReduxAction = {
+    type: 'ADD_DIRECTORY',
+    directory: directory
+  }
+  store.dispatch(reduxAction);
+}
+
+export function removeDirectory(directoryId: string) {
+  const reduxAction: ReduxAction = {
+    type: 'REMOVE_DIRECTORY',
+    bookmarkId: directoryId
+  }
+  store.dispatch(reduxAction);
+}
+
+export function updateDirectory(directory: Directory) {
+  const reduxAction: ReduxAction = {
+    type: 'UPDATE_DIRECTORY',
+    directory: directory
   }
   store.dispatch(reduxAction);
 }
@@ -117,11 +161,15 @@ export function searchValueChanged(value: string) {
 async function initData() {
   const markService = new MarkerService();
   const bookmarkService = new BookmarkService();
+  const directoryService = new DirectoryService();
+  const tagService = new TagsService();
   try {
 
     // Init marks
   await markService.getMarks();
   await bookmarkService.getBookmarks();
+  await tagService.getTags();
+  await directoryService.getDirectories();
 
   } catch (error) {
     logout()
