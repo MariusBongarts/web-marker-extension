@@ -122,17 +122,9 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
 
     case 'UPDATE_MARK':
 
-      // Update tags in store
-      let tags = state.tags;
-      action.mark.tags.forEach(tag => {
-        if(!tags.includes(tag => tag.name === tag)) {
-          tags = [...state.tags, {name: tag}];
-        }
-      });
       return {
         ...state,
         marks: state.marks.map(mark => mark.id === action.mark.id ? action.mark : mark),
-        tags: tags,
         lastAction: action.type
       };
 
@@ -200,20 +192,8 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       // If tag was added
       if (oldBookmark.tags.length < newBookmark.tags.length) changedTag = newBookmark.tags.find(tag => !oldBookmark.tags.includes(tag));
 
-
-      // Update tags in store
-      let newTags: Tag[] = state.tags;
-      if (type === 'addedTag' && !state.tags.includes(tag => tag.name === changedTag)) {
-        newTags = [...state.tags, {name: changedTag} as Tag];
-      }
-      if (type === 'removedTag') {
-        // TODO: Deleting tags should be done in server
-      }
-
-
       return {
         ...state,
-        tags: newTags,
         bookmarks: state.bookmarks.map(bookmark => bookmark.id === action.bookmark.id ? action.bookmark : bookmark),
         // Update tags of mark
         marks: state.marks.map(mark => mark.url === oldBookmark.url ? {

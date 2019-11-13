@@ -1,10 +1,11 @@
+import { TagsService } from './tags.service';
 import { store } from './../store/store';
 import { Bookmark } from './../models/bookmark';
 import { JwtService } from './jwt.service';
 import { Mark } from './../models/mark';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { updateBookmark, addBookmark, removeBookmark, initBookmarks } from '../store/actions';
+import { updateBookmark, addBookmark, removeBookmark, initBookmarks, initTags } from '../store/actions';
 import { v4 as uuid } from 'uuid';
 import { MarkerService } from './marker.service';
 import { getTitleForBookmark } from '../helper/bookmarkHelper';
@@ -14,6 +15,7 @@ export class BookmarkService {
   httpClient!: HttpClient;
   socket;
   jwtService = new JwtService();
+  tagsService = new TagsService();
   BASE_URL = '/bookmarks';
 
   constructor() {
@@ -59,6 +61,10 @@ export class BookmarkService {
 
     // Update bookmarks for store
     await this.getBookmarks();
+
+    // Update tags for store
+    await this.tagsService.getTags();
+
   }
 
   async getBookmarkById(id: string): Promise<Bookmark> {

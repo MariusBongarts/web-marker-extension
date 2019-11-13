@@ -1,3 +1,4 @@
+import { TagsService } from './tags.service';
 import { store } from './../store/store';
 import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
@@ -12,6 +13,7 @@ export class MarkerService {
   socket;
   jwtService = new JwtService();
   bookmarkService = new BookmarkService();
+  tagsService = new TagsService();
 
   constructor() {
     this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
@@ -54,6 +56,7 @@ export class MarkerService {
   async updateMark(mark: Mark): Promise<void> {
     updateMark(mark);
     await this.httpClient.put('/marks', mark);
+    await this.tagsService.getTags();
   }
 
   async getMarkById(id: string): Promise<Mark> {
