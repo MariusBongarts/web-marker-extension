@@ -43,7 +43,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     let filteredBookmarks = this.bookmarks;
     // Filter if search value is given
     if (store.getState().searchValue) {
-      filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title.toLowerCase().includes(
+      filteredBookmarks = filteredBookmarks.filter(bookmark => bookmark.title && bookmark.title.toLowerCase().includes(
         this.searchFilter) ||
         this.isFilterInTagsOfElement(bookmark) ||
         bookmark.url.includes(store.getState().searchValue));
