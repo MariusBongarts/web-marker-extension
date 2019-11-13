@@ -56,7 +56,6 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
     this.selectedTag = store.getState().activeTag;
-    console.log(this.selectedTag);
     this.tags = store.getState().tags.filter(tag => !tag._directory).map(tag => tag.name);
     this.selectedDirectory = store.getState().activeDirectory;
     this.selectedBookmark = undefined;
@@ -94,6 +93,17 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   }
 
 
+  /**
+   * Tags can be dragged in directories. The belonging tagName is saved in dataTransfer object.
+   *
+   * @param {DragEvent} e
+   * @param {string} tag
+   * @memberof TagsViewComponent
+   */
+  dragTag(e: DragEvent, tag: string) {
+    e.dataTransfer.setData("tagName", tag);
+  }
+
   render() {
     return html`
 ${this.loaded ? html`
@@ -118,7 +128,10 @@ ${!this.selectedTag ? html`
   <!-- Show all tags if no directory is selected -->
   ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter) && (!this.selectedDirectory)).map(tag =>
       html`
-  <bronco-chip @click=${() => this.toggleTag(tag)}
+  <bronco-chip
+  draggable="true"
+  @dragstart=${(e: DragEvent) => this.dragTag(e, tag)}
+  @click=${() => this.toggleTag(tag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length + this.bookmarks.filter(bookmark =>
         bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">

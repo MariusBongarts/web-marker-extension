@@ -1,3 +1,4 @@
+import { TagsService } from './../../../services/tags.service';
 import { Tag } from './../../../models/tag';
 import { DirectoryService } from './../../../services/directory.service';
 import { Directory } from './../../../models/directory';
@@ -12,6 +13,7 @@ const componentCSS = require('./directory-element.component.scss');
 export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
   directoryService = new DirectoryService();
+  tagService = new TagsService();
 
   @property()
   directory: Directory;
@@ -27,6 +29,24 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   firstUpdated() {
     this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
+
+    // Allow tags to be dragged inside of this directory
+    this.ondragover = (e) => e.preventDefault();
+  }
+
+
+  /**
+   *Tags can be dropped in this directory. The belonging tag will be read out in dataTransfer object and
+   * and the new directory for the tag is saved in the server
+   * @param {DragEvent} e
+   * @memberof DirectoryOverviewComponent
+   */
+  async onDrop(e: DragEvent) {
+    e.preventDefault();
+    const tagName = e.dataTransfer.getData("tagName");
+    const droppedTag: Tag = store.getState().tags.find(tag => tag.name === tagName);
+    droppedTag._directory = this.directory._id;
+    await this.tagService.updateTag(droppedTag);
   }
 
   stateChanged() {
@@ -44,6 +64,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
+    <div @drop=${async (e) => await this.onDrop(e)}>
     <h5>${this.directory.name}</h5>
 
     <!-- Show tags of directory only when directory is active -->
@@ -59,6 +80,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     `)}
     `}
     ` : ''}
+    </div>
     `;
   }
 
