@@ -19,6 +19,7 @@ export interface State {
   activeView: Tab;
   activeTag: string;
   directories: Directory[],
+  activeDirectory: Directory,
   tags: Tag[]
 }
 
@@ -31,6 +32,7 @@ const INITIAL_STATE: State = {
   activeTag: '',
   directories: [],
   tags: [],
+  activeDirectory: undefined
 };
 
 export type ReduxActionType =
@@ -52,7 +54,9 @@ export type ReduxActionType =
   'UPDATE_DIRECTORY' |
   'INIT_TAGS' |
   'ADD_TAG' |
-  'REMOVE_TAG';
+  'REMOVE_TAG' |
+  'TOGGLE_DIRECTORY' |
+  'TOGGLE_TAG';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -70,12 +74,20 @@ export interface ReduxAction {
   directory?: Directory,
   directoryId?: string,
   tags?: Tag[],
-  tagName?: string
+  tagName?: string,
+  activeDirectory?: Directory,
 }
 
 
 export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
   switch (action.type) {
+
+    case 'TOGGLE_DIRECTORY':
+      return {
+        ...state,
+        activeDirectory: action.activeDirectory,
+        activeTag: action.activeTag
+      };
 
     case 'INIT_MARKS':
       return {
@@ -97,6 +109,12 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         ...state,
         tags: [...state.tags, tag],
         lastAction: action.type
+      };
+
+    case 'TOGGLE_TAG':
+      return {
+        ...state,
+        activeTag: action.activeTag
       };
 
     case 'REMOVE_TAG':

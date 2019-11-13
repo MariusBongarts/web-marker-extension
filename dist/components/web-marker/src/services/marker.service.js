@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { TagsService } from './tags.service';
 import { store } from './../store/store';
 import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
@@ -17,6 +18,7 @@ export class MarkerService {
     constructor() {
         this.jwtService = new JwtService();
         this.bookmarkService = new BookmarkService();
+        this.tagsService = new TagsService();
         this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
     }
     getMarks() {
@@ -58,6 +60,7 @@ export class MarkerService {
         return __awaiter(this, void 0, void 0, function* () {
             updateMark(mark);
             yield this.httpClient.put('/marks', mark);
+            yield this.tagsService.getTags();
         });
     }
     getMarkById(id) {

@@ -17,6 +17,8 @@ import './components/pop-up/tree-view/tree-view.component.ts';
 import './components/pop-up/accordion-view/accordion-view.component.ts';
 import './components/pop-up/origin-overview/origin-overview.component.ts';
 import './components/pop-up/origin-element/origin-element.component.ts';
+import './components/pop-up/directory-overview/directory-overview.component.ts';
+import './components/pop-up/directory-element/directory-element.component.ts';
 import './components/pop-up/bookmark-overview/bookmark-overview.component.ts';
 import './components/pop-up/mark-overview/mark-overview.component.ts';
 import './components/pop-up/tags-view/tags-view.component.ts';

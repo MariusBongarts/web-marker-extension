@@ -1,0 +1,9 @@
+@import "../../../variables.scss";
+
+bronco-chip {
+  flex: 1 auto;
+  margin: 2px;
+  --height: 20px;
+  --background-color: var(--secondary-dark);
+  --font-size: 12px;
+}

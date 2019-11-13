@@ -39,4 +39,21 @@ export class TagsService {
       //
     }
   }
+
+
+  /**
+   * Updates a tag and reloads all tags from server for state management
+   *
+   * @param {Tag} tag
+   * @memberof TagsService
+   */
+  async updateTag(tag: Tag) {
+    try {
+      await this.httpClient.put(this.BASE_URL, tag);
+      await this.getTags();
+    } catch (error) {
+      //
+    }
+
+  }
 }

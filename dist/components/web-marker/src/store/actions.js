@@ -7,6 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { TagsService } from './../services/tags.service';
+import { DirectoryService } from './../services/directory.service';
 import { BookmarkService } from './../services/bookmark.service';
 import { MarkerService } from './../services/marker.service';
 import { store } from './store';
@@ -35,6 +37,56 @@ export function updateMark(mark) {
     const reduxAction = {
         type: 'UPDATE_MARK',
         mark: mark
+    };
+    store.dispatch(reduxAction);
+}
+export function initTags(tags) {
+    const reduxAction = {
+        type: 'INIT_TAGS',
+        tags: tags
+    };
+    store.dispatch(reduxAction);
+}
+export function addTag(tagName) {
+    console.log(tagName);
+    const reduxAction = {
+        type: 'ADD_TAG',
+        tagName: tagName
+    };
+    store.dispatch(reduxAction);
+}
+export function removeTag(tagName) {
+    const reduxAction = {
+        type: 'REMOVE_TAG',
+        tagName: tagName
+    };
+    store.dispatch(reduxAction);
+}
+export function initDirectories(directories) {
+    const reduxAction = {
+        type: 'INIT_DIRECTORIES',
+        directories: directories
+    };
+    store.dispatch(reduxAction);
+}
+export function addDirectory(directory) {
+    const reduxAction = {
+        type: 'ADD_DIRECTORY',
+        directory: directory
+    };
+    store.dispatch(reduxAction);
+}
+export function removeDirectory(directoryId) {
+    const reduxAction = {
+        type: 'REMOVE_DIRECTORY',
+        bookmarkId: directoryId
+    };
+    store.dispatch(reduxAction);
+}
+export function updateDirectory(directory) {
+    const reduxAction = {
+        type: 'UPDATE_DIRECTORY',
+        directory: directory
     };
     store.dispatch(reduxAction);
 }
@@ -109,10 +161,14 @@ function initData() {
     return __awaiter(this, void 0, void 0, function* () {
         const markService = new MarkerService();
         const bookmarkService = new BookmarkService();
+        const directoryService = new DirectoryService();
+        const tagService = new TagsService();
         try {
             // Init marks
             yield markService.getMarks();
             yield bookmarkService.getBookmarks();
+            yield tagService.getTags();
+            yield directoryService.getDirectories();
         }
         catch (error) {
             logout();

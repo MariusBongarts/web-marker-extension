@@ -53,10 +53,17 @@ export function initTags(tags: Tag[]) {
 }
 
 export function addTag(tagName: string) {
-  console.log(tagName);
   const reduxAction: ReduxAction = {
     type: 'ADD_TAG',
     tagName: tagName
+  }
+  store.dispatch(reduxAction);
+}
+
+export function toggleTag(tagName: string) {
+  const reduxAction: ReduxAction = {
+    type: 'TOGGLE_TAG',
+    activeTag: tagName
   }
   store.dispatch(reduxAction);
 }
@@ -81,6 +88,15 @@ export function addDirectory(directory: Directory) {
   const reduxAction: ReduxAction = {
     type: 'ADD_DIRECTORY',
     directory: directory
+  }
+  store.dispatch(reduxAction);
+}
+
+export function toggleDirectory(activeDirectory: Directory) {
+  const reduxAction: ReduxAction = {
+    type: 'TOGGLE_DIRECTORY',
+    activeDirectory: activeDirectory,
+    activeTag: ''
   }
   store.dispatch(reduxAction);
 }

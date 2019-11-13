@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { TagsService } from './tags.service';
 import { store } from './../store/store';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
@@ -18,6 +19,7 @@ import { getTitleForBookmark } from '../helper/bookmarkHelper';
 export class BookmarkService {
     constructor() {
         this.jwtService = new JwtService();
+        this.tagsService = new TagsService();
         this.BASE_URL = '/bookmarks';
         this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
     }
@@ -61,6 +63,8 @@ export class BookmarkService {
             yield this.updateRelatedMarks(bookmark);
             // Update bookmarks for store
             yield this.getBookmarks();
+            // Update tags for store
+            yield this.tagsService.getTags();
         });
     }
     getBookmarkById(id) {

@@ -1,3 +1,4 @@
+import { Directory } from './../../../models/directory';
 import { TagsService } from './../../../services/tags.service';
 import { Bookmark } from './../../../models/bookmark';
 import { Mark } from './../../../models/mark';
@@ -6,91 +7,98 @@ import { connect } from 'pwa-helpers';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { urlToOrigin } from '../../../helper/urlHelper';
+import { toggleTag } from '../../../store/actions';
 
 const componentCSS = require('./tags-view.component.scss');
 
 @customElement('tags-view')
 export class TagsViewComponent extends connect(store)(LitElement) {
-static styles = css`${unsafeCSS(componentCSS)}`;
-tagsService = new TagsService();
+  static styles = css`${unsafeCSS(componentCSS)}`;
+  tagsService = new TagsService();
 
-@property()
-activeDirectory = '';
+  @property()
+  activeDirectory = '';
 
-@property()
-marks: Mark[] = [];
+  @property()
+  marks: Mark[] = [];
 
-@property()
-bookmarks: Bookmark[] = [];
+  @property()
+  bookmarks: Bookmark[] = [];
 
-@property()
-selectedBookmark!: Bookmark;
+  @property()
+  selectedBookmark!: Bookmark;
 
-@property()
-filter = '';
+  @property()
+  selectedDirectory!: Directory;
 
-@property()
-loaded = false;
+  @property()
+  filter = '';
 
-@property()
-selectedTag = store.getState().activeTag;
+  @property()
+  loaded = false;
 
-@property()
-tags: string[] = [];
+  @property()
+  selectedTag = store.getState().activeTag;
 
-
-async firstUpdated() {
-this.loadData();
-}
-
-stateChanged() {
-this.loadData();
-}
-
-loadData() {
-this.marks = store.getState().marks;
-this.bookmarks = store.getState().bookmarks;
-this.selectedTag = store.getState().activeTag;
-this.tags = store.getState().tags.filter(tag => !tag._directory).map(tag => tag.name);
-this.selectedBookmark = undefined;
-this.loaded = true;
-}
-
-/**
-* Find related tags, which are inserted in combination with selected tag
-*
-* @returns
-* @memberof TagsViewComponent
-*/
-getRelatedTags() {
-let relatedTags = [];
-this.marks.filter(mark => mark.tags.includes(this.selectedTag)).forEach(mark => relatedTags = [...relatedTags,
-...mark.tags]);
-this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).forEach(bookmark => relatedTags =
-[...relatedTags,
-...bookmark.tags]);
-let tags = [...new Set(relatedTags)].filter(tag => tag !== this.selectedTag);
-tags = tags.filter(tag =>
-this.marks.filter(mark => mark.tags.includes(tag)).length > 0 ||
-this.bookmarks.filter(bookmark => bookmark.tags.includes(tag)).length > 0);
-return tags;
-}
-
-/**
-* Toggle selected tag and set selectedBookmark to undefined
-*
-* @param {string} tag
-* @memberof TagsViewComponent
-*/
-toggleTag(tag: string) {
-this.selectedTag === tag ? this.selectedTag = '' : this.selectedTag = tag;
-this.selectedBookmark = undefined;
-}
+  @property()
+  tags: string[] = [];
 
 
-render() {
-return html`
+  async firstUpdated() {
+    this.loadData();
+  }
+
+  stateChanged() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.marks = store.getState().marks;
+    this.bookmarks = store.getState().bookmarks;
+    this.selectedTag = store.getState().activeTag;
+    console.log(this.selectedTag);
+    this.tags = store.getState().tags.filter(tag => !tag._directory).map(tag => tag.name);
+    this.selectedDirectory = store.getState().activeDirectory;
+    this.selectedBookmark = undefined;
+    this.loaded = true;
+  }
+
+  /**
+  * Find related tags, which are inserted in combination with selected tag
+  *
+  * @returns
+  * @memberof TagsViewComponent
+  */
+  getRelatedTags() {
+    let relatedTags = [];
+    this.marks.filter(mark => mark.tags.includes(this.selectedTag)).forEach(mark => relatedTags = [...relatedTags,
+    ...mark.tags]);
+    this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).forEach(bookmark => relatedTags =
+      [...relatedTags,
+      ...bookmark.tags]);
+    let tags = [...new Set(relatedTags)].filter(tag => tag !== this.selectedTag);
+    tags = tags.filter(tag =>
+      this.marks.filter(mark => mark.tags.includes(tag)).length > 0 ||
+      this.bookmarks.filter(bookmark => bookmark.tags.includes(tag)).length > 0);
+    return tags;
+  }
+
+  /**
+  * Toggle tag in state management
+  *
+  * @param {string} tag
+  * @memberof TagsViewComponent
+  */
+  toggleTag(tag: string) {
+    store.getState().activeTag === tag ? toggleTag('') : toggleTag(tag);
+  }
+
+
+  render() {
+    return html`
 ${this.loaded ? html`
+
+<directory-overview></directory-overview>
 
 <!-- If no tag is selected -->
 ${!this.selectedTag ? html`
@@ -107,25 +115,26 @@ ${!this.selectedTag ? html`
     </div>
   </div>
   ` : html`
-  ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter)).map(tag =>
-  html`
-  <bronco-chip @click=${()=> this.toggleTag(tag)}
+  <!-- Show all tags if no directory is selected -->
+  ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter) && (!this.selectedDirectory)).map(tag =>
+      html`
+  <bronco-chip @click=${() => this.toggleTag(tag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length + this.bookmarks.filter(bookmark =>
-    bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
+        bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
       <span>${tag}</span>
     </div>
   </bronco-chip>`
-  )}
+    )}
   `}
 </div>
 
 <!-- If Tag is selected -->
 ` : html`
 <div class="selectedChipContainer">
-  <bronco-chip @click=${()=> this.selectedTag = ''}
+  <bronco-chip @click=${() => this.toggleTag(this.selectedTag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length +
-    this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
+            this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
       <span>${this.selectedTag}</span>
     </div>
@@ -136,9 +145,9 @@ ${!this.selectedTag ? html`
 <!-- Show related tags -->
 <div class="container">
   ${this.getRelatedTags().map(tag => html`
-  <bronco-chip @click=${()=> this.selectedTag === tag ? this.selectedTag = '' : this.selectedTag = tag}
+  <bronco-chip @click=${() => this.toggleTag(tag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length + this.bookmarks.filter(bookmark =>
-    bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
+              bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
       <span>${tag}</span>
     </div>
@@ -157,11 +166,11 @@ ${this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).le
 ` : ''}
 <!-- Show bookmarks for selected tag -->
 ${this.bookmarks.filter(bookmark =>
-bookmark.tags.includes(this.selectedTag)).map(bookmark => html`
+                bookmark.tags.includes(this.selectedTag)).map(bookmark => html`
 <!-- Hide bookmark, when a bookmark got selected and it is not the selected one -->
 ${!this.selectedBookmark || this.selectedBookmark === bookmark ? html`
-<bookmark-element @click=${()=> this.selectedBookmark && this.selectedBookmark === bookmark ? this.selectedBookmark =
-  undefined : this.selectedBookmark = bookmark}
+<bookmark-element @click=${() => this.selectedBookmark && this.selectedBookmark === bookmark ? this.selectedBookmark =
+                      undefined : this.selectedBookmark = bookmark}
   .bookmark=${bookmark}
   .isDropdown=${true}></bookmark-element>
 ` : ''}
@@ -179,8 +188,8 @@ ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length ? html`
 ` : ''}
 <!-- Show marks for selected tag -->
 ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).map(mark =>
-html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-element>`
-)}
+                        html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-element>`
+                      )}
 
 </div>
 ` : ''}
@@ -188,6 +197,6 @@ html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-ele
 ` : html`Loading...`}
 
 `;
-}
+  }
 
 }

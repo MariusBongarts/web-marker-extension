@@ -2991,9 +2991,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 /*#__PURE__*/
 
+// CONCATENATED MODULE: ./src/environments/environment.dev.ts
+
+// CONCATENATED MODULE: ./src/services/http-client.ts
+
 // tslint:disable-next-line: no-empty
 
-// CONCATENATED MODULE: ./src/environments/environment.dev.ts
+// CONCATENATED MODULE: ./src/services/tags.service.ts
+
+// CONCATENATED MODULE: ./src/services/directory.service.ts
+
+// Update redux
 
 // EXTERNAL MODULE: ./node_modules/uuid/index.js
 
@@ -3017,8 +3025,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // Remove spaces %20 for windows
 
 // CONCATENATED MODULE: ./src/services/bookmark.service.ts
-
-// Update redux
 
 /**
  * Hand a tab as a param to set selected tag
@@ -4854,8 +4860,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // Filter for current page if mode is set to currentPage
 
 // Filter for current bookmark, if given
-
-// CONCATENATED MODULE: ./src/services/tags.service.ts
 
 // CONCATENATED MODULE: ./src/components/pop-up/tags-view/tags-view.component.ts
 
