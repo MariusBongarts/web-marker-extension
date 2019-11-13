@@ -1,1 +1,9 @@
 @import "../../../variables.scss";
+
+.container {
+  display: flex;
+}
+
+directory-element, add-directory-element {
+  margin: 5px;
+}

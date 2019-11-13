@@ -21,17 +21,40 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   @property()
   tagsForDirectory: Tag[];
 
+
+  /**
+   * True, when user drags tag inside of this directory
+   *
+   * @memberof DirectoryOverviewComponent
+   */
+  @property()
+  dragActive = false;
+
   @property()
   active = store.getState().activeDirectory === this.directory;
 
   @property()
   activeTag = store.getState().activeTag;
 
-  firstUpdated() {
+  async firstUpdated() {
     this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
+    this.handleDragEvents();
+  }
 
-    // Allow tags to be dragged inside of this directory
-    this.ondragover = (e) => e.preventDefault();
+  handleDragEvents() {
+    // Allow tags to be dragged inside of this directory and toggleDragActive to show css effect
+    this.ondragover = (e) => {
+      this.dragActive = true;
+      e.preventDefault()
+    };
+
+    this.ondragleave = (e) => {
+      this.dragActive = false;
+      e.preventDefault()
+    };
+
+    this.ondrop = async (e) => await this.onDrop(e);
+
   }
 
 
@@ -64,17 +87,25 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
-    <div @drop=${async (e) => await this.onDrop(e)}>
-    <h5>${this.directory.name}</h5>
+    <div class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
+    <div class="folder ${this.dragActive || this.active ? 'active' : ''}">
+    <span>${this.tagsForDirectory.length}</span>
+    </div>
+    <div class="footer">
+      <span>${this.directory.name}</span>
+    </div>
+    </div>
 
+    <div class="tagsContainer">
     <!-- Show tags of directory only when directory is active -->
     ${this.active ? html`
     ${this.activeTag ?
-        html`
+          html`
     ` :
-        html`
+          html`
         ${this.tagsForDirectory.map(tag => html`
         <bronco-chip
+        @deleted=${async () => await this.tagService.updateTag({ ...tag, _directory: '' })}
         @click=${(e) => this.navigateToTab(e, tag)}
         >${tag.name}</bronco-chip>
     `)}

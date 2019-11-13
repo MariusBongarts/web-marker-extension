@@ -57,6 +57,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       .directory=${directory}>
       </directory-element>
       `)}
+      <add-directory-element></add-directory-element>
     `}
 
 </div>
