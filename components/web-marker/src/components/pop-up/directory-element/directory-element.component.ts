@@ -48,12 +48,16 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
     <!-- Show tags of directory only when directory is active -->
     ${this.active ? html`
-    ${this.tagsForDirectory.map(tag => html`
-
-    <bronco-chip
-    @click=${(e) => this.navigateToTab(e, tag)}
-    >${tag.name}</bronco-chip>
+    ${this.activeTag ?
+        html`
+    ` :
+        html`
+        ${this.tagsForDirectory.map(tag => html`
+        <bronco-chip
+        @click=${(e) => this.navigateToTab(e, tag)}
+        >${tag.name}</bronco-chip>
     `)}
+    `}
     ` : ''}
     `;
   }
