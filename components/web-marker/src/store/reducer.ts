@@ -102,7 +102,7 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
     case 'REMOVE_TAG':
       return {
         ...state,
-        marks: state.tags.filter(e => e.name !== action.tagName),
+        tags: state.tags.filter(e => e.name !== action.tagName),
         lastAction: action.type
       };
 

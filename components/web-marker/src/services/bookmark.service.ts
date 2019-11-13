@@ -88,7 +88,9 @@ export class BookmarkService {
   async updateRelatedMarks(bookmark: Bookmark) {
     const markService = new MarkerService();
     const marks = store.getState().marks.filter(mark => mark.url === bookmark.url);
+
     marks.forEach(async (mark) => await markService.updateMark(mark));
+
   }
 
 }
