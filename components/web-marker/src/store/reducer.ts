@@ -20,7 +20,8 @@ export interface State {
   activeTag: string;
   directories: Directory[],
   activeDirectory: Directory,
-  tags: Tag[]
+  tags: Tag[],
+  dragMode: boolean
 }
 
 const INITIAL_STATE: State = {
@@ -32,7 +33,8 @@ const INITIAL_STATE: State = {
   activeTag: '',
   directories: [],
   tags: [],
-  activeDirectory: undefined
+  activeDirectory: undefined,
+  dragMode: false
 };
 
 export type ReduxActionType =
@@ -56,7 +58,8 @@ export type ReduxActionType =
   'ADD_TAG' |
   'REMOVE_TAG' |
   'TOGGLE_DIRECTORY' |
-  'TOGGLE_TAG';
+  'TOGGLE_TAG' |
+  'TOGGLE_DRAGMODE';
 
 export interface ReduxAction {
   type: ReduxActionType,
@@ -76,6 +79,7 @@ export interface ReduxAction {
   tags?: Tag[],
   tagName?: string,
   activeDirectory?: Directory,
+  dragMode?: boolean
 }
 
 
@@ -87,6 +91,11 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
         ...state,
         activeDirectory: action.activeDirectory,
         activeTag: action.activeTag
+      };
+    case 'TOGGLE_DRAGMODE':
+      return {
+        ...state,
+        dragMode: action.dragMode
       };
 
     case 'INIT_MARKS':
@@ -161,9 +170,10 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       };
 
     case 'REMOVE_DIRECTORY':
+      console.log(action);
       return {
         ...state,
-        directories: state.directories.filter(e => e.id !== action.directoryId),
+        directories: state.directories.filter(e => e._id !== action.directoryId),
         lastAction: action.type
       };
 

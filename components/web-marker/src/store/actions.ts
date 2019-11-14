@@ -68,6 +68,15 @@ export function toggleTag(tagName: string) {
   store.dispatch(reduxAction);
 }
 
+export function toggleDragMode(dragMode: boolean) {
+  const reduxAction: ReduxAction = {
+    type: 'TOGGLE_DRAGMODE',
+    dragMode: dragMode
+  }
+  store.dispatch(reduxAction);
+}
+
+
 export function removeTag(tagName: string) {
   const reduxAction: ReduxAction = {
     type: 'REMOVE_TAG',
@@ -104,7 +113,7 @@ export function toggleDirectory(activeDirectory: Directory) {
 export function removeDirectory(directoryId: string) {
   const reduxAction: ReduxAction = {
     type: 'REMOVE_DIRECTORY',
-    bookmarkId: directoryId
+    directoryId: directoryId
   }
   store.dispatch(reduxAction);
 }

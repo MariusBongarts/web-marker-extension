@@ -10,7 +10,6 @@
 .folder {
   width: 40px;
   height: 40px;
-  border: 2px solid var(--secondary-color);
   border-radius: 10px;
   color: var(--primary-color);
   font-size: 20;
@@ -19,6 +18,7 @@
 
   svg {
     margin: auto;
+    margin-top: 10px;
   }
 }
 

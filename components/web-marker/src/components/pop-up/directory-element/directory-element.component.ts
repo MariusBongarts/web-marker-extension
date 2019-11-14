@@ -5,7 +5,7 @@ import { Directory } from './../../../models/directory';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { store } from './../../../store/store';
 import { connect } from 'pwa-helpers';
-import { navigateToTab, toggleTag, toggleDirectory } from '../../../store/actions';
+import { navigateToTab, toggleTag, toggleDirectory, toggleDragMode } from '../../../store/actions';
 
 const componentCSS = require('./directory-element.component.scss');
 
@@ -56,7 +56,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   async getState() {
     this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && this.directory && tag._directory === this.directory._id);
     this.activeTag = store.getState().activeTag;
-    if (this.directory._parentDirectory) {
+    if (this.directory && this.directory._parentDirectory) {
       this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
     }
   }
@@ -101,6 +101,12 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     await this.handleDirectoryDropped(e);
   }
 
+  onDropEnd(e: DragEvent) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    toggleDragMode(false);
+  }
+
   async handleTagDropped(e: DragEvent) {
     const tagName = e.dataTransfer.getData("tagName").trim();
     if (tagName) {
@@ -135,6 +141,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   dragDirectory(e: DragEvent) {
     e.dataTransfer.setData("directoryId", this.directory._id);
+    toggleDragMode(true);
   }
 
   render() {
@@ -144,6 +151,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   <div
   draggable="true"
   @dragstart=${(e: DragEvent) => this.dragDirectory(e)}
+  @dragend=${(e: DragEvent) => this.onDropEnd(e)}
   @click=${() => this.toggleDirectory()}
       class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
       <div class="folder ${this.dragActive || this.active ? 'active' : ''}">

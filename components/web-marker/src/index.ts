@@ -20,6 +20,7 @@ import './components/pop-up/origin-element/origin-element.component.ts';
 import './components/pop-up/directory-overview/directory-overview.component.ts';
 import './components/pop-up/directory-element/directory-element.component.ts';
 import './components/pop-up/add-directory-element/add-directory-element.component.ts';
+import './components/pop-up/remove-directory-element/remove-directory-element.component.ts';
 import './components/pop-up/bookmark-overview/bookmark-overview.component.ts';
 import './components/pop-up/mark-overview/mark-overview.component.ts';
 import './components/pop-up/tags-view/tags-view.component.ts';

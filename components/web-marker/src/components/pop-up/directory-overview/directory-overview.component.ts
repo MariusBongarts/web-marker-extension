@@ -26,6 +26,9 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   searchFilter = '';
 
   @property()
+  dragMode = false;
+
+  @property()
   selectedDirectory: Directory = undefined;
 
   async firstUpdated() {
@@ -39,14 +42,16 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   getState() {
     this.directories = store.getState().directories;
     this.mainDirectories = this.directories.filter(directory => !directory._parentDirectory);
-    this.subDirectories = this.directories.filter(directory =>  this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
+    this.subDirectories = this.directories.filter(directory => this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
     this.searchFilter = store.getState().searchValue;
     this.selectedDirectory = store.getState().activeDirectory;
+    this.dragMode = store.getState().dragMode;
   }
 
   render() {
     return html`
     <div class="container">
+
       ${this.directories.length ? html`
 
       <!-- Show selected directory and sub directories -->
@@ -56,7 +61,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     .active=${true}
     .directory=${this.directories.find(directory => directory === this.selectedDirectory)}></directory-element>
     ${this.subDirectories.map(directory =>
-      html`
+            html`
       <!-- Sub directories of directory -->
       <directory-element
       .active=${false}
@@ -75,7 +80,11 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     `)}
     `}
     ` : ''}
+
+    <!-- Add a new directory. Will be hidden when user is dragging elements -->
+    ${!this.dragMode ? html`
     <add-directory-element></add-directory-element>
+    ` : ''}
 </div>
 `;
   }

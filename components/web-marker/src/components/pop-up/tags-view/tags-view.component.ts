@@ -18,9 +18,6 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   tagsService = new TagsService();
 
   @property()
-  activeDirectory = '';
-
-  @property()
   marks: Mark[] = [];
 
   @property()
@@ -124,12 +121,15 @@ ${this.loaded ? html`
 
 <directory-overview></directory-overview>
 
+<!-- Element in which directories can be dragged to delete them. This is only shown when the user drags something (Handled in component) -->
+<remove-directory-element></remove-directory-element>
+
 <!-- If no tag is selected -->
 ${!this.selectedTag ? html`
 <div class="container">
 
   <!-- Info text if there are no tags yet -->
-  ${this.tags.length === 0 ? html`
+  ${this.tags.length === 0 && !this.selectedDirectory ? html`
   <div class="infoContainer">
     <div class="mainInfo">
       <span>No tags made yet</span>
@@ -236,6 +236,7 @@ ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).map(mark =>
                       )}
 
 </div>
+
 ` : ''}
 `}
 ` : html`Loading...`}
