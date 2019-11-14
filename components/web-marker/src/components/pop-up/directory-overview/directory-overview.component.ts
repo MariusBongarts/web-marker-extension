@@ -17,51 +17,61 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   directories: Directory[] = [];
 
   @property()
+  subDirectories: Directory[] = [];
+
+  @property()
   searchFilter = '';
 
   @property()
   selectedDirectory: Directory = undefined;
 
   async firstUpdated() {
-    this.directories = store.getState().directories;
+    this.getState();
   }
 
   stateChanged() {
+    this.getState();
+  }
+
+  getState() {
     this.directories = store.getState().directories;
     this.searchFilter = store.getState().searchValue;
     this.selectedDirectory = store.getState().activeDirectory;
-  }
-
-  toggleDirectory(directory: Directory) {
-    this.selectedDirectory === directory ? this.selectedDirectory = undefined : toggleDirectory(directory);
-    toggleTag('');
+    this.subDirectories = this.directories.filter(directory =>  this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
   }
 
   render() {
     return html`
-  ${this.directories.length ? html`
     <div class="container">
-    <!-- Show selected directory -->
+  ${this.directories.length ? html`
+
+    <!-- Show selected directory and sub directories -->
     ${this.selectedDirectory ?
-    html`
+          html`
     <directory-element
-    @click=${() => toggleDirectory(undefined)}
+    .active=${true}
     .directory=${this.directories.find(directory => directory === this.selectedDirectory)}></directory-element>
+    ${this.subDirectories.map(directory =>
+      html`
+      <!-- Sub directories of directory -->
+      <directory-element
+      .directory=${directory}>
+      </directory-element>
+
+      `)}
     ` :
-    html`
+          html`
     <!-- Show all directories -->
     ${this.directories.filter(directory => directory.name.toLowerCase().includes(this.searchFilter)).map(directory =>
-      html`
+            html`
       <directory-element
-      @click=${() => this.toggleDirectory(directory)}
       .directory=${directory}>
       </directory-element>
       `)}
-      <add-directory-element></add-directory-element>
     `}
-
-</div>
   ` : ''}
+  <add-directory-element></add-directory-element>
+</div>
 `;
   }
 

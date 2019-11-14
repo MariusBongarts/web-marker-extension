@@ -18,6 +18,19 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   @property()
   active = false;
 
+  async inputEvent(e: KeyboardEvent) {
+    this.directoryName = this.inputElement.value
+    if (e.keyCode === 13) {
+      const directory = {
+        name: this.directoryName,
+        _parentDirectory: store.getState().activeDirectory ? store.getState().activeDirectory._id : ''
+      } as Directory;
+      await this.directoryService.createDirectory(directory);
+      this.inputElement.value = '';
+      this.active = false;
+    }
+  }
+
 
   render() {
     return html`
@@ -25,7 +38,11 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     ${!this.active ?
         html`
     <div class="directoryContainer"
-    @click=${() => this.active = !this.active}>
+    @click=${() => {
+            this.active = !this.active;
+            setTimeout(() => this.inputElement.focus(), 100)
+          }
+          }>
     <div class="folder">
     <span>+</span>
     </div>
@@ -44,7 +61,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     <div class="footer">
       <input
     @blur=${() => this.active = false}
-    @keydown=${(e) => this.directoryName = this.inputElement.value}
+    @keydown=${(e) => this.inputEvent(e)}
     id="inputElement" placeholder="Enter name...">
     </div>
     </div>

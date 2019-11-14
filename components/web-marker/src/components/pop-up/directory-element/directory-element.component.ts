@@ -5,7 +5,7 @@ import { Directory } from './../../../models/directory';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { store } from './../../../store/store';
 import { connect } from 'pwa-helpers';
-import { navigateToTab, toggleTag } from '../../../store/actions';
+import { navigateToTab, toggleTag, toggleDirectory } from '../../../store/actions';
 
 const componentCSS = require('./directory-element.component.scss');
 
@@ -17,6 +17,9 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   @property()
   directory: Directory;
+
+  @property()
+  parentDirectory: Directory;
 
   @property()
   tagsForDirectory: Tag[];
@@ -31,14 +34,40 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   dragActive = false;
 
   @property()
-  active = store.getState().activeDirectory === this.directory;
+  active = false;
 
   @property()
   activeTag = store.getState().activeTag;
 
+  @property()
+  loaded = false;
+
   async firstUpdated() {
-    this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
+    this.getState();
     this.handleDragEvents();
+  }
+
+  async stateChanged() {
+    this.getState();
+  }
+
+  async getState() {
+    this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
+    this.activeTag = store.getState().activeTag;
+    if (this.directory._parentDirectory) {
+      this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
+    }
+  }
+
+  toggleDirectory() {
+    if (!this.active) {
+      toggleDirectory(this.directory);
+      this.active = true;
+    } else {
+      this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
+      toggleDirectory(this.directory._parentDirectory ? this.parentDirectory : undefined);
+    }
+    toggleTag('');
   }
 
   handleDragEvents() {
@@ -72,45 +101,23 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     await this.tagService.updateTag(droppedTag);
   }
 
-  stateChanged() {
-    this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
-    this.active = store.getState().activeDirectory === this.directory;
-    this.activeTag = store.getState().activeTag;
-  }
-
   navigateToTab(e: Event, tag: Tag) {
     e.preventDefault();
     e.stopImmediatePropagation();
     navigateToTab('tags-view', tag.name);
   }
 
-
   render() {
     return html`
-    <div class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
+    <div
+    @click=${() => this.toggleDirectory()}
+    class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
     <div class="folder ${this.dragActive || this.active ? 'active' : ''}">
     <span>${this.tagsForDirectory.length}</span>
     </div>
     <div class="footer">
       <span>${this.directory.name}</span>
     </div>
-    </div>
-
-    <div class="tagsContainer">
-    <!-- Show tags of directory only when directory is active -->
-    ${this.active ? html`
-    ${this.activeTag ?
-          html`
-    ` :
-          html`
-        ${this.tagsForDirectory.map(tag => html`
-        <bronco-chip
-        @deleted=${async () => await this.tagService.updateTag({ ...tag, _directory: '' })}
-        @click=${(e) => this.navigateToTab(e, tag)}
-        >${tag.name}</bronco-chip>
-    `)}
-    `}
-    ` : ''}
     </div>
     `;
   }

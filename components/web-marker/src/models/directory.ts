@@ -5,5 +5,4 @@ export interface Directory extends Entity {
   _directory?: string;
   _parentDirectory?: string;
   name: string;
-  index: number;
 }

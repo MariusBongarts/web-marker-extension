@@ -199,10 +199,10 @@ async function initData() {
   try {
 
     // Init marks
-  await markService.getMarks();
-  await bookmarkService.getBookmarks();
-  await tagService.getTags();
-  await directoryService.getDirectories();
+  markService.getMarks();
+  bookmarkService.getBookmarks();
+  tagService.getTags();
+  directoryService.getDirectories();
 
   } catch (error) {
     logout()

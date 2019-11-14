@@ -2,8 +2,9 @@
 
 .container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 directory-element, add-directory-element {
-  margin: 5px;
+  margin: 1px 5px;
 }

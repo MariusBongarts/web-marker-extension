@@ -1,3 +1,4 @@
+import uuidv4 from 'uuid/v4';
 import { Directory } from './../models/directory';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
@@ -22,11 +23,12 @@ export class DirectoryService {
     return directories;
   }
 
-  async createDirectory(directory: Directory): Promise<Directory | undefined> {
-    // Update redux
-    addDirectory(directory);
-    const response = await this.httpClient.post(this.BASE_URL, directory);
+  async createDirectory(directory: Partial<Directory>): Promise<Directory | undefined> {
+    const newDirectory = { ...directory, id: uuidv4() } as Directory;
+    const response = await this.httpClient.post(this.BASE_URL, newDirectory);
     const createdDirectory: Directory = (await response.json() as Directory);
+    // Update redux
+    addDirectory(createdDirectory);
     return createdDirectory;
   }
 

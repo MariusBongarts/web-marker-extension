@@ -1,3 +1,4 @@
+import { Tag } from './../../../models/tag';
 import { Directory } from './../../../models/directory';
 import { TagsService } from './../../../services/tags.service';
 import { Bookmark } from './../../../models/bookmark';
@@ -43,6 +44,9 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   @property()
   tags: string[] = [];
 
+  @property()
+  tagsForDirectory: Tag[] = [];
+
 
   async firstUpdated() {
     this.loadData();
@@ -56,10 +60,20 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
     this.selectedTag = store.getState().activeTag;
-    this.tags = store.getState().tags.filter(tag => !tag._directory).map(tag => tag.name);
+    this.getTags();
     this.selectedDirectory = store.getState().activeDirectory;
     this.selectedBookmark = undefined;
     this.loaded = true;
+  }
+
+  getTags() {
+    this.tags = store.getState().tags.filter(tag => !tag._directory).map(tag => tag.name);
+
+    if (this.selectedDirectory) {
+      this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.selectedDirectory._id);
+    } else {
+      this.tagsForDirectory = [];
+    }
   }
 
   /**
@@ -139,6 +153,23 @@ ${!this.selectedTag ? html`
     </div>
   </bronco-chip>`
     )}
+
+    <!-- Show tags for current selected directory -->
+    ${this.selectedDirectory ? html`
+    ${this.tagsForDirectory.map(tag =>
+      html`
+        <bronco-chip
+  draggable="true"
+  @dragstart=${(e: DragEvent) => this.dragTag(e, tag.name)}
+  @click=${() => this.toggleTag(tag.name)}
+    .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag.name)).length + this.bookmarks.filter(bookmark =>
+        bookmark.tags.includes(tag.name)).length} .hideDeleteIcon=${true}>
+    <div class="chipContainer">
+      <span>${tag.name}</span>
+    </div>
+  </bronco-chip>
+    `)}
+    ` : ''}
   `}
 </div>
 
