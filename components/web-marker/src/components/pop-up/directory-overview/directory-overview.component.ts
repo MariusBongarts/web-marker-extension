@@ -59,6 +59,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       html`
       <!-- Sub directories of directory -->
       <directory-element
+      .active=${false}
       .directory=${directory}>
     </directory-element>
 

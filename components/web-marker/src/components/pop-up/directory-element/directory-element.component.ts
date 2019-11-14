@@ -48,11 +48,13 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   }
 
   async stateChanged() {
-    this.getState();
+    if (this.directory) {
+      this.getState();
+    }
   }
 
   async getState() {
-    this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && tag._directory === this.directory._id);
+    this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && this.directory && tag._directory === this.directory._id);
     this.activeTag = store.getState().activeTag;
     if (this.directory._parentDirectory) {
       this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
@@ -62,7 +64,6 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   toggleDirectory() {
     if (!this.active) {
       toggleDirectory(this.directory);
-      this.active = true;
     } else {
       this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
       toggleDirectory(this.directory._parentDirectory ? this.parentDirectory : undefined);
@@ -95,10 +96,35 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
    */
   async onDrop(e: DragEvent) {
     e.preventDefault();
-    const tagName = e.dataTransfer.getData("tagName");
-    const droppedTag: Tag = store.getState().tags.find(tag => tag.name === tagName);
-    droppedTag._directory = this.directory._id;
-    await this.tagService.updateTag(droppedTag);
+    e.stopImmediatePropagation();
+    await this.handleTagDropped(e);
+    await this.handleDirectoryDropped(e);
+  }
+
+  async handleTagDropped(e: DragEvent) {
+    const tagName = e.dataTransfer.getData("tagName").trim();
+    if (tagName) {
+      const droppedTag: Tag = store.getState().tags.find(tag => tag.name === tagName);
+
+      // Only set id when id does not equal the directoryId
+      if (droppedTag._directory !== this.directory._id) {
+        droppedTag._directory = this.directory._id;
+      } else {
+        // parentId === id => Maybe in previous folder?
+      }
+      await this.tagService.updateTag(droppedTag);
+    }
+  }
+
+  async handleDirectoryDropped(e: DragEvent) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const directoryId = e.dataTransfer.getData("directoryId").trim();
+    if (directoryId) {
+      const droppedDirectory = store.getState().directories.find(directory => directory._id === directoryId);
+      droppedDirectory._parentDirectory = this.directory._id;
+      await this.directoryService.updateDirectory(droppedDirectory);
+    }
   }
 
   navigateToTab(e: Event, tag: Tag) {
@@ -107,18 +133,27 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     navigateToTab('tags-view', tag.name);
   }
 
+  dragDirectory(e: DragEvent) {
+    e.dataTransfer.setData("directoryId", this.directory._id);
+  }
+
   render() {
     return html`
-    <div
-    @click=${() => this.toggleDirectory()}
-    class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
-    <div class="folder ${this.dragActive || this.active ? 'active' : ''}">
-    <span>${this.tagsForDirectory.length}</span>
-    </div>
-    <div class="footer">
-      <span>${this.directory.name}</span>
-    </div>
-    </div>
+    ${this.directory ?
+      html`
+  <div
+  draggable="true"
+  @dragstart=${(e: DragEvent) => this.dragDirectory(e)}
+  @click=${() => this.toggleDirectory()}
+      class="directoryContainer ${this.dragActive || this.active ? 'active' : ''}">
+      <div class="folder ${this.dragActive || this.active ? 'active' : ''}">
+      <span>${this.tagsForDirectory.length}</span>
+      </div>
+      <div class="footer">
+        <span>${this.directory.name ? this.directory.name : ''}</span>
+      </div>
+  </div>
+` : ''}
     `;
   }
 
