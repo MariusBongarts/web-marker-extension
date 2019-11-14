@@ -170,7 +170,6 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       };
 
     case 'REMOVE_DIRECTORY':
-      console.log(action);
       return {
         ...state,
         directories: state.directories.filter(e => e._id !== action.directoryId),
