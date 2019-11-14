@@ -17,6 +17,9 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   directories: Directory[] = [];
 
   @property()
+  mainDirectories: Directory[] = [];
+
+  @property()
   subDirectories: Directory[] = [];
 
   @property()
@@ -35,9 +38,10 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   getState() {
     this.directories = store.getState().directories;
+    this.mainDirectories = this.directories.filter(directory => !directory._parentDirectory);
+    this.subDirectories = this.directories.filter(directory =>  this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
     this.searchFilter = store.getState().searchValue;
     this.selectedDirectory = store.getState().activeDirectory;
-    this.subDirectories = this.directories.filter(directory =>  this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
   }
 
   render() {
@@ -61,8 +65,8 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       `)}
     ` :
           html`
-    <!-- Show all directories -->
-    ${this.directories.filter(directory => directory.name.toLowerCase().includes(this.searchFilter)).map(directory =>
+    <!-- Show all main directories (sub directories are filtered) -->
+    ${this.mainDirectories.filter(directory => directory.name.toLowerCase().includes(this.searchFilter)).map(directory =>
             html`
       <directory-element
       .directory=${directory}>

@@ -20,7 +20,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
 
   async inputEvent(e: KeyboardEvent) {
     this.directoryName = this.inputElement.value
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && this.directoryName) {
       const directory = {
         name: this.directoryName,
         _parentDirectory: store.getState().activeDirectory ? store.getState().activeDirectory._id : ''
