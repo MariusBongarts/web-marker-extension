@@ -47,10 +47,10 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   render() {
     return html`
     <div class="container">
-  ${this.directories.length ? html`
+      ${this.directories.length ? html`
 
-    <!-- Show selected directory and sub directories -->
-    ${this.selectedDirectory ?
+      <!-- Show selected directory and sub directories -->
+      ${this.selectedDirectory ?
           html`
     <directory-element
     .active=${true}
@@ -60,9 +60,9 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       <!-- Sub directories of directory -->
       <directory-element
       .directory=${directory}>
-      </directory-element>
+    </directory-element>
 
-      `)}
+    `)}
     ` :
           html`
     <!-- Show all main directories (sub directories are filtered) -->
@@ -70,11 +70,11 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
             html`
       <directory-element
       .directory=${directory}>
-      </directory-element>
-      `)}
+    </directory-element>
+    `)}
     `}
-  ` : ''}
-  <add-directory-element></add-directory-element>
+    ` : ''}
+    <add-directory-element></add-directory-element>
 </div>
 `;
   }
