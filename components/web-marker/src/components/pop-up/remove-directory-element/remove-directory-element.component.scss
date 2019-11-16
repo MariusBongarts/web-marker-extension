@@ -2,16 +2,11 @@
 
 :host {
   padding: 5px;
-  margin: 0px 10px;
+  margin: 0px 5px;
 }
 
 .directoryContainer {
   cursor: default;
-  display: none;
-}
-.directoryContainer.dragMode {
-  cursor: default;
-  display: block;
 }
 
 .folder {

@@ -15,6 +15,9 @@ const componentCSS = require('./origin-overview.component.scss');
 export class TreeViewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
 
+  @query('#searchInput')
+  searchElement!: HTMLInputElement;
+
   @property()
   activeDirectory = '';
 
@@ -23,6 +26,10 @@ export class TreeViewComponent extends connect(store)(LitElement) {
 
   @property()
   marks: Mark[] = [];
+
+
+  @property()
+  filter = '';
 
   @property()
   bookmarks: Bookmark[] = [];
@@ -51,6 +58,8 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     this.bookmarks = store.getState().bookmarks;
     this.searchValue = store.getState().searchValue;
     this.getDistinctOrigins();
+    this.searchElement.value = '';
+    this.filter = '';
   }
 
   getDistinctOrigins() {
@@ -65,9 +74,27 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     this.selectedOrigin === origin ? this.selectedOrigin = undefined : this.selectedOrigin = origin;
   }
 
+  /**
+ * Filter origins by search
+ *
+ * @memberof TagsViewComponent
+ */
+  emitInput() {
+    this.filter = this.searchElement.value.toLowerCase();
+    this.selectedOrigin = '';
+  }
+
   render() {
     return html`
     <div class="container">
+    <input
+      id="searchInput"
+      class="searchInput"
+      type="search"
+      @search=${(e: KeyboardEvent) => this.emitInput()}
+      @keydown=${(e: KeyboardEvent) => this.emitInput()}
+      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      placeholder="Filter...">
 
     <!-- Info text if no marks or bookmarks are created yet -->
     ${this.origins.length === 0 ? html`
@@ -82,7 +109,7 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     ` : html`
       <!-- When no origin is selected,  all origins are shown. Otherwise all non selected are filtered.
       The filtering also waits for the animation to finish -->
-      ${this.origins.filter(origin => origin.includes(this.searchValue) && (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map((origin, index) => html`
+      ${this.origins.filter(origin => origin.includes(this.filter) && origin.includes(this.searchValue) && (!this.selectedOrigin || this.animation || this.selectedOrigin === origin)).map((origin, index) => html`
       <origin-element
       origin=${origin}
       .index=${index}

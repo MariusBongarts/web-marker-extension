@@ -7,6 +7,7 @@
   padding: 5px;
   padding-top: 5px;
   padding-left: 0px;
+  margin-top: 5px;
 }
 
 bronco-chip {
@@ -35,13 +36,15 @@ bronco-chip {
   margin-top: 0px;
 }
 
-.bookmark-icon, .mark-icon {
+.bookmark-icon,
+.mark-icon {
   background: var(--primary-color);
   display: flex;
   margin-top: 10px;
 }
 
-.bookmark-icon svg, .mark-icon svg {
+.bookmark-icon svg,
+.mark-icon svg {
   color: white;
   fill: var(--primary-color);
   margin-left: auto;
@@ -53,4 +56,27 @@ bronco-chip {
 
 bookmark-element {
   --bg-color: var(--secondary-dark);
+}
+
+.searchInput {
+  width: 100%;
+  margin: 5px;
+  outline: none;
+  background-color: var(--secondary-color);
+  border: none;
+  box-shadow: 0px 1px 4px -2px rgba(0, 0, 0, 0.301);
+  color: white;
+  padding-left: 5px;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  /* Remove default */
+  -webkit-appearance: none;
+
+  /* Custom cancel input button */
+  height: 10px;
+  width: 10px;
+  cursor: pointer;
+  // Use feather icon x
+  background-image: url("data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iY29sb3I6d2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4=");
 }

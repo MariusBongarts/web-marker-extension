@@ -17,6 +17,9 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
   tagsService = new TagsService();
 
+  @query('#searchInput')
+  searchElement!: HTMLInputElement;
+
   @property()
   marks: Mark[] = [];
 
@@ -44,6 +47,8 @@ export class TagsViewComponent extends connect(store)(LitElement) {
   @property()
   tagsForDirectory: Tag[] = [];
 
+  @property()
+  dragMode = false;
 
   async firstUpdated() {
     this.loadData();
@@ -51,9 +56,12 @@ export class TagsViewComponent extends connect(store)(LitElement) {
 
   stateChanged() {
     this.loadData();
+    this.searchElement.value = '';
+    this.filter = '';
   }
 
   loadData() {
+    this.dragMode = store.getState().dragMode;
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
     this.selectedTag = store.getState().activeTag;
@@ -115,6 +123,16 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     e.dataTransfer.setData("tagName", tag);
   }
 
+
+  /**
+   * Filter tags by search
+   *
+   * @memberof TagsViewComponent
+   */
+  emitInput() {
+    this.filter = this.searchElement.value.toLowerCase();
+  }
+
   render() {
     return html`
 ${this.loaded ? html`
@@ -122,11 +140,21 @@ ${this.loaded ? html`
 <directory-overview></directory-overview>
 
 <!-- Element in which directories can be dragged to delete them. This is only shown when the user drags something (Handled in component) -->
+${this.dragMode ? html`
 <remove-directory-element></remove-directory-element>
+` : ''}
 
 <!-- If no tag is selected -->
 ${!this.selectedTag ? html`
 <div class="container">
+<input
+      id="searchInput"
+      class="searchInput"
+      type="search"
+      @search=${(e: KeyboardEvent) => this.emitInput()}
+      @keydown=${(e: KeyboardEvent) => this.emitInput()}
+      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      placeholder="Filter...">
 
   <!-- Info text if there are no tags yet -->
   ${this.tags.length === 0 && !this.selectedDirectory ? html`
@@ -156,7 +184,7 @@ ${!this.selectedTag ? html`
 
     <!-- Show tags for current selected directory -->
     ${this.selectedDirectory ? html`
-    ${this.tagsForDirectory.map(tag =>
+    ${this.tagsForDirectory.filter(tag => tag.name.toLowerCase().includes(this.filter)).map(tag =>
       html`
         <bronco-chip
   draggable="true"
@@ -177,6 +205,8 @@ ${!this.selectedTag ? html`
 ` : html`
 <div class="selectedChipContainer">
   <bronco-chip @click=${() => this.toggleTag(this.selectedTag)}
+  draggable="true"
+  @dragstart=${(e: DragEvent) => this.dragTag(e, this.selectedTag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length +
             this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
@@ -190,6 +220,8 @@ ${!this.selectedTag ? html`
 <div class="container">
   ${this.getRelatedTags().map(tag => html`
   <bronco-chip @click=${() => this.toggleTag(tag)}
+  draggable="true"
+  @dragstart=${(e: DragEvent) => this.dragTag(e, tag.name)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length + this.bookmarks.filter(bookmark =>
               bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
