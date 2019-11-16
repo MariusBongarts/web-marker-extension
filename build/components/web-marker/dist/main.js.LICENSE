@@ -4807,6 +4807,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          * @memberof DirectoryOverviewComponent
          */
 
+//this.dragActive = store.getState().dragMode;
+
 // Allow tags to be dragged inside of this directory and toggleDragActive to show css effect
 
 /**

@@ -1,6 +1,7 @@
 @import "../../../variables.scss";
 
 :host {
+  --size: 35px;
 }
 
 .directoryContainer {
@@ -8,12 +9,12 @@
 }
 
 .folder {
-  width: 40px;
-  height: 40px;
+  width: var(--size);
+  height: var(--size);
   border: 2px solid var(--secondary-dark);
   border-radius: 10px;
   color: var(--primary-color);
-  font-size: 20;
+  font-size: 20px;
   font-family: var(--font-family);
   display: flex;
 
@@ -31,15 +32,16 @@
 }
 
 .footer {
-  width: 50px;
+  width: var(--size);
   font-family: var(--font-family);
-  font-size: 10;
+  font-size: 10px;
   overflow: hidden;
   text-align: center;
   display: flex;
 
   span {
     width: 100%;
+    font-size: 10px;
   }
 }
 
