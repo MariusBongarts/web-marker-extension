@@ -43,5 +43,22 @@ export class TagsService {
             }
         });
     }
+    /**
+     * Updates a tag and reloads all tags from server for state management
+     *
+     * @param {Tag} tag
+     * @memberof TagsService
+     */
+    updateTag(tag) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.httpClient.put(this.BASE_URL, tag);
+                yield this.getTags();
+            }
+            catch (error) {
+                //
+            }
+        });
+    }
 }
 //# sourceMappingURL=tags.service.js.map

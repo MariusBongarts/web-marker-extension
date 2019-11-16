@@ -56,7 +56,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   async getState() {
     this.tagsForDirectory = store.getState().tags.filter(tag => tag._directory && this.directory && tag._directory === this.directory._id);
     this.activeTag = store.getState().activeTag;
-    this.dragActive = store.getState().dragMode;
+    //this.dragActive = store.getState().dragMode;
     if (this.directory && this.directory._parentDirectory) {
       this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
     }
@@ -128,7 +128,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     e.preventDefault();
     e.stopImmediatePropagation();
     const directoryId = e.dataTransfer.getData("directoryId").trim();
-    if (directoryId) {
+    if (directoryId && directoryId !== this.directory._id) {
       const droppedDirectory = store.getState().directories.find(directory => directory._id === directoryId);
       droppedDirectory._parentDirectory = this.directory._id;
       await this.directoryService.updateDirectory(droppedDirectory);

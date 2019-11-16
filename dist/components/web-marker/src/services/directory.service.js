@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import uuidv4 from 'uuid/v4';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
@@ -27,10 +28,11 @@ export class DirectoryService {
     }
     createDirectory(directory) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Update redux
-            addDirectory(directory);
-            const response = yield this.httpClient.post(this.BASE_URL, directory);
+            const newDirectory = Object.assign(Object.assign({}, directory), { id: uuidv4() });
+            const response = yield this.httpClient.post(this.BASE_URL, newDirectory);
             const createdDirectory = yield response.json();
+            // Update redux
+            addDirectory(createdDirectory);
             return createdDirectory;
         });
     }

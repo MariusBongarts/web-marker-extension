@@ -9,9 +9,15 @@ const INITIAL_STATE = {
     activeTag: '',
     directories: [],
     tags: [],
+    activeDirectory: undefined,
+    dragMode: false
 };
 export const reducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case 'TOGGLE_DIRECTORY':
+            return Object.assign(Object.assign({}, state), { activeDirectory: action.activeDirectory, activeTag: action.activeTag });
+        case 'TOGGLE_DRAGMODE':
+            return Object.assign(Object.assign({}, state), { dragMode: action.dragMode });
         case 'INIT_MARKS':
             return Object.assign(Object.assign({}, state), { marks: action.marks, lastAction: action.type });
         case 'INIT_TAGS':
@@ -19,6 +25,8 @@ export const reducer = (state = INITIAL_STATE, action) => {
         case 'ADD_TAG':
             const tag = { name: action.tagName };
             return Object.assign(Object.assign({}, state), { tags: [...state.tags, tag], lastAction: action.type });
+        case 'TOGGLE_TAG':
+            return Object.assign(Object.assign({}, state), { activeTag: action.activeTag });
         case 'REMOVE_TAG':
             return Object.assign(Object.assign({}, state), { tags: state.tags.filter(e => e.name !== action.tagName), lastAction: action.type });
         case 'ADD_MARK':
@@ -32,7 +40,7 @@ export const reducer = (state = INITIAL_STATE, action) => {
         case 'ADD_DIRECTORY':
             return Object.assign(Object.assign({}, state), { directories: [...state.directories, action.directory], lastAction: action.type });
         case 'REMOVE_DIRECTORY':
-            return Object.assign(Object.assign({}, state), { directories: state.directories.filter(e => e.id !== action.directoryId), lastAction: action.type });
+            return Object.assign(Object.assign({}, state), { directories: state.directories.filter(e => e._id !== action.directoryId), lastAction: action.type });
         case 'UPDATE_DIRECTORY':
             return Object.assign(Object.assign({}, state), { directories: state.directories.map(directory => directory.id === action.directory.id ? action.directory : directory), lastAction: action.type });
         case 'INIT_BOOKMARKS':

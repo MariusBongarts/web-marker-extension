@@ -48,10 +48,23 @@ export function initTags(tags) {
     store.dispatch(reduxAction);
 }
 export function addTag(tagName) {
-    console.log(tagName);
     const reduxAction = {
         type: 'ADD_TAG',
         tagName: tagName
+    };
+    store.dispatch(reduxAction);
+}
+export function toggleTag(tagName) {
+    const reduxAction = {
+        type: 'TOGGLE_TAG',
+        activeTag: tagName
+    };
+    store.dispatch(reduxAction);
+}
+export function toggleDragMode(dragMode) {
+    const reduxAction = {
+        type: 'TOGGLE_DRAGMODE',
+        dragMode: dragMode
     };
     store.dispatch(reduxAction);
 }
@@ -76,10 +89,18 @@ export function addDirectory(directory) {
     };
     store.dispatch(reduxAction);
 }
+export function toggleDirectory(activeDirectory) {
+    const reduxAction = {
+        type: 'TOGGLE_DIRECTORY',
+        activeDirectory: activeDirectory,
+        activeTag: ''
+    };
+    store.dispatch(reduxAction);
+}
 export function removeDirectory(directoryId) {
     const reduxAction = {
         type: 'REMOVE_DIRECTORY',
-        bookmarkId: directoryId
+        directoryId: directoryId
     };
     store.dispatch(reduxAction);
 }
@@ -165,10 +186,10 @@ function initData() {
         const tagService = new TagsService();
         try {
             // Init marks
-            yield markService.getMarks();
-            yield bookmarkService.getBookmarks();
-            yield tagService.getTags();
-            yield directoryService.getDirectories();
+            markService.getMarks();
+            bookmarkService.getBookmarks();
+            tagService.getTags();
+            directoryService.getDirectories();
         }
         catch (error) {
             logout();
