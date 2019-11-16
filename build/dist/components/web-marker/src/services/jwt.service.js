@@ -55,7 +55,7 @@ export class JwtService {
             chrome.storage.sync.set({ jwt_key: jwt });
         }
         catch (error) {
-            console.log(error);
+            //
         }
     }
 }

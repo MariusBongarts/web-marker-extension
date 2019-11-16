@@ -86,21 +86,14 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   show = environment.production ? false : true;
 
   async firstUpdated() {
-    this.marks = [];
-    try {
-      this.marks = await this.markService.getMarksForUrl(location.href);
-    } catch (error) {
-      this.emitLogout();
-    }
     this.listenForFullscreen();
-
   }
 
-      /**
-    * Hides the icon on fullscreen mode
-    *
-    * @memberof WebMarker
-    */
+    /**
+  * Hides the icon on fullscreen mode
+  *
+  * @memberof WebMarker
+  */
   listenForFullscreen() {
     window.addEventListener("resize", () => {
       if (window.innerHeight == screen.height) {
@@ -166,14 +159,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     this.socket.disconnect();
   }
 
-  emitLogout() {
-    this.dispatchEvent(
-      new CustomEvent('logout', {
-        bubbles: true
-      })
-    );
-  }
-
   emitTabChange(tabNr: number) {
     searchValueChanged('');
   }
@@ -203,6 +188,7 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
 
   render() {
     return html`
+
     <!-- Button to toggle side-bar. It hides when animation is active -->
 <button class="hideShow ${this.animation || this.hide ? 'hide' : ''} ${this.show && !this.animation ? 'active' : ''}" @click=${() => this.toggleShow()}>${this.show ?
         html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -249,11 +235,9 @@ ${this.animation && !this.show ? 'slide-out' : ''}">
     ` : ''}
 
     `}
-    ` : ''}
-  </div>
-
-    ${this.loggedIn ? html`
     ` : html`
+
+    <!-- Not logged in -->
     <div class="infoContainer">
       <div class="mainInfo">
         <span>Login to save your marks</span>
@@ -263,7 +247,10 @@ ${this.animation && !this.show ? 'slide-out' : ''}">
         <button @click=${() => this.openLobbyContainer()}>Login</button>
       </div>
       <div>
-        `}
+    `}
+  </div>
+
+
       </div>
       ` : ''}
       `

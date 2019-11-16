@@ -5,7 +5,7 @@ import { JwtService } from './jwt.service';
 import { Mark } from './../models/mark';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { addMark, removeMark, updateMark, initMarks } from '../store/actions';
+import { addMark, removeMark, updateMark, initMarks, logout } from '../store/actions';
 
 
 export class MarkerService {
@@ -27,9 +27,13 @@ export class MarkerService {
   }
 
   async getMarksForUrl(url: string): Promise<Mark[]> {
-    const response = await this.httpClient.get('/marks/url?url=' + url);
-    const marks: Mark[] = (await response.json() as Mark[]);
-    return marks;
+    try {
+      const response = await this.httpClient.get('/marks/url?url=' + url);
+      const marks: Mark[] = (await response.json() as Mark[]);
+      return marks;
+    } catch (error) {
+      logout();
+    }
   }
 
   async createMark(mark: Mark): Promise<Mark | undefined> {

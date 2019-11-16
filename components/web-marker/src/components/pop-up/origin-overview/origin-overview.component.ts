@@ -58,8 +58,16 @@ export class TreeViewComponent extends connect(store)(LitElement) {
     this.bookmarks = store.getState().bookmarks;
     this.searchValue = store.getState().searchValue;
     this.getDistinctOrigins();
-    this.searchElement.value = '';
-    this.filter = '';
+    this.resetInputElement()
+  }
+
+  resetInputElement() {
+    try {
+      this.searchElement.value = '';
+      this.filter = '';
+    } catch (error) {
+      //
+    }
   }
 
   getDistinctOrigins() {

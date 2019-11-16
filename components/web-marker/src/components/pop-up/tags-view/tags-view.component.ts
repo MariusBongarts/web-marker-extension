@@ -56,8 +56,16 @@ export class TagsViewComponent extends connect(store)(LitElement) {
 
   stateChanged() {
     this.loadData();
-    this.searchElement.value = '';
-    this.filter = '';
+    this.resetInputElement()
+  }
+
+  resetInputElement() {
+    try {
+      this.searchElement.value = '';
+      this.filter = '';
+    } catch (error) {
+      //
+    }
   }
 
   loadData() {
@@ -147,14 +155,6 @@ ${this.dragMode ? html`
 <!-- If no tag is selected -->
 ${!this.selectedTag ? html`
 <div class="container">
-<input
-      id="searchInput"
-      class="searchInput"
-      type="search"
-      @search=${(e: KeyboardEvent) => this.emitInput()}
-      @keydown=${(e: KeyboardEvent) => this.emitInput()}
-      @keyup=${(e: KeyboardEvent) => this.emitInput()}
-      placeholder="Filter...">
 
   <!-- Info text if there are no tags yet -->
   ${this.tags.length === 0 && !this.selectedDirectory ? html`
@@ -167,6 +167,14 @@ ${!this.selectedTag ? html`
     </div>
   </div>
   ` : html`
+  <input
+      id="searchInput"
+      class="searchInput"
+      type="search"
+      @search=${(e: KeyboardEvent) => this.emitInput()}
+      @keydown=${(e: KeyboardEvent) => this.emitInput()}
+      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      placeholder="Filter...">
   <!-- Show all tags if no directory is selected -->
   ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter) && (!this.selectedDirectory)).map(tag =>
       html`

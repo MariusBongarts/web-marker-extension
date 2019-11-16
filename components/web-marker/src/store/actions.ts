@@ -206,14 +206,16 @@ async function initData() {
   const directoryService = new DirectoryService();
   const tagService = new TagsService();
   try {
+    console.log("InitData")
 
     // Init marks
-  markService.getMarks();
-  bookmarkService.getBookmarks();
-  tagService.getTags();
-  directoryService.getDirectories();
+    markService.getMarks();
+    bookmarkService.getBookmarks();
+    tagService.getTags();
+    directoryService.getDirectories();
 
   } catch (error) {
+    console.log("Caaatch error");
     logout()
   }
 }

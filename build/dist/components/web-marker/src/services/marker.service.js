@@ -13,7 +13,7 @@ import { BookmarkService } from './bookmark.service';
 import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
-import { addMark, removeMark, updateMark, initMarks } from '../store/actions';
+import { addMark, removeMark, updateMark, initMarks, logout } from '../store/actions';
 export class MarkerService {
     constructor() {
         this.jwtService = new JwtService();
@@ -31,9 +31,14 @@ export class MarkerService {
     }
     getMarksForUrl(url) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.httpClient.get('/marks/url?url=' + url);
-            const marks = yield response.json();
-            return marks;
+            try {
+                const response = yield this.httpClient.get('/marks/url?url=' + url);
+                const marks = yield response.json();
+                return marks;
+            }
+            catch (error) {
+                logout();
+            }
         });
     }
     createMark(mark) {

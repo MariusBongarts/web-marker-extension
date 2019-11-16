@@ -4784,6 +4784,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/pop-up/origin-overview/origin-overview.component.ts
 
+/**
+   * Filter origins by search
+   *
+   * @memberof TagsViewComponent
+   */
+
 // CONCATENATED MODULE: ./src/components/pop-up/origin-element/origin-element.component.ts
 
 /**
@@ -4807,7 +4813,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          * @memberof DirectoryOverviewComponent
          */
 
-//this.dragActive = store.getState().dragMode;
+//  this.dragActive = store.getState().dragMode;
 
 // Allow tags to be dragged inside of this directory and toggleDragActive to show css effect
 
@@ -4957,6 +4963,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      *
      * @param {DragEvent} e
      * @param {string} tag
+     * @memberof TagsViewComponent
+     */
+
+/**
+     * Filter tags by search
+     *
      * @memberof TagsViewComponent
      */
 

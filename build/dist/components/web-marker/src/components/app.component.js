@@ -40,10 +40,19 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
     }
     firstUpdated() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.listenToShowMarker();
-            yield this.highlightMarks();
+            if (store.getState().loggedIn) {
+                this.listenToShowMarker();
+                yield this.highlightMarks();
+            }
             this.listenForContextMenu();
             this.listenForFullscreen();
+        });
+    }
+    stateChanged() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (store.getState().loggedIn) {
+                this.marks = store.getState().marks;
+            }
         });
     }
     /**
@@ -73,11 +82,6 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
         catch (error) {
             // Chrome extension not available
         }
-    }
-    stateChanged() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.marks = store.getState().marks;
-        });
     }
     /**
      * Listens for click and selection events to show or hide the marker
@@ -127,7 +131,9 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
         return __awaiter(this, void 0, void 0, function* () {
             this.scrollToMark();
             this.marks = yield this.markerService.getMarksForUrl(location.href);
-            this.marks.forEach(mark => highlightText(null, mark));
+            if (this.marks) {
+                this.marks.forEach(mark => highlightText(null, mark));
+            }
         });
     }
     /**

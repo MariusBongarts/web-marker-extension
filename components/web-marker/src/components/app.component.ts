@@ -42,12 +42,19 @@ export class WebMarker extends connect(store)(LitElement) {
   private markerService = new MarkerService();
 
   async firstUpdated() {
-    this.listenToShowMarker();
-    await this.highlightMarks();
+    if (store.getState().loggedIn) {
+      this.listenToShowMarker();
+      await this.highlightMarks();
+    }
     this.listenForContextMenu();
     this.listenForFullscreen();
   }
 
+  async stateChanged() {
+    if (store.getState().loggedIn) {
+      this.marks = store.getState().marks;
+    }
+  }
 
   /**
    * Hides the icon on fullscreen mode
@@ -80,9 +87,6 @@ export class WebMarker extends connect(store)(LitElement) {
 
   }
 
-  async stateChanged() {
-    this.marks = store.getState().marks;
-  }
 
   /**
    * Listens for click and selection events to show or hide the marker
@@ -135,7 +139,9 @@ export class WebMarker extends connect(store)(LitElement) {
   async highlightMarks() {
     this.scrollToMark();
     this.marks = await this.markerService.getMarksForUrl(location.href);
-    this.marks.forEach(mark => highlightText(null, mark));
+    if (this.marks) {
+      this.marks.forEach(mark => highlightText(null, mark));
+    }
   }
 
 
