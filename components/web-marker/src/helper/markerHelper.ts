@@ -26,7 +26,6 @@ export function highlightText(range?: Range, mark?: Mark) {
  */
 export function createMark(text?: string): Mark {
   const selection = window.getSelection();
-  console.log(selection.toString());
 
   // If selection is made by my-menu popup
   if (selection.toString()) {

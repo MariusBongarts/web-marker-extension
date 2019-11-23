@@ -7,28 +7,16 @@ document.body.appendChild(marker);
 const popup = document.createElement("pop-up") as PopUpComponent;
 document.body.appendChild(popup);
 
-// Listens for messages from background script
+// Listens for messages from popup in browser action
 chrome.runtime.onMessage.addListener(async (request) => {
-  closePopupOnOutsideClick();
 
-  // Show or hides the popup component
-  if (request.id === 'togglePopup') {
-    popup.showAccountPopup ? popup.showAccountPopup = false : popup.showAccountPopup = true;
+  if (request.id === 'loggedIn') {
+    await popup.loadUserData();
+  };
+
+  if (request.id === 'loggedOut') {
+    await popup.logout();
   };
 
 });
 
-
-function closePopupOnOutsideClick() {
-  document.body.onclick = (e) => {
-    if (e.target !== popup) {
-      try {
-        // document.body.onclick = undefined;
-        // popup.remove();
-        popup.showAccountPopup = false;
-      } catch (error) {
-
-      }
-    }
-  }
-}

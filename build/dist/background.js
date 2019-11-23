@@ -52,13 +52,13 @@ chrome.runtime.onInstalled.addListener(function () {
         contexts: ["selection"]
     });
 });
-chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            id: 'togglePopup',
-        });
-    });
-});
+// chrome.browserAction.onClicked.addListener(function (tab) {
+//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//     chrome.tabs.sendMessage(tabs[0].id, {
+//       id: 'togglePopup',
+//     });
+//   });
+// })
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     for (var key in changes) {
         var storageChange = changes[key];

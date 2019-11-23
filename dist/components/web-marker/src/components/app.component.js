@@ -51,6 +51,9 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
             if (store.getState().loggedIn) {
                 this.marks = store.getState().marks;
             }
+            else {
+                this.marks = [];
+            }
         });
     }
     /**

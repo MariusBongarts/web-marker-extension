@@ -235,7 +235,6 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   autoCompleteEvent(e: CustomEvent, isClick?: boolean) {
-    console.log(e);
     if (isClick) {
       this.chips = [...new Set([...this.chips, e.detail])]
       this.inputElement.value = '';

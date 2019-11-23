@@ -29,7 +29,6 @@ const componentCSS = require('./main-component.component.scss');
 @customElement('main-component')
 class MarkOverviewComponent extends connect(store)(LitElement) {
   static styles = css`${unsafeCSS(componentCSS)}`;
-  socket: SocketIOClient.Socket;
 
   userService = new UserService();
   markService = new MarkerService();
@@ -86,24 +85,9 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
   show = environment.production ? false : true;
 
   async firstUpdated() {
+    this.loggedUser = store.getState().jwtPayload;
     this.listenForFullscreen();
   }
-
-    /**
-  * Hides the icon on fullscreen mode
-  *
-  * @memberof WebMarker
-  */
-  listenForFullscreen() {
-    window.addEventListener("resize", () => {
-      if (window.innerHeight == screen.height) {
-        this.hide = true;
-      } else {
-        this.hide = false;
-      }
-    });
-  }
-
 
   /**
   * Function called by extended connect method from pwa-helper, when state changed
@@ -117,46 +101,19 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     this.searchValue = store.getState().searchValue;
     this.loggedIn = store.getState().loggedIn;
   }
-
-  async initSocket() {
-    const jwt = await this.jwtService.getJwt();
-    const jwtPayload = await this.jwtService.getJwtPayload();
-    if (environment.production) {
-      this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt } });
-    } else {
-      this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt }, transports: ['websocket', 'xhr-polling'] });
-    }
-    this.socket.emit('join', { id: jwtPayload._id, email: jwtPayload.email });
-
-  }
-
-  // handleSockets() {
-  // this.socket.on('createMark', (createdMark: Mark) => {
-  // this.allMarks = [...this.allMarks, createdMark];
-  // if (location.href === createdMark.url) {
-  // this.marks = [...this.marks, createdMark];
-  // } else {
-  // // TODO: Maybe a popup to show that on different page has been added a mark?
-  // }
-  // });
-
-  // this.socket.on('deleteMark', (deletedMarkId: string) => {
-  // this.marks = this.marks.filter(mark => mark.id !== deletedMarkId);
-  // this.allMarks = this.allMarks.filter(mark => mark.id !== deletedMarkId);
-  // });
-
-  // this.socket.on('updateMark', (updatedMark: Mark) => {
-  // this.marks = this.marks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
-  // this.allMarks = this.allMarks.map(mark => mark.id === updatedMark.id ? updatedMark : mark);
-  // });
-
-  // this.socket.on('connect', (data: string) => {
-  // console.log('yeah');
-  // });
-  // }
-
-  disconnectedCallback() {
-    this.socket.disconnect();
+  /**
+* Hides the icon on fullscreen mode
+*
+* @memberof WebMarker
+*/
+  listenForFullscreen() {
+    window.addEventListener("resize", () => {
+      if (window.innerHeight == screen.height) {
+        this.hide = true;
+      } else {
+        this.hide = false;
+      }
+    });
   }
 
   emitTabChange(tabNr: number) {

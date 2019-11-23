@@ -15,7 +15,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { connect } from 'pwa-helpers';
 import { store } from './../../store/store';
-import { environment } from './../../environments/environment.dev';
 import { UserService } from './../../services/user.service';
 import { MarkerService } from './../../services/marker.service';
 import { JwtService } from './../../services/jwt.service';
@@ -29,7 +28,6 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
         this.markService = new MarkerService();
         this.userService = new UserService();
         this.loaded = false;
-        this.showAccountPopup = environment.production ? false : true;
     }
     stateChanged() {
         if (!store.getState().loggedIn)
@@ -51,24 +49,23 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
             }
         });
     }
+    /**
+     * Function called by content script, when user logs out in browser action popup
+     *
+     * @memberof LobbyContainer
+     */
     logout() {
-        this.loggedUser = undefined;
-        this.userService.logout();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.loggedUser = undefined;
+            yield this.userService.logout();
+        });
     }
     render() {
         return html `
     ${this.loaded ? html `
     <main-component
-    @openLobby=${() => this.showAccountPopup = true}
     .loggedUser=${this.loggedUser}
     ></main-component>
-      ${this.showAccountPopup && this.loggedUser && this.loggedUser.email ? html `
-      <account-overview @logout=${() => this.logout()} .loggedUser=${this.loggedUser}></account-overview>
-      ` : html `
-      ${this.showAccountPopup ? html `
-      <lobby-container @login=${() => __awaiter(this, void 0, void 0, function* () { return yield this.loadUserData(); })}></lobby-container>
-      ` : ''}
-      `}
       ` :
             // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
             html `<p>Loading...</p>`}
@@ -79,9 +76,6 @@ PopUpComponent.styles = css `${unsafeCSS(componentCSS)}`;
 __decorate([
     property()
 ], PopUpComponent.prototype, "loaded", void 0);
-__decorate([
-    property()
-], PopUpComponent.prototype, "showAccountPopup", void 0);
 __decorate([
     property()
 ], PopUpComponent.prototype, "marks", void 0);

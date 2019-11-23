@@ -51,32 +51,7 @@ let MyMarkerElement = class MyMarkerElement extends connect(store)(LitElement) {
             this.requestUpdate();
         }
     }
-    // async initSocket() {
-    //   const jwt = await this.jwtService.getJwt();
-    //   const jwtPayload = await this.jwtService.getJwtPayload();
-    //   if (environment.production) {
-    //     this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt } });
-    //   } else {
-    //     this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt }, transports: ['websocket', 'xhr-polling'] });
-    //   }
-    //   this.socket.emit('join', { id: jwtPayload._id, email: jwtPayload.email });
-    // }
-    // handleSockets() {
-    //   this.socket.on('deleteMark', (deletedMarkId: string) => {
-    //     if (this.mark.id === deletedMarkId) {
-    //       deleteMarkFromDom(this.parentElement);
-    //       this.remove();
-    //     }
-    //   });
-    //   this.socket.on('updateMark', (updatedMark: Mark) => {
-    //     if (this.mark.id === updatedMark.id) {
-    //       this.mark = updatedMark;
-    //     }
-    //   });
-    //   // this.socket.on('connect', (data: string) => {
-    //   //   console.log('yeah');
-    //   // });
-    // }
+
     /**
      *  Sets position of this component so that it is centralized above mark-element
      *

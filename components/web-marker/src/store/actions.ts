@@ -200,22 +200,26 @@ export function searchValueChanged(value: string) {
   store.dispatch(reduxAction);
 }
 
-async function initData() {
+export async function initData() {
   const markService = new MarkerService();
   const bookmarkService = new BookmarkService();
   const directoryService = new DirectoryService();
   const tagService = new TagsService();
   try {
-    console.log("InitData")
-
     // Init marks
-    markService.getMarks();
-    bookmarkService.getBookmarks();
-    tagService.getTags();
-    directoryService.getDirectories();
-
+    markService.getMarks().catch(() => {
+      //
+    });
+    bookmarkService.getBookmarks().catch(() => {
+      //
+    });
+    tagService.getTags().catch(() => {
+      //
+    });
+    directoryService.getDirectories().catch(() => {
+      //
+    });
   } catch (error) {
-    console.log("Caaatch error");
     logout()
   }
 }

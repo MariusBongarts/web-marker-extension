@@ -16,7 +16,8 @@
     "128": "./assets/markerIcon.png"
   },
   "browser_action": {
-    "default_title": "WebHighlighter"
+    "default_title": "WebHighlighter",
+    "default_popup": "popup.html"
   },
   "background": {
     "scripts": ["./dist/background.js"],

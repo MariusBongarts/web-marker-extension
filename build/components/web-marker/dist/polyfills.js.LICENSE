@@ -44,6 +44,12 @@
 
 /************************************************************************/
 
+/* 0 */
+
+/* 1 */
+
+/* 2 */
+
 /***/
 
 // This works in non-strict mode
@@ -58,7 +64,23 @@
 
 // easier to handle this case. if(!global) { ...}
 
+/* 3 */
+
+/* 4 */
+
+/* 5 */
+
+/* 6 */
+
+/* 7 */
+
+/* 8 */
+
+/* 9 */
+
 /* harmony import */
+
+/* 10 */
 
 /**
 @license @nocompile
@@ -69,6 +91,8 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
+
+/* 11 */
 
 /* WEBPACK VAR INJECTION */
 
@@ -147,6 +171,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 //# sourceMappingURL=webcomponents-bundle.js.map
 
+/* 12 */
+
 // DOM APIs, for completeness
 
 // Does not start the time, just sets up the members needed.
@@ -158,6 +184,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // able to install onto.  Search each possibility in the same order as the
 
 // `setimmediate` library.
+
+/* 13 */
 
 // Spec says greater than zero
 
@@ -190,6 +218,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
 
 // "too much recursion" error.
+
+/* 14 */
 
 // shim for using process in browser
 

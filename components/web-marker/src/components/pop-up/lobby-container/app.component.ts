@@ -1,8 +1,11 @@
+import { JwtService } from './../../../services/jwt.service';
+import { JwtPayload } from './../../../models/jwtPayload';
 import { store } from './../../../store/store';
 import { connect } from 'pwa-helpers';
 import { LoginUserDto } from './../../../models/loginUserDto';
 import { css, customElement, html, LitElement, query, property, unsafeCSS } from 'lit-element';
 import { UserService } from '../../../services/user.service';
+import { initData, login } from '../../../store/actions';
 
 const componentCSS = require('./app.component.scss');
 
@@ -18,9 +21,10 @@ const componentCSS = require('./app.component.scss');
  */
 
 @customElement('lobby-container')
-class LobbyContainer  extends connect(store)(LitElement) {
+class LobbyContainer extends connect(store)(LitElement) {
 	static styles = css`${unsafeCSS(componentCSS)}`;
 	userService = new UserService();
+	jwtService = new JwtService();
 
 	@property()
 	formSuccess = false;
@@ -36,6 +40,49 @@ class LobbyContainer  extends connect(store)(LitElement) {
 
 	@query('#password')
 	passwordElement!: HTMLInputElement;
+
+	@property()
+	loggedUser: JwtPayload;
+
+	async firstUpdated() {
+		await this.loadUserData();
+	}
+
+	stateChanged() {
+		if (!store.getState().loggedIn) this.loggedUser = undefined;
+	}
+
+	async loadUserData() {
+		try {
+			this.loggedUser = await this.jwtService.getJwtPayload();
+		} catch (error) {
+			this.logout();
+		}
+	}
+
+
+	/**
+	 * Notifies content script that user loggedIn successfully
+	 *
+	 * @memberof LobbyContainer
+	 */
+	chromeMessage(requestId: 'loggedIn' | 'loggedOut') {
+		try {
+			chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+				chrome.tabs.sendMessage(tabs[0].id, {
+					id: requestId,
+				});
+			});
+		} catch (error) {
+
+		}
+	}
+
+	async logout() {
+		this.loggedUser = undefined;
+		await this.userService.logout();
+		this.chromeMessage('loggedOut');
+	}
 
 	async submit(e?: MouseEvent) {
 		e.stopImmediatePropagation();
@@ -58,17 +105,12 @@ class LobbyContainer  extends connect(store)(LitElement) {
 			this.form.classList.add('was-validated');
 		}
 		if (jwtToken) {
-			setTimeout(() => this.emitLogin(jwtToken), 1000);
+			// Notifies content script that user logged in
+			this.chromeMessage('loggedIn');
+			setTimeout(async () => {
+				await this.loadUserData();
+			}, 500);
 		}
-	}
-
-	emitLogin(jwtToken: string) {
-		this.dispatchEvent(
-			new CustomEvent('login', {
-				detail: jwtToken,
-				bubbles: true
-			})
-		);
 	}
 
 	isFormValid() {
@@ -77,23 +119,28 @@ class LobbyContainer  extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-	<bubbles-animation>
-	<div class="container ${this.formSuccess ? 'form-success' : ''}">
-		<h1>Welcome</h1>
-		${!this.formSuccess ? html`
-		<form class="form">
-			<input type="email" required id="email" name="email" placeholder="Email">
-			<input type="password" required id="password" name="password" placeholder="Password">
-			<button
-			type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
-			class="${this.loading ? 'loading' :
+		${this.loggedUser && this.loggedUser.email ? html`
+		<account-overview @logout=${async () => await this.logout()} .loggedUser=${this.loggedUser}></account-overview>
+		` :
+				html`
+		<bubbles-animation>
+			<div class="container ${this.formSuccess ? 'form-success' : ''}">
+					<h1>Welcome</h1>
+					${!this.formSuccess ? html`
+					<form class="form">
+						<input type="email" required id="email" name="email" placeholder="Email">
+						<input type="password" required id="password" name="password" placeholder="Password">
+						<button
+						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
+						class="${this.loading ? 'loading' :
 
-			''}"
-			>${this.loading ? '...' : 'Login'}</button>
-		</form>
-		` : ''}
-	</div>
-	</bubbles-animation>
+							''}"
+				>${this.loading ? '...' : 'Login'}</button>
+				</form>
+				` : ''}
+			</div>
+		</bubbles-animation>
+	`}
   `
 	}
 }

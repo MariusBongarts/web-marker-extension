@@ -21,9 +21,6 @@ export class PopUpComponent extends connect(store)(LitElement) {
 
   @property()
   loaded = false;
-  
-  @property()
-  showAccountPopup = environment.production ? false : true;
 
   @property()
   marks!: Mark[];
@@ -49,9 +46,14 @@ export class PopUpComponent extends connect(store)(LitElement) {
     }
   }
 
-  logout() {
+  	/**
+	 * Function called by content script, when user logs out in browser action popup
+	 *
+	 * @memberof LobbyContainer
+	 */
+  async logout() {
     this.loggedUser = undefined;
-    this.userService.logout();
+    await this.userService.logout();
   }
 
 
@@ -59,16 +61,8 @@ export class PopUpComponent extends connect(store)(LitElement) {
     return html`
     ${this.loaded ? html`
     <main-component
-    @openLobby=${() => this.showAccountPopup = true}
     .loggedUser=${this.loggedUser}
     ></main-component>
-      ${this.showAccountPopup && this.loggedUser && this.loggedUser.email ? html`
-      <account-overview @logout=${() => this.logout()} .loggedUser=${this.loggedUser}></account-overview>
-      ` : html`
-      ${this.showAccountPopup ? html`
-      <lobby-container @login=${async () => await this.loadUserData()}></lobby-container>
-      ` : ''}
-      `}
       ` :
         // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
         html`<p>Loading...</p>`}

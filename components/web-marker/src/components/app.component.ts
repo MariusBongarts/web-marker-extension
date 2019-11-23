@@ -51,6 +51,8 @@ export class WebMarker extends connect(store)(LitElement) {
   async stateChanged() {
     if (store.getState().loggedIn) {
       this.marks = store.getState().marks;
+    } else {
+      this.marks = [];
     }
   }
 
