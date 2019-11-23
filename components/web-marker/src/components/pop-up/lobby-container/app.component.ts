@@ -80,6 +80,7 @@ class LobbyContainer extends connect(store)(LitElement) {
 
 	async logout() {
 		this.loggedUser = undefined;
+		this.formSuccess = false;
 		await this.userService.logout();
 		this.chromeMessage('loggedOut');
 	}

@@ -15,6 +15,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { connect } from 'pwa-helpers';
 import { store } from './../../store/store';
+import { environment } from './../../environments/environment.dev';
 import { UserService } from './../../services/user.service';
 import { MarkerService } from './../../services/marker.service';
 import { JwtService } from './../../services/jwt.service';
@@ -50,10 +51,10 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
         });
     }
     /**
-     * Function called by content script, when user logs out in browser action popup
-     *
-     * @memberof LobbyContainer
-     */
+   * Function called by content script, when user logs out in browser action popup
+   *
+   * @memberof LobbyContainer
+   */
     logout() {
         return __awaiter(this, void 0, void 0, function* () {
             this.loggedUser = undefined;
@@ -66,6 +67,14 @@ let PopUpComponent = class PopUpComponent extends connect(store)(LitElement) {
     <main-component
     .loggedUser=${this.loggedUser}
     ></main-component>
+
+    <!-- To edit lobby container in development mode -->
+    ${!environment.production ? html `
+    <div id="test">
+      <lobby-container .loggedUser="${this.loggedUser}"></<lobby-container>
+  </div>
+    ` : html ``}
+
       ` :
             // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
             html `<p>Loading...</p>`}

@@ -20,7 +20,6 @@ export function highlightText(range, mark) {
  */
 export function createMark(text) {
     const selection = window.getSelection();
-    console.log(selection.toString());
     // If selection is made by my-menu popup
     if (selection.toString()) {
         const range = selection.getRangeAt(0);

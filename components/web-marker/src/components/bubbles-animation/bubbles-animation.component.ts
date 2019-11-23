@@ -9,22 +9,24 @@ export class BubblesAnimationComponent extends LitElement {
   static styles = css`${unsafeCSS(componentCSS)}`;
 
   render() {
-    return html`
-<div class="bubblesContainer">
-  <slot></slot>
-	<ul class="bg-bubbles">
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
-</div>
+		return html`
+		<div class="container">
+			<div class="bubblesContainer">
+				<slot></slot>
+				<ul class="bg-bubbles">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
 `;
   }
 

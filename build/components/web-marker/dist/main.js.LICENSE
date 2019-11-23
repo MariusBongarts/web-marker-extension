@@ -2167,10 +2167,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // CONCATENATED MODULE: ./src/components/pop-up/app.component.ts
 
 /**
-     * Function called by content script, when user logs out in browser action popup
-     *
-     * @memberof LobbyContainer
-     */
+   * Function called by content script, when user logs out in browser action popup
+   *
+   * @memberof LobbyContainer
+   */
 
 // html`<sign-in @login=${async () => await this.loadUserData()}></sign-in>`}
 

@@ -34,7 +34,6 @@ export class UserService {
     }
     logout() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Logged out");
             this.jwtService.setJwt('');
             logout();
         });

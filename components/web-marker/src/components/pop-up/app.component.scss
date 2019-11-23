@@ -1,1 +1,9 @@
 @import './../../variables.scss';
+
+#test {
+  position: fixed;
+  width: 360px;
+  top: 5px;
+  right: 5px;
+  background: var(--primary-color);
+}

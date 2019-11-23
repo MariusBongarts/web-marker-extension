@@ -120,15 +120,6 @@ class MarkOverviewComponent extends connect(store)(LitElement) {
     searchValueChanged('');
   }
 
-  openLobbyContainer() {
-    this.dispatchEvent(
-      new CustomEvent('openLobby', {
-        bubbles: true
-      })
-    );
-  }
-
-
   /**
    * Wati for animation of side-menu to finish
    *
@@ -200,9 +191,6 @@ ${this.animation && !this.show ? 'slide-out' : ''}">
         <span>Login to save your marks</span>
       </div>
       <hr class="divider">
-      <div class="loginInfo">
-        <button @click=${() => this.openLobbyContainer()}>Login</button>
-      </div>
       <div>
     `}
   </div>
