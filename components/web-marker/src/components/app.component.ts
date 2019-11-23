@@ -42,10 +42,8 @@ export class WebMarker extends connect(store)(LitElement) {
   private markerService = new MarkerService();
 
   async firstUpdated() {
-    if (store.getState().loggedIn) {
-      this.listenToShowMarker();
-      await this.highlightMarks();
-    }
+    this.listenToShowMarker();
+    await this.highlightMarks();
     this.listenForContextMenu();
     this.listenForFullscreen();
   }

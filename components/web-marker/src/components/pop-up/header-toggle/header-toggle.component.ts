@@ -36,9 +36,10 @@ export class HeaderToggleComponent extends connect(store)(LitElement) {
     navigateToTab(newView);
   }
 
-  emitInput() {
+  emitInput(e: KeyboardEvent) {
     const value = this.searchElement.value.toLowerCase();
     searchValueChanged(value);
+    e.stopImmediatePropagation();
   }
 
   activateSearch() {
@@ -77,9 +78,9 @@ export class HeaderToggleComponent extends connect(store)(LitElement) {
       type="search"
       autofocus
       @blur=${() => this.searchElement.value ? '' : this.searchActive = false}
-      @search=${(e: KeyboardEvent) => this.emitInput()}
-      @keydown=${(e: KeyboardEvent) => this.emitInput()}
-      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      @search=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keydown=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keyup=${(e: KeyboardEvent) => this.emitInput(e)}
       placeholder="Search...">
       `}
 

@@ -38,6 +38,7 @@ class LobbyContainer  extends connect(store)(LitElement) {
 	passwordElement!: HTMLInputElement;
 
 	async submit(e?: MouseEvent) {
+		e.stopImmediatePropagation();
 		e ? e.preventDefault() : '';
 		let jwtToken = '';
 		if (this.isFormValid()) {

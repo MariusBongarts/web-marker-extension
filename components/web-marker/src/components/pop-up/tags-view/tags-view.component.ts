@@ -137,7 +137,8 @@ export class TagsViewComponent extends connect(store)(LitElement) {
    *
    * @memberof TagsViewComponent
    */
-  emitInput() {
+  emitInput(e?: KeyboardEvent) {
+    if (e) e.stopImmediatePropagation();
     this.filter = this.searchElement.value.toLowerCase();
   }
 
@@ -171,9 +172,9 @@ ${!this.selectedTag ? html`
       id="searchInput"
       class="searchInput"
       type="search"
-      @search=${(e: KeyboardEvent) => this.emitInput()}
-      @keydown=${(e: KeyboardEvent) => this.emitInput()}
-      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      @search=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keydown=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keyup=${(e: KeyboardEvent) => this.emitInput(e)}
       placeholder="Filter...">
   <!-- Show all tags if no directory is selected -->
   ${this.tags.filter(tag => tag.toLowerCase().includes(this.filter) && (!this.selectedDirectory)).map(tag =>

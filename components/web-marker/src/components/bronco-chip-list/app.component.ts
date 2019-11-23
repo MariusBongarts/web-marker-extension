@@ -147,6 +147,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   async submitChip(e: KeyboardEvent) {
+    e.stopImmediatePropagation();
     const target = e.target as HTMLInputElement;
 
     this.inputValue = target.value;
@@ -256,7 +257,9 @@ ${this.chips.map((chip, index) => html`
 `)}
     <input
     placeholder=${'+'}
-    type="text" class="form-control ${this.chips.length ? 'not-empty' : ''}" name="tag"  id="tag"  @keyup=${async (e: any) => await this.submitChip(e)}>
+    type="text" class="form-control ${this.chips.length ? 'not-empty' : ''}" name="tag"  id="tag"
+    @keyup=${async (e: any) => await this.submitChip(e)}
+    @keydown=${async (e: any) => await this.submitChip(e)}>
   </div>
   ${this.inputElement && this.inputElement.value ? html`
   <auto-complete

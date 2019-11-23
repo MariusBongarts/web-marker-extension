@@ -87,7 +87,8 @@ export class TreeViewComponent extends connect(store)(LitElement) {
  *
  * @memberof TagsViewComponent
  */
-  emitInput() {
+  emitInput(e: KeyboardEvent) {
+    if (e) e.stopImmediatePropagation();
     this.filter = this.searchElement.value.toLowerCase();
     this.selectedOrigin = '';
   }
@@ -99,9 +100,9 @@ export class TreeViewComponent extends connect(store)(LitElement) {
       id="searchInput"
       class="searchInput"
       type="search"
-      @search=${(e: KeyboardEvent) => this.emitInput()}
-      @keydown=${(e: KeyboardEvent) => this.emitInput()}
-      @keyup=${(e: KeyboardEvent) => this.emitInput()}
+      @search=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keydown=${(e: KeyboardEvent) => this.emitInput(e)}
+      @keyup=${(e: KeyboardEvent) => this.emitInput(e)}
       placeholder="Filter...">
 
     <!-- Info text if no marks or bookmarks are created yet -->

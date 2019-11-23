@@ -40,10 +40,8 @@ let WebMarker = class WebMarker extends connect(store)(LitElement) {
     }
     firstUpdated() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (store.getState().loggedIn) {
-                this.listenToShowMarker();
-                yield this.highlightMarks();
-            }
+            this.listenToShowMarker();
+            yield this.highlightMarks();
             this.listenForContextMenu();
             this.listenForFullscreen();
         });
