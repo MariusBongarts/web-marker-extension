@@ -244,7 +244,6 @@ export class BroncoChipList extends connect(store)(LitElement) {
       this.emit();
     } else {
       this.autoCompleteValue = e.detail;
-      console.log(this.autoCompleteValue);
     }
   }
 
