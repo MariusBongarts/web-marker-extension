@@ -37,6 +37,16 @@ export class BroncoChipList extends connect(store)(LitElement) {
   @property()
   chips = [] as string[];
 
+
+  /**
+   * This value will be set from the autoComplete component.
+   * When the user submits and this value is truthy, it will be used to add the tag
+   *
+   * @memberof BroncoChipList
+   */
+  @property()
+  autoCompleteValue = '';
+
   /**
    * Current mark
    *
@@ -108,7 +118,6 @@ export class BroncoChipList extends connect(store)(LitElement) {
 
   async disconnectedCallback() {
     this.mark && this.mark.tags ? this.mark.tags = this.chips : '';
-    this.submit();
   }
 
   async emit(deletedChip?: string) {
@@ -147,7 +156,13 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   async submitChip(e: KeyboardEvent) {
-    e.stopImmediatePropagation();
+
+    // Stop Propagation not for arrow doww / arrow up and enter because auto complete listens for those events
+    if (e.keyCode !== 40 && e.keyCode !== 38) {
+      e.stopImmediatePropagation();
+    }
+
+
     const target = e.target as HTMLInputElement;
 
     this.inputValue = target.value;
@@ -157,36 +172,22 @@ export class BroncoChipList extends connect(store)(LitElement) {
       this.markedToSubmit = false;
     }
 
-    if (!target.value && e.key === 'Enter') {
-      if (this.markedToSubmit) {
-        this.markedToSubmit = false;
-        this.submit();
-      } else {
-        this.markedToSubmit = true;
-      }
-    }
-
     if (target.value && (e.key === 'Enter')) {
-      this.addChip(target);
+      // Either take the current autoComplete value or the inputElement value
+      const tagValue = this.autoCompleteValue ? this.autoCompleteValue : target.value;
+      this.addChip(tagValue);
       this.markedToSubmit = false;
     }
 
     if (e.key === 'Backspace' && this.chips.length && !target.value.length) {
-      await this.deleteChip(target);
-      this.markedToSubmit = false;
+      if (this.markedToSubmit) {
+        await this.deleteChip(target);
+        this.markedToSubmit = false;
+      } else {
+        this.markedToSubmit = true;
+      }
     }
-
     e.key !== 'Backspace' ? this.emit() : '';
-
-  }
-
-  // Fix: Is this necessary (Danger of bad fix)
-  submit() {
-    // this.dispatchEvent(
-    //   new CustomEvent('submitTriggered', {
-    //     bubbles: true,
-    //     detail: [...new Set(this.chips)]
-    //   }));
   }
 
   /**
@@ -196,10 +197,10 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @param {HTMLInputElement} target
    * @memberof BroncoChipList
    */
-  addChip(target: HTMLInputElement) {
+  addChip(tagValue: string) {
     // Map array to lower case to check case insensitive if tag already exists
-    !this.chips.map(chip => chip.toLowerCase()).includes(target.value.toLowerCase().trim()) ? this.chips = [...this.chips, target.value.trim()] : '';
-    target.value = '';
+    !this.chips.map(chip => chip.toLowerCase()).includes(tagValue.toLowerCase().trim()) ? this.chips = [...this.chips, tagValue.trim()] : '';
+    this.inputElement.value = '';
   }
 
   /**
@@ -210,7 +211,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
    */
   async deleteChip(target: HTMLInputElement) {
     if (this.markedToDelete && !target.value && this.chips.length) {
-      await this.filterChips(this.chips[this.chips.length - 1]);
+      this.filterChips(this.chips[this.chips.length - 1]);
       this.markedToDelete = false;
     } else {
       this.markedToDelete = true;
@@ -218,7 +219,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
     }
   }
 
-  async filterChips(chip: string) {
+  filterChips(chip: string) {
     this.chips = this.chips.filter(e => e !== chip);
     this.emit();
   }
@@ -235,13 +236,15 @@ export class BroncoChipList extends connect(store)(LitElement) {
    * @memberof BroncoChipList
    */
   autoCompleteEvent(e: CustomEvent, isClick?: boolean) {
+    e.stopImmediatePropagation();
     if (isClick) {
       this.chips = [...new Set([...this.chips, e.detail])]
       this.inputElement.value = '';
       this.inputValue = ''
       this.emit();
     } else {
-      this.inputElement.value = e.detail;
+      this.autoCompleteValue = e.detail;
+      console.log(this.autoCompleteValue);
     }
   }
 

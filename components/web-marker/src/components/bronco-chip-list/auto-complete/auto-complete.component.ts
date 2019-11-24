@@ -12,6 +12,15 @@ export class HeaderToggleComponent extends LitElement {
   @property() filter: string;
   @property() selectedIndex: number = -1;
 
+
+  /**
+   * Maximum of shown suggestions in dropdown
+   *
+   * @type {5}
+   * @memberof HeaderToggleComponent
+   */
+  @property() maxSuggestions = 5;
+
   static styles = css`${unsafeCSS(componentCSS)}`;
 
   async firstUpdated() {
@@ -22,25 +31,19 @@ export class HeaderToggleComponent extends LitElement {
         filteredItems = this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase()));
       }
 
+
       // Key arrow down
-      if (e.keyCode === 40 && ((this.selectedIndex + 1) < filteredItems.length)) {
-        this.selectedIndex = this.selectedIndex + 1;
+      if (e.keyCode === 40 && ((this.selectedIndex + 1) < this.maxSuggestions)) {
+        this.selectedIndex = (this.selectedIndex + 1);
+        let value = filteredItems[this.selectedIndex] || '';
+        this.emit(value);
       }
 
       // Key arrow up
       if (e.keyCode === 38 && this.selectedIndex > -1) {
         this.selectedIndex = this.selectedIndex - 1;
-      }
-
-      // Enter
-      if (e.keyCode === 13 && filteredItems.length !== 0) {
-        let value = filteredItems[this.selectedIndex];
-
-        if (value) {
-          this.emit(value);
-          this.selectedIndex = -1;
-          setTimeout(() => this.filter = '', 200);
-        }
+        let value = filteredItems[this.selectedIndex] || '';
+        this.emit(value);
       }
 
       if (filteredItems.length === 0) {
@@ -60,7 +63,7 @@ export class HeaderToggleComponent extends LitElement {
   }
 
   emit(value: string, isClick?: boolean) {
-    this.selectedIndex = -1;
+    // this.selectedIndex = -1;
     this.dispatchEvent(
       new CustomEvent(isClick ? 'clickSelected' : 'selected', {
         bubbles: true,
@@ -73,7 +76,7 @@ export class HeaderToggleComponent extends LitElement {
     return html`
   ${this.filter ? html`
   <div class="auto-complete-items">
-    ${this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase())).slice(0, 5).map((item, index) =>
+    ${this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase())).slice(0, this.maxSuggestions).map((item, index) =>
       html`
         <bronco-chip @click=${() => this.emit(item, true)} class="${this.selectedIndex === index ? 'active' : ''}" .hideDeleteIcon=${true}>${item}</bronco-chip>
       `)}

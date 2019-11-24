@@ -2046,6 +2046,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          */
 
 /**
+         * This value will be set from the autoComplete component.
+         * When the user submits and this value is truthy, it will be used to add the tag
+         *
+         * @memberof BroncoChipList
+         */
+
+/**
          * Property to set focus on input initially
          *
          * @memberof BroncoChipList
@@ -2077,17 +2084,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof BroncoChipList
      */
 
-// Fix: Is this necessary (Danger of bad fix)
+// Stop Propagation not for arrow doww / arrow up and enter because auto complete listens for those events
 
-// this.dispatchEvent(
-
-//   new CustomEvent('submitTriggered', {
-
-//     bubbles: true,
-
-//     detail: [...new Set(this.chips)]
-
-//   }));
+// Either take the current autoComplete value or the inputElement value
 
 /**
      * Adds a tag if current value is not empty.
@@ -2119,8 +2118,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/bronco-chip-list/auto-complete/auto-complete.component.ts
 
-// Enter
-
 // Key arrow down
 
 // Key arrow up
@@ -2130,6 +2127,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      *
      * @memberof HeaderToggleComponent
      */
+
+// this.selectedIndex = -1;
 
 // CONCATENATED MODULE: ./src/services/user.service.ts
 
