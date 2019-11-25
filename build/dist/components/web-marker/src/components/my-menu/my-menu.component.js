@@ -95,6 +95,7 @@ let MyMarkElement = class MyMarkElement extends LitElement {
         const defaultTags = document.title.split(' ').filter(e => e.length > 2);
         return defaultTags.slice(0, 2);
     }
+
     /**
      *  First dispatches event to delete mark in client,
      *  then deletes it in server.

@@ -357,6 +357,10 @@
 
 /* 80 */
 
+/* 81 */
+
+/* 82 */
+
 // EXTERNAL MODULE: ./src/index.scss
 
 // CONCATENATED MODULE: C:/Users/mariu/Projekte/chromeExtensions/web-marker/extension/node_modules/pwa-helpers/connect-mixin.js
@@ -2118,6 +2122,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // CONCATENATED MODULE: ./src/components/bronco-chip-list/auto-complete/auto-complete.component.ts
 
+/**
+         * Maximum of shown suggestions in dropdown
+         *
+         * @type {5}
+         * @memberof HeaderToggleComponent
+         */
+
 // Key arrow down
 
 // Key arrow up
@@ -2139,28 +2150,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof UserService
      */
 
-// CONCATENATED MODULE: ./src/components/pop-up/sign-in/sign-in.component.ts
-
 /**
- *
- * This component is the sign-in component.
- *
- * It allows the user to login.
- *
- * @export
- * @class SignInComponent
- * @extends {LitElement}
- */
-
-/**
+     * Signs up the user. A jwt token will be the result so that the user gets logged in directly
      *
-     * This component is the sign-in component.
-     *
-     * It allows the user to login.
-     *
-     * @export
-     * @class SignInComponent
-     * @extends {LitElement}
+     * @returns {Promise<string>}
+     * @memberof UserService
      */
 
 // CONCATENATED MODULE: ./src/components/pop-up/app.component.ts
@@ -2212,7 +2206,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof BookmarkElementComponent
      */
 
-// CONCATENATED MODULE: ./src/components/pop-up/lobby-container/app.component.ts
+// CONCATENATED MODULE: ./src/components/lobby-container/sign-up/sign-up.component.ts
+
+// CONCATENATED MODULE: ./src/components/lobby-container/sign-in/sign-in.component.ts
+
+// CONCATENATED MODULE: ./src/components/lobby-container/app.component.ts
 
 /**
  *
@@ -2242,9 +2240,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof LobbyContainer
      */
 
-// Notifies content script that user logged in
-
-// CONCATENATED MODULE: ./src/components/pop-up/account-overview/account-overview.component.ts
+// CONCATENATED MODULE: ./src/components/lobby-container/account-overview/account-overview.component.ts
 
 // CONCATENATED MODULE: ./src/components/bubbles-animation/bubbles-animation.component.ts
 

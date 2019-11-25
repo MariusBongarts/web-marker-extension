@@ -8,7 +8,6 @@ import { UserService } from './../../services/user.service';
 import { MarkerService } from './../../services/marker.service';
 import { JwtService } from './../../services/jwt.service';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
-import './sign-in/sign-in.component.ts';
 
 const componentCSS = require('./app.component.scss');
 

@@ -1,7 +1,7 @@
-import { environment } from './../../../environments/environment.dev';
+import { environment } from '../../../environments/environment.dev';
 import { connect } from 'pwa-helpers';
-import { store } from './../../../store/store';
-import { JwtPayload } from './../../../models/jwtPayload';
+import { store } from '../../../store/store';
+import { JwtPayload } from '../../../models/jwtPayload';
 import { css, customElement, html, LitElement, query, property, unsafeCSS } from 'lit-element';
 import { UserService } from '../../../services/user.service';
 import { navigateExternal } from '../../../helper/router';

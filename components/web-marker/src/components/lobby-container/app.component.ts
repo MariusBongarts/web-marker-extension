@@ -1,11 +1,13 @@
-import { JwtService } from './../../../services/jwt.service';
-import { JwtPayload } from './../../../models/jwtPayload';
-import { store } from './../../../store/store';
+import { JwtService } from '../../services/jwt.service';
+import { JwtPayload } from '../../models/jwtPayload';
+import { store } from '../../store/store';
 import { connect } from 'pwa-helpers';
-import { LoginUserDto } from './../../../models/loginUserDto';
+import { LoginUserDto } from '../../models/loginUserDto';
 import { css, customElement, html, LitElement, query, property, unsafeCSS } from 'lit-element';
-import { UserService } from '../../../services/user.service';
-import { initData, login } from '../../../store/actions';
+import { UserService } from '../../services/user.service';
+import { initData, login } from '../../store/actions';
+import './sign-up/sign-up.component.ts';
+import './sign-in/sign-in.component.ts';
 
 const componentCSS = require('./app.component.scss');
 
@@ -25,6 +27,9 @@ class LobbyContainer extends connect(store)(LitElement) {
 	static styles = css`${unsafeCSS(componentCSS)}`;
 	userService = new UserService();
 	jwtService = new JwtService();
+
+	@property()
+	activeTab: 'signIn' | 'signUp' = 'signIn';
 
 	@property()
 	formSuccess = false;
@@ -49,15 +54,27 @@ class LobbyContainer extends connect(store)(LitElement) {
 	}
 
 	stateChanged() {
-		if (!store.getState().loggedIn) this.loggedUser = undefined;
+		if (!store.getState().loggedIn) {
+			this.loggedUser = undefined;
+			this.formSuccess = false;
+		};
 	}
 
 	async loadUserData() {
 		try {
 			this.loggedUser = await this.jwtService.getJwtPayload();
+			if (!this.loggedUser) this.logout();
 		} catch (error) {
 			this.logout();
 		}
+	}
+
+	async loggedIn() {
+		this.formSuccess = true;
+		setTimeout(async () => {
+			this.loggedUser = await this.jwtService.getJwtPayload();
+		}, 500);
+		this.chromeMessage('loggedIn');
 	}
 
 
@@ -85,38 +102,6 @@ class LobbyContainer extends connect(store)(LitElement) {
 		this.chromeMessage('loggedOut');
 	}
 
-	async submit(e?: MouseEvent) {
-		e.stopImmediatePropagation();
-		e ? e.preventDefault() : '';
-		let jwtToken = '';
-		if (this.isFormValid()) {
-			const signInData: LoginUserDto = {
-				email: this.emailElement.value,
-				password: this.passwordElement.value
-			};
-			try {
-				this.loading = true;
-				jwtToken = await this.userService.login(signInData);
-			} catch (error) {
-				//
-			}
-			jwtToken ? this.formSuccess = true : '';
-			this.loading = false;
-		} else {
-			this.form.classList.add('was-validated');
-		}
-		if (jwtToken) {
-			// Notifies content script that user logged in
-			this.chromeMessage('loggedIn');
-			setTimeout(async () => {
-				await this.loadUserData();
-			}, 500);
-		}
-	}
-
-	isFormValid() {
-		return this.form.checkValidity();
-	}
 
 	render() {
 		return html`
@@ -126,18 +111,20 @@ class LobbyContainer extends connect(store)(LitElement) {
 				html`
 		<bubbles-animation>
 			<div class="container ${this.formSuccess ? 'form-success' : ''}">
-					<h1>Welcome</h1>
-					${!this.formSuccess ? html`
-					<form class="form">
-						<input type="email" required id="email" name="email" placeholder="Email">
-						<input type="password" required id="password" name="password" placeholder="Password">
-						<button
-						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
-						class="${this.loading ? 'loading' :
+			<div class="tabs">
+			<button @click=${() => this.activeTab = 'signIn'} class="${this.activeTab === 'signIn' ? 'active' : ''}">Sign in</button>
+			<button @click=${() => this.activeTab = 'signUp'} class="${this.activeTab === 'signUp' ? 'active' : ''}">Sign up</button>
+			</div>
+			${!this.formSuccess ? html`
+			${this.activeTab === 'signIn' ? html`
+			<h1>Welcome</h1>
+					<!-- Sign in View -->
+					<sign-in @loggedIn=${async () => await this.loggedIn()}></sign-in>
+` : html`
+<!-- Sign Up view -->
+<sign-up @registered=${async () => await this.loggedIn()}></sign-up>
 
-							''}"
-				>${this.loading ? '...' : 'Login'}</button>
-				</form>
+`}
 				` : ''}
 			</div>
 		</bubbles-animation>

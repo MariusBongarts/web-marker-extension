@@ -32,6 +32,22 @@ export class UserService {
             return jwtToken.token;
         });
     }
+    /**
+     * Signs up the user. A jwt token will be the result so that the user gets logged in directly
+     *
+     * @returns {Promise<string>}
+     * @memberof UserService
+     */
+    register(loginUserDto) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const token = yield this.httpClient.post('/users/register', loginUserDto);
+            const jwtToken = yield token.json();
+            this.jwtService.setJwt(jwtToken.token);
+            const jwtPayload = yield this.jwtService.getJwtPayload();
+            login(jwtPayload);
+            return jwtToken.token;
+        });
+    }
     logout() {
         return __awaiter(this, void 0, void 0, function* () {
             this.jwtService.setJwt('');

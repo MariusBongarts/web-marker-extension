@@ -1,5 +1,4 @@
-@import "../../../variables.scss";
-
+@import '../../variables.scss';
 
 :host {
   z-index: 99999999 !important;
@@ -8,6 +7,7 @@
   // background: linear-gradient(to top left, #53e3a6 0%, #00b077 100%);
   // background: linear-gradient(to bottom right, #00b077 0%, #53e3a6 100%);
   background: var(--primary-color);
+  font-family: var(--font-family);
 }
 
 .container.form-success h1 {
@@ -15,8 +15,7 @@
 }
 .container {
   margin: 0 auto;
-  padding: 20px 0;
-  height: 360px;
+  padding-bottom: 20px;
   width: 100%;
   text-align: center;
 }
@@ -80,4 +79,26 @@ form button.loading {
 form button:hover {
   background-color: var(--secondary-dark);
   // background-color: #f5f7f9;
+}
+
+.tabs {
+  display: flex;
+  button {
+    width: 50%;
+
+    height: 50px;
+    border: none;
+    color: white;
+    background: var(--primary-color);
+    outline: none;
+    cursor: default;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  button.active {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    box-shadow: 1px 1px 1px 1px var(--primary-dark);
+  }
 }
