@@ -57,3 +57,42 @@ form button:hover {
   background-color: var(--secondary-dark);
   // background-color: #f5f7f9;
 }
+
+.invalid-feedback {
+  color: var(--error-color);
+  margin: 5px auto;
+  display: none;
+}
+
+.was-validated {
+  input:invalid {
+    border: solid var(--error-color) 1px;
+  }
+
+  input:invalid ~ .invalid-feedback {
+    color: var(--error-color);
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    display: block;
+  }
+
+  input:valid ~ .invalid-feedback {
+    display: none;
+  }
+}
+
+.error-message {
+  color: var(--error-color);
+  margin: 5px auto;
+}
+
+.privacy-confirmation {
+  font-size: 12px;
+  display: flex;
+  margin: 20px 20px;
+
+  input {
+    max-height: 20px;
+    max-width: 20px;
+  }
+}

@@ -22,7 +22,6 @@ export class UserService {
   async login(loginUserDto: LoginUserDto): Promise<string> {
     const token = await this.httpClient.post('/auth', loginUserDto);
     const jwtToken = await token.json();
-    console.log(jwtToken);
     this.jwtService.setJwt(jwtToken.token);
     const jwtPayload = await this.jwtService.getJwtPayload();
     if (jwtToken.token) login(jwtPayload);

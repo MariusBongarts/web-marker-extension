@@ -23,11 +23,17 @@ class SignInComponent extends connect(store)(LitElement) {
 	@query('form')
 	form!: HTMLFormElement;
 
+	@property()
+	errorMsg = '';
+
 	@query('#email')
 	emailElement!: HTMLInputElement;
 
 	@query('#password')
 	passwordElement!: HTMLInputElement;
+
+	@query('#password2')
+	passwordElement2!: HTMLInputElement;
 
 	async submit(e?: MouseEvent) {
 		e.stopImmediatePropagation();
@@ -42,7 +48,7 @@ class SignInComponent extends connect(store)(LitElement) {
 				this.loading = true;
 				jwtToken = await this.userService.register(signInData);
 			} catch (error) {
-				//
+				this.errorMsg = error.error;
 			}
 			jwtToken ? this.emitLogin() : '';
 			this.loading = false;
@@ -58,6 +64,15 @@ class SignInComponent extends connect(store)(LitElement) {
 	}
 
 	isFormValid() {
+		if (
+			(this.passwordElement.value && this.passwordElement2.value) &&
+			(this.passwordElement.value !== this.passwordElement2.value)
+		) {
+			this.form.classList.add('was-validated');
+			this.passwordElement2.setCustomValidity('Passwords must match');
+		} else {
+			this.passwordElement2.setCustomValidity('');
+		}
 		return this.form.checkValidity();
 	}
 
@@ -65,8 +80,26 @@ class SignInComponent extends connect(store)(LitElement) {
 		return html`
 					<form class="form">
 						<input type="email" required id="email" name="email" placeholder="Email">
-						<input type="password" required id="password" name="password" placeholder="Password">
-						<input type="password" required id="password" name="password" placeholder="Repeat Password">
+						<input
+						@keyup=${() => this.isFormValid()}
+						type="password" required id="password" name="password" placeholder="Password">
+						<div>
+							<input
+							@keyup=${() => this.isFormValid()}
+							 type="password" required id="password2" name="password2" placeholder="Repeat Password">
+        		</div>
+
+						${this.errorMsg ? html`
+						<div class="error-message">${this.errorMsg}</div>
+						` : ''}
+
+						<div class="privacy-confirmation">
+							<input type="checkbox" required>
+							<div>
+							I hereby confirm that I have read and agree with the <a target="_blank" href="${environment.PRIVACY_URL}">privacy policy</a>.
+							</div>
+						</div>
+
 						<button
 						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
 						class="${this.loading ? 'loading' :
