@@ -28,7 +28,8 @@ export class UserService {
             const jwtToken = yield token.json();
             this.jwtService.setJwt(jwtToken.token);
             const jwtPayload = yield this.jwtService.getJwtPayload();
-            login(jwtPayload);
+            if (jwtToken.token)
+                login(jwtPayload);
             return jwtToken.token;
         });
     }
@@ -46,6 +47,11 @@ export class UserService {
             const jwtPayload = yield this.jwtService.getJwtPayload();
             login(jwtPayload);
             return jwtToken.token;
+        });
+    }
+    resendEmailConfirmationLink(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.httpClient.post(`/users/resend-email-confirmation?email=${email}`, {});
         });
     }
     logout() {

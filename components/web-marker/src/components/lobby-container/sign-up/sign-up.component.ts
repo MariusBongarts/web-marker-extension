@@ -107,9 +107,13 @@ class SignInComponent extends connect(store)(LitElement) {
 						` : ''}
 
 						<div class="privacy-confirmation">
-							<input @change=${() => this.isFormValid()} type="checkbox" required>
 							<div>
-							I hereby confirm that I have read and agree with the <a target="_blank" href="${environment.PRIVACY_URL}">privacy policy</a>.
+								<input
+								@change=${() => this.isFormValid()}
+								required
+								type="checkbox" id="privacy-checkbox" name="privacy-checkbox">
+								<label for="privacy-checkbox">I hereby confirm that I have read and agree with the <a target="_blank" href="${environment.PRIVACY_URL}">privacy policy</a>.</label>
+
 							</div>
 						</div>
 

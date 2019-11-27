@@ -46,6 +46,10 @@ export class HttpClient {
                 return response;
             }
             else {
+                if (response.status === 401)
+                    return yield Promise.reject(yield response.json());
+                if (response.status === 400)
+                    return yield Promise.reject(yield response.json());
                 let message = yield response.text();
                 try {
                     message = JSON.parse(message).message;
