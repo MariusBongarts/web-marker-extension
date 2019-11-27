@@ -29,6 +29,9 @@ class SignInComponent extends connect(store)(LitElement) {
 	@query('#password')
 	passwordElement!: HTMLInputElement;
 
+	@property()
+	errorMsg = '';
+
 	async submit(e?: MouseEvent) {
 		e.stopImmediatePropagation();
 		e ? e.preventDefault() : '';
@@ -43,7 +46,7 @@ class SignInComponent extends connect(store)(LitElement) {
 				jwtToken = await this.userService.login(signInData);
 				if (jwtToken) this.emitLogin();
 			} catch (error) {
-				//
+				this.errorMsg = error.error;
 			}
 			this.loading = false;
 		} else {
@@ -57,6 +60,10 @@ class SignInComponent extends connect(store)(LitElement) {
 		}));
 	}
 
+	async resendEmailConfirmation() {
+		await this.userService.resendEmailConfirmationLink(this.emailElement.value);
+	}
+
 	isFormValid() {
 		return this.form.checkValidity();
 	}
@@ -66,6 +73,18 @@ class SignInComponent extends connect(store)(LitElement) {
 					<form class="form">
 						<input type="email" required id="email" name="email" placeholder="Email">
 						<input type="password" required id="password" name="password" placeholder="Password">
+
+						${this.errorMsg ? html`
+						<div class="invalid-feedback">${this.errorMsg}</div>
+
+						<!-- Option to resend email confirmation link -->
+						${this.errorMsg === 'Email is not confirmed yet!' ? html`
+						<div class="resend-email">
+							<button @click=${async () => await this.resendEmailConfirmation()}>Resend email confirmation link<button>
+							</div>
+						` : ''}
+
+						` : ''}
 						<button
 						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
 						class="${this.loading ? 'loading' :

@@ -44,7 +44,10 @@ export class HttpClient {
     const response = await fetch(this.config.baseURL + url, requestOptions);
     if (response.ok) {
       return response;
-    } else {
+    }
+    else {
+      if (response.status === 401) return await Promise.reject(await response.json());
+      if (response.status === 400) return await Promise.reject(await response.json());
       let message = await response.text();
       try {
         message = JSON.parse(message).message;

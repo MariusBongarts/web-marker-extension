@@ -22,6 +22,7 @@ export class UserService {
   async login(loginUserDto: LoginUserDto): Promise<string> {
     const token = await this.httpClient.post('/auth', loginUserDto);
     const jwtToken = await token.json();
+    console.log(jwtToken);
     this.jwtService.setJwt(jwtToken.token);
     const jwtPayload = await this.jwtService.getJwtPayload();
     if (jwtToken.token) login(jwtPayload);
@@ -41,6 +42,10 @@ export class UserService {
     const jwtPayload = await this.jwtService.getJwtPayload();
     login(jwtPayload);
     return jwtToken.token;
+  }
+
+  async resendEmailConfirmationLink(email: string) {
+    await this.httpClient.post(`/users/resend-email-confirmation?email=${email}`, {});
   }
 
   async logout() {

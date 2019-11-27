@@ -57,3 +57,27 @@ form button:hover {
   background-color: var(--secondary-dark);
   // background-color: #f5f7f9;
 }
+
+
+.invalid-feedback {
+  color: var(--error-color);
+  margin: 5px auto;
+}
+
+.resend-email {
+  margin: 5px auto;
+  cursor: pointer;
+
+  button {
+    background: none;
+    color: var(--secondary-dark);
+    padding: 2px;
+    margin: 5px 0px;
+  }
+  button:hover {
+    background: none;
+    box-shadow: 1px 1px 1px 1px var(--secondary-color);
+    color: var(--secondary-dark);
+  }
+
+}
