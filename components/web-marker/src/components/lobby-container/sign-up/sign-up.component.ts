@@ -20,6 +20,9 @@ class SignInComponent extends connect(store)(LitElement) {
 	@property()
 	loading = false;
 
+	@property()
+	formIsValid = false;
+
 	@query('form')
 	form!: HTMLFormElement;
 
@@ -73,19 +76,29 @@ class SignInComponent extends connect(store)(LitElement) {
 		} else {
 			this.passwordElement2.setCustomValidity('');
 		}
-		return this.form.checkValidity();
+		const isValid = this.form.checkValidity();
+		this.formIsValid = isValid;
+		return isValid;
 	}
 
 	render() {
 		return html`
 					<form class="form">
-						<input type="email" required id="email" name="email" placeholder="Email">
 						<input
 						@keyup=${() => this.isFormValid()}
+						@keydown=${() => this.isFormValid()}
+						@change=${() => this.isFormValid()}
+						type="email" required id="email" name="email" placeholder="Email">
+						<input
+						@keyup=${() => this.isFormValid()}
+						@keydown=${() => this.isFormValid()}
+						@change=${() => this.isFormValid()}
 						type="password" required id="password" name="password" placeholder="Password">
 						<div>
 							<input
 							@keyup=${() => this.isFormValid()}
+							@keydown=${() => this.isFormValid()}
+							@change=${() => this.isFormValid()}
 							 type="password" required id="password2" name="password2" placeholder="Repeat Password">
         		</div>
 
@@ -94,13 +107,14 @@ class SignInComponent extends connect(store)(LitElement) {
 						` : ''}
 
 						<div class="privacy-confirmation">
-							<input type="checkbox" required>
+							<input @change=${() => this.isFormValid()} type="checkbox" required>
 							<div>
 							I hereby confirm that I have read and agree with the <a target="_blank" href="${environment.PRIVACY_URL}">privacy policy</a>.
 							</div>
 						</div>
 
 						<button
+						?disabled=${!this.formIsValid}
 						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
 						class="${this.loading ? 'loading' :
 

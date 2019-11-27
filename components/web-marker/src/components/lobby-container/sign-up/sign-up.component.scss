@@ -58,6 +58,12 @@ form button:hover {
   // background-color: #f5f7f9;
 }
 
+form button:disabled {
+  color: white;
+  background: var(--secondary-color-transparent);
+  cursor: not-allowed;
+}
+
 .invalid-feedback {
   color: var(--error-color);
   margin: 5px auto;

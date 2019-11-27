@@ -58,6 +58,29 @@ form button:hover {
   // background-color: #f5f7f9;
 }
 
+form button:disabled {
+  color: white;
+  background: var(--secondary-color-transparent);
+  cursor: not-allowed;
+}
+
+.was-validated {
+  input:invalid {
+    border: solid var(--error-color) 1px;
+  }
+
+  input:invalid ~ .invalid-feedback {
+    color: var(--error-color);
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    display: block;
+  }
+
+  input:valid ~ .invalid-feedback {
+    display: none;
+  }
+}
+
 
 .invalid-feedback {
   color: var(--error-color);
