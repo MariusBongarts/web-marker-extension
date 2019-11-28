@@ -115,9 +115,9 @@ class LobbyContainer extends connect(store)(LitElement) {
 			<button @click=${() => this.activeTab = 'signIn'} class="${this.activeTab === 'signIn' ? 'active' : ''}">Sign in</button>
 			<button @click=${() => this.activeTab = 'signUp'} class="${this.activeTab === 'signUp' ? 'active' : ''}">Sign up</button>
 			</div>
+			<h1>Welcome</h1>
 			${!this.formSuccess ? html`
 			${this.activeTab === 'signIn' ? html`
-			<h1>Welcome</h1>
 					<!-- Sign in View -->
 					<sign-in @loggedIn=${async () => await this.loggedIn()}></sign-in>
 ` : html`
