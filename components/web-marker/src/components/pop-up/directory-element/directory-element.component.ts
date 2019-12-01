@@ -48,6 +48,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   }
 
   async stateChanged() {
+    this.active = false;
     if (this.directory) {
       this.getState();
     }
@@ -59,6 +60,10 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     //  this.dragActive = store.getState().dragMode;
     if (this.directory && this.directory._parentDirectory) {
       this.parentDirectory = store.getState().directories.find(directory => this.directory._parentDirectory === directory._id);
+    }
+
+    if (store.getState().activeDirectory && store.getState().activeDirectory._id === this.directory._id) {
+      this.active = true;
     }
   }
 
@@ -128,11 +133,20 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     e.preventDefault();
     e.stopImmediatePropagation();
     const directoryId = e.dataTransfer.getData("directoryId").trim();
-    if (directoryId && directoryId !== this.directory._id) {
+
+    // If directory element is dragged one directory level back
+    if (this.active) {
+      const droppedDirectory = store.getState().directories.find(directory => directory._id === directoryId);
+      droppedDirectory._parentDirectory = this.directory._parentDirectory || '';
+      await this.directoryService.updateDirectory(droppedDirectory);
+    }
+
+    if (!this.active && directoryId && directoryId !== this.directory._id) {
       const droppedDirectory = store.getState().directories.find(directory => directory._id === directoryId);
       droppedDirectory._parentDirectory = this.directory._id;
       await this.directoryService.updateDirectory(droppedDirectory);
     }
+    this.dragActive = false;
   }
 
   navigateToTab(e: Event, tag: Tag) {
@@ -149,7 +163,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
   render() {
     return html`
     ${this.directory ?
-      html`
+        html`
   <div
   draggable="true"
   @dragstart=${(e: DragEvent) => this.dragDirectory(e)}

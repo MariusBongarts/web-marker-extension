@@ -45,6 +45,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     this.subDirectories = this.directories.filter(directory => this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
     this.searchFilter = store.getState().searchValue;
     this.selectedDirectory = store.getState().activeDirectory;
+    console.log("Selected directory:" + this.selectedDirectory);
     this.dragMode = store.getState().dragMode;
   }
 
@@ -58,13 +59,11 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       ${this.selectedDirectory ?
           html`
     <directory-element
-    .active=${true}
-    .directory=${this.directories.find(directory => directory === this.selectedDirectory)}></directory-element>
+    .directory=${this.directories.find(directory => directory._id === this.selectedDirectory._id)}></directory-element>
     ${this.subDirectories.map(directory =>
             html`
       <!-- Sub directories of directory -->
       <directory-element
-      .active=${false}
       .directory=${directory}>
     </directory-element>
 
