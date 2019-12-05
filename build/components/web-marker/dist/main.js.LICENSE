@@ -71,11 +71,549 @@
 
 /* 1 */
 
+/**
+ * Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+// Minimal set of properties required for DOM Level 2 Range compliance. Comparison constants such as START_TO_START
+
+// are omitted because ranges in KHTML do not have them but otherwise work perfectly well. See issue 113.
+
+/*----------------------------------------------------------------------------------------------------------------*/
+
+// Trio of functions taken from Peter Michaux's article:
+
+// http://peter.michaux.ca/articles/feature-detection-state-of-the-art-browser-scripting
+
+// Creates a convenience function to save verbose repeated calls to tests functions
+
+// Next trio of functions are a convenience to save verbose repeated calls to previous two functions
+
+// Special case for toString, which does not show up in for...in loops in IE <= 8
+
+// Test whether we're in a browser and bail out if not
+
+// Test whether Array.prototype.slice can be relied on for NodeLists and use an alternative toArray() if not
+
+// Initialization
+
+// First, perform basic feature tests
+
+// Initialize modules
+
+// Call init listeners
+
+// Allow external scripts to initialize this library in case it's loaded after the document has loaded
+
+// Execute listener immediately if already initialized
+
+// Ensure rangy.rangePrototype and rangy.selectionPrototype are available immediately
+
+// Notify listeners
+
+// Now run initializer
+
+// Allow 2 or 3 arguments (second argument is an optional array of dependencies)
+
+// Initialize the module immediately if the core is already initialized
+
+// DOM utility methods used by Rangy
+
+// Perform feature tests
+
+// innerHTML is required for Range's createContextualFragment method
+
+// Removed use of indexOf because of a bizarre bug in Opera that is thrown in one of the Acid3 tests. I haven't been
+
+// able to replicate it outside of the test. The bug is that indexOf returns -1 when called on an Array that
+
+// contains just the document as a single element and the value searched for is the document.
+
+/*Array.prototype.indexOf ?
+            function(arr, val) {
+                return arr.indexOf(val) > -1;
+            }:*/
+
+// Opera 11 puts HTML elements in the null namespace, it seems, and IE 7 has undefined namespaceURI
+
+// Text, CDataSection or Comment
+
+// Note that we cannot use splitText() because it is bugridden in IE 9.
+
+// This looks bad. Is it worth it?
+
+// Test for IE's crash (IE 6/7) or exception (IE >= 8) when a reference to garbage-collected text node is queried
+
+// Text or Comment
+
+// Preserve positions
+
+// Handle case where position was inside the portion of node after the split point
+
+// See http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-Comparing
+
+// Case 1: nodes are the same
+
+// Case 2: node C (container B or an ancestor) is a child node of A
+
+// Case 3: node C (container A or an ancestor) is a child node of B
+
+// Case 4: containers are siblings or descendants of siblings
+
+// This shouldn't be possible
+
+// Insert the test element at the start of the body to prevent scrolling to the bottom in iOS (issue #292)
+
+// Pure JavaScript implementation of DOM Range
+
+// Utility functions
+
+// The node is partially selected by the Range, so we can use a new RangeIterator on the portion of
+
+// the node selected by the Range.
+
+// The whole node is selected, so we can use efficient DOM iteration to iterate over the node and its
+
+// descendants
+
+// DocumentType
+
+// RangeIterator code partially borrows from IERange by Tim Ryan (http://github.com/timcameronryan/IERange)
+
+// Move to next node
+
+// Check for partially selected text nodes
+
+// Checks if the current node is partially selected
+
+// Test the browser's innerHTML support to decide how to implement createContextualFragment
+
+// IE 6 and 7 throw
+
+// Implementation as per HTML parsing spec, trusting in the browser's implementation of innerHTML. See
+
+// discussion and base code for this implementation at issue 67.
+
+// Spec: http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface
+
+// Thanks to Aleks Williams.
+
+// "Let node the context object's start's node."
+
+// "If the context object's start's node is null, raise an INVALID_STATE_ERR
+
+// exception and abort these steps."
+
+// "Let element be as follows, depending on node's interface:"
+
+// Document, Document Fragment: null
+
+// "Element: node"
+
+// "If this raises an exception, then abort these steps. Otherwise, let new
+
+// children be the nodes returned."
+
+// "Let fragment be a new DocumentFragment."
+
+// "Append all new children to fragment."
+
+// "Return fragment."
+
+// "If the node's document is an HTML document: Invoke the HTML fragment parsing algorithm."
+
+// "If the node's document is an XML document: Invoke the XML fragment parsing algorithm."
+
+// "In either case, the algorithm must be invoked with fragment as the input
+
+// and element as the context element."
+
+// "If either element is null or element's ownerDocument is an HTML document
+
+// and element's local name is "html" and element's namespace is the HTML
+
+// namespace"
+
+// "let element be a new Element with "body" as its local name and the HTML
+
+// namespace as its namespace.""
+
+// In this case, innerHTML cannot be trusted, so fall back to a simpler, non-conformant implementation that
+
+// previous versions of Rangy used (with the exception of using a body element rather than a div)
+
+// Check none of the range is read-only
+
+// Remove the content
+
+// Move to the new position
+
+// Check the root containers of the range and the new boundary, and also check whether the new boundary
+
+// is after the current end. In either case, collapse the range to the new position
+
+// Set up inheritance
+
+/**
+                 * Convenience method to set a range's start and end boundaries. Overloaded as follows:
+                 * - Two parameters (node, offset) creates a collapsed range at that position
+                 * - Three parameters (node, startOffset, endOffset) creates a range contained with node starting at
+                 *   startOffset and ending at endOffset
+                 * - Four parameters (startNode, startOffset, endNode, endOffset) creates a range starting at startOffset in
+                 *   startNode and ending at endOffset in endNode
+                 */
+
+// Check if the contents can be surrounded. Specifically, this means whether the range partially selects
+
+// no non-text nodes.
+
+// Updates commonAncestorContainer and collapsed after boundary change
+
+// No check for whether the container of the start of the Range is of a type that does not allow
+
+// children of the type of node: the browser's DOM implementation should do this for us when we attempt
+
+// to add the node
+
+// Extract the contents
+
+// Clear the children of the node
+
+// Insert the new node and add the extracted contents
+
+// Accept only text or CDATA nodes, not comments
+
+// The methods below are all non-standard. The following batch were introduced by Mozilla but have since
+
+// been removed from Mozilla.
+
+// touchingIsIntersecting determines whether this method considers a node that borders a range intersects
+
+// with it (as in WebKit) or not (as in Gecko pre-1.9, and the default)
+
+// The methods below are non-standard and invented by me.
+
+// Sharing a boundary start-to-end or end-to-start does not count as intersection.
+
+// Sharing a boundary start-to-end or end-to-start does count as intersection.
+
+// Don't include a boundary container if it is a character data node and the range does not contain any
+
+// of its character data. See issue 190.
+
+// In DOM4, detach() is now a no-op.
+
+// Wrappers for the browser's native DOM Range and/or TextRange implementation
+
+// This is a wrapper around the browser's native DOM Range. It has two aims:
+
+// - Provide workarounds for specific browser bugs
+
+// - provide convenient extensions, which are inherited from Rangy's DomRange
+
+// Fix for broken collapsed property in IE 9.
+
+// Always set both boundaries for the benefit of IE9 (see issue 35)
+
+// Due to a long-standing Firefox bug that I have not been able to find a reliable way to detect,
+
+// insertNode() is never delegated to the native range.
+
+// Create test range and node for feature detection
+
+/*--------------------------------------------------------------------------------------------------------*/
+
+// Test for Firefox 2 bug that prevents moving the start of a Range to a point after its current end and
+
+// correct for it
+
+// Always use DOM4-compliant selectNodeContents implementation: it's simpler and less code than testing
+
+// whether the native implementation can be trusted
+
+// Test for and correct WebKit bug that has the behaviour of compareBoundaryPoints round the wrong way for
+
+// constants START_TO_END and END_TO_START: https://bugs.webkit.org/show_bug.cgi?id=20738
+
+// This is the wrong way round, so correct for it
+
+// Test for IE deleteContents() and extractContents() bug and correct it. See issue 107.
+
+// Behaviour is correct per DOM4 Range so wrap the browser's implementation of deleteContents() and
+
+// extractContents()
+
+// Test for existence of createContextualFragment and delegate to it if it exists
+
+// Clean up
+
+/*
+            This is a workaround for a bug where IE returns the wrong container element from the TextRange's parentElement()
+            method. For example, in the following (where pipes denote the selection boundaries):
+
+            <ul id="ul"><li id="a">| a </li><li id="b"> b |</li></ul>
+
+            var range = document.selection.createRange();
+            alert(range.parentElement().id); // Should alert "ul" but alerts "b"
+
+            This method returns the common ancestor node of the following:
+            - the parentElement() of the textRange
+            - the parentElement() of the textRange after calling collapse(true)
+            - the parentElement() of the textRange after calling collapse(false)
+            */
+
+// Sometimes collapsing a TextRange that's at the start of a text node can move it into the previous node, so
+
+// check for that
+
+// Deal with nodes that cannot "contain rich HTML markup". In practice, this means form inputs, images and
+
+// similar. See http://msdn.microsoft.com/en-us/library/aa703950%28VS.85%29.aspx
+
+// Workaround for HTML5 Shiv's insane violation of document.createElement(). See Rangy issue 104 and HTML5
+
+// Shiv issue 64: https://github.com/aFarkas/html5shiv/issues/64
+
+// We know the endth child node is after the range boundary, so we must be done.
+
+// We've now reached or gone past the boundary of the text range we're interested in
+
+// so have identified the node we want
+
+// This is a character data node (text, comment, cdata). The working range is collapsed at the start of
+
+// the node containing the text range's boundary, so we move the end of the working range to the
+
+// boundary point and measure the length of its text to get the boundary's offset within the node.
+
+/*
+                        For the particular case of a boundary within a text node containing rendered line breaks (within a
+                        <pre> element, for example), we need a slightly complicated approach to get the boundary's offset in
+                        IE. The facts:
+
+                        - Each line break is represented as \r in the text node's data/nodeValue properties
+                        - Each line break is represented as \r\n in the TextRange's 'text' property
+                        - The 'text' property of the TextRange does not contain trailing line breaks
+
+                        To get round the problem presented by the final fact above, we can use the fact that TextRange's
+                        moveStart() and moveEnd() methods return the actual number of characters moved, which is not
+                        necessarily the same as the number of characters it was instructed to move. The simplest approach is
+                        to use this to store the characters moved when moving both the start and end of the range to the
+                        start of the document body and subtracting the start offset from the end offset (the
+                        "move-negative-gazillion" method). However, this is extremely slow when the document is large and
+                        the range is near the end of it. Clearly doing the mirror image (i.e. moving the range boundaries to
+                        the end of the document) has the same problem.
+
+                        Another approach that works is to use moveStart() to move the start boundary of the range up to the
+                        end boundary one character at a time and incrementing a counter with the value returned by the
+                        moveStart() call. However, the check for whether the start boundary has reached the end boundary is
+                        expensive, so this method is slow (although unlike "move-negative-gazillion" is largely unaffected
+                        by the location of the range within the document).
+
+                        The approach used below is a hybrid of the two methods above. It uses the fact that a string
+                        containing the TextRange's 'text' property with each \r\n converted to a single \r character cannot
+                        be longer than the text of the TextRange, so the start of the range is moved that length initially
+                        and then a character at a time to make up for any trailing line breaks not contained in the 'text'
+                        property. This has good performance in most situations compared to the previous two methods.
+                        */
+
+// If the boundary immediately follows a character data node and this is the end boundary, we should favour
+
+// a position within that, and likewise for a start boundary preceding a character data node
+
+// Making the working element non-empty element persuades IE to consider the TextRange boundary to be within
+
+// the element rather than immediately before or after it
+
+// Position the range immediately before the node containing the boundary
+
+// insertBefore is supposed to work like appendChild if the second parameter is null. However, a bug report
+
+// for IERange suggests that it can crash the browser: http://code.google.com/p/ierange/issues/detail?id=12
+
+// Move the working range to the text offset, if required
+
+/*------------------------------------------------------------------------------------------------------------*/
+
+// This is a wrapper around a TextRange, providing full DOM Range functionality using rangy's DomRange as a
+
+// prototype
+
+// TextRange's parentElement() method cannot be trusted. getTextRangeContainerElement() works around that.
+
+// An optimization used here is that if the start and end boundaries have the same parent element, the
+
+// search scope for the end boundary can be limited to exclude the portion of the element that precedes
+
+// the start boundary
+
+// IE 9 and above have both implementations and Rangy makes both available. The next few lines sets which
+
+// implementation to use by default.
+
+// Add WrappedTextRange as the Range property of the global object to allow expression like Range.END_TO_END to work
+
+// This module creates a selection object wrapper that conforms as closely as possible to the Selection specification
+
+// in the HTML Editing spec (http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#selections)
+
+// Utility function to support direction parameters in the API that may be a string ("backward", "backwards",
+
+// "forward" or "forwards") or a Boolean (true for backwards).
+
+// Test for the Range/TextRange and Selection features required
+
+// Test for ability to retrieve selection
+
+// Check whether the selection TextRange is actually contained within the correct document
+
+// In Firefox, the selection is null in an iframe with display: none. See issue #138.
+
+// Test for existence of native selection extend() method
+
+// Test if rangeCount exists
+
+// Previously an iframe was used but this caused problems in some circumstances in IE, so tests are
+
+// performed on the current document's selection. See issue 109.
+
+// Note also that if a selection previously existed, it is wiped and later restored by these tests. This
+
+// will result in the selection direction begin reversed if the original selection was backwards and the
+
+// browser does not support setting backwards selections (Internet Explorer, I'm looking at you).
+
+// Store the current selection
+
+// Create some test elements
+
+// Test whether the native selection is capable of supporting multiple ranges.
+
+// Doing the original feature test here in Chrome 36 (and presumably later versions) prints a
+
+// console error of "Discontiguous selection is not supported." that cannot be suppressed. There's
+
+// nothing we can do about this while retaining the feature test so we have to resort to a browser
+
+// sniff. I'm not happy about it. See
+
+// https://code.google.com/p/chromium/issues/detail?id=399791
+
+// ControlRanges
+
+// Simple, quick test which only needs to distinguish between a TextRange and a ControlRange
+
+// Create a Range from the selected TextRange
+
+// Update the wrapped selection based on what's now in the native selection
+
+// This case (where the selection type is "Control" and calling createRange() on the selection returns
+
+// a TextRange) can happen in IE 9. It happens, for example, when all elements in the selected
+
+// ControlRange have been removed from the ControlRange and removed from the document.
+
+// Selection collapsedness
+
+// try/catch is present because getRangeAt() must have thrown an error in some browser and some situation.
+
+// Unfortunately, I didn't write a comment about the specifics and am now scared to take it out. Let that be a
+
+// lesson to us all, especially me.
+
+// Handle the case when the selection was selected backwards (from the end to the start in the
+
+// document)
+
+// Check if the parameter is a Rangy Selection object
+
+// Ensure that the selection becomes of type "Control"
+
+// Selecting a range
+
+// Clone the native range so that changing the selected range does not affect the selection.
+
+// This is contrary to the spec but is the only way to achieve consistency between browsers. See
+
+// issue 80.
+
+// Check whether adding the range was successful
+
+// The range was added successfully
+
+// Check whether the range that we added to the selection is reflected in the last range extracted from
+
+// the selection
+
+// Happens in WebKit with, for example, a selection placed at the start of a text node
+
+// The range was not added successfully. The simplest thing is to refresh
+
+// Added try/catch as fix for issue #21
+
+// Check for empty() not working (issue #24)
+
+// Work around failure to empty a control selection by instead selecting a TextRange and then
+
+// calling empty()
+
+// Clone the range to preserve selection-range independence. See issue 80.
+
+// Check the range count first
+
+// Now check the direction. Checking the anchor position is the same is enough since we're checking all the
+
+// ranges after this
+
+// Finally, compare each range in turn
+
+// Removal of a single range
+
+// No current browser conforms fully to the spec for this method, so Rangy's own method is always used
+
+// Create an alias for backwards compatibility. From 1.3, everything is "backward" rather than "backwards"
+
+// Selection stringifier
+
+// This is conformant to the old HTML5 selections draft spec but differs from WebKit and Mozilla's implementation.
+
+// The current spec does not yet define this method.
+
+// The spec is very specific on how selectAllChildren should be implemented and not all browsers implement it as
+
+// specified so the native implementation is never used by Rangy.
+
+// Sepcial behaviour required for IE's control selections
+
+// The spec says nothing about what the selection should contain after calling deleteContents on each
+
+// range. Firefox moves the selection to where the final selected range was, so we emulate that
+
+// The following are non-standard extensions
+
+// Add select() method to Range prototype. Any existing selection will be removed.
+
+// Detecting if a selection is backward
+
+// Wait for document to load before initializing
+
+// Test whether the document has already been loaded and initialize immediately if so
+
+// Add a fallback in case the DOMContentLoaded event isn't supported
+
+/* 2 */
+
 // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
 
 // Copy bytes to buffer, if provided
 
-/* 2 */
+/* 3 */
 
 // This works in non-strict mode
 
@@ -89,9 +627,9 @@
 
 // easier to handle this case. if(!global) { ...}
 
-/* 3 */
-
 /* 4 */
+
+/* 5 */
 
 /* WEBPACK VAR INJECTION */
 
@@ -101,7 +639,7 @@
 
 /* harmony default export */
 
-/* 5 */
+/* 6 */
 
 // Unique ID creation requires a high quality random # generator.  In the
 
@@ -127,7 +665,7 @@
 
 // quality.
 
-/* 6 */
+/* 7 */
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
@@ -136,13 +674,11 @@
 
 // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
 
-/* 7 */
-
 /* 8 */
 
-/* harmony export (binding) */
-
 /* 9 */
+
+/* harmony export (binding) */
 
 /* 10 */
 
@@ -156,11 +692,13 @@
 
 /* 15 */
 
-// extracted by mini-css-extract-plugin
-
 /* 16 */
 
+// extracted by mini-css-extract-plugin
+
 /* 17 */
+
+/* 18 */
 
 /**
  * The code was extracted from:
@@ -179,7 +717,7 @@
 
 // try to find character in table (0-63, not found => -1)
 
-/* 18 */
+/* 19 */
 
 // See https://github.com/broofa/node-uuid for API details
 
@@ -229,27 +767,549 @@
 
 // `node`
 
-/* 19 */
+/* 20 */
 
 // module.parent = undefined by default
 
-/* 20 */
-
 /* 21 */
 
-// Module
+/**
+ * Class Applier module for Rangy.
+ * Adds, removes and toggles classes on Ranges and Selections
+ *
+ * Part of Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Depends on Rangy core.
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+// Inefficient, inelegant nonsense for IE's svg element, which has no classList and non-HTML className implementation
+
+// For convenience, allow newIndex to be -1 to mean "insert at the end".
+
+// Now actually move the node.
+
+// Optimization as per issue 145
+
+// Remove non-intersecting text nodes from the start of the range
+
+// White space characters as defined by HTML 4 (http://www.w3.org/TR/html401/struct/text.html)
+
+// descendantNode is now guaranteed not to be a text or other character node
+
+// Work out a new split point in the parent node
+
+// Can merge if the node's previous/next sibling is a text node
+
+// Compare text node parent element with its sibling
+
+// Handle case where position is inside the text node being merged into a preceding node
+
+// Handle case where both text nodes precede the position within the same parent node
+
+// TODO: Populate this with every attribute name that corresponds to a property with a different name. Really??
+
+// cssClass property is for backward compatibility
+
+// Initialize from options object
+
+// Backward compatibility: the second parameter can also be a Boolean indicating to normalize after unapplying
+
+// Initialize element properties and attribute exceptions
+
+// Ensure each attribute value is a string
+
+// Initialize tag names
+
+// Special case for class. The copied properties object has the applier's class as well as its own
+
+// to simplify checks when removing styling elements
+
+// Copy the property back from the dummy element so that later comparisons to check whether
+
+// elements may be removed are checking against the right value. For example, the href property
+
+// of an element returns a fully qualified URL even if it was previously assigned a relative
+
+// URL.
+
+// Not all properties map to identically-named attributes
+
+// White space adjacent to an unwrappable node can be ignored for wrapping
+
+// We now have a whitespace-only text node that may be rendered depending on its context. If it is adjacent to a
+
+// non-inline element, it will not be rendered. This seems to be a good enough definition.
+
+// Normalizes nodes after applying a class to a Range.
+
+// Check for every required merge and create a Merge object for each
+
+// Test whether the first node after the range needs merging
+
+// Apply the merges
+
+// Set the range boundaries
+
+// For checking whether we should reuse an existing element, we just want to check that the element
+
+// has all the classes specified in the className property. When deciding whether the element is
+
+// removable when unapplying a class, there is separate special handling to check whether the
+
+// element has extra classes so the same simple check will do.
+
+// Check whether the text node can be styled. Text within a <style> or <script> element, for example,
+
+// should not be styled. See issue 283.
+
+// Update the range from the preserved boundary positions
+
+// Split out the portion of the ancestor from which we can remove the class
+
+//var parent = ancestorWithClass.parentNode, index = dom.getNodeIndex(ancestorWithClass);
+
+// Tidy up the DOM by removing empty containers
+
+// Update the ranges from the preserved boundary positions
+
+// Apply classes to any appropriate empty elements
+
+// Create an array of range boundaries to preserve
+
+// Ensure the range is still valid
+
+// Remove class from any appropriate empty elements
+
+// Get ranges returned in document order
 
 /* 22 */
 
+/**
+ * Highlighter module for Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Depends on Rangy core, ClassApplier and optionally TextRange modules.
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+// Puts highlights in order, last in document first.
+
+// Lazily load the TextRange-based converter so that the dependency is only checked when required.
+
+// Test that textRangeModule exists and is supported
+
+// Test each range against each of the highlighted ranges to see whether they overlap
+
+//var selCharRange = converter.rangeToCharacterRange(range);
+
+// Ignore empty ranges
+
+// Restrict character range to container element, if it exists
+
+// Check for intersection with existing highlights. For each intersection, create a new highlight
+
+// which is the union of the highlight range and the selected range
+
+// Replace the existing highlight if it needs to be:
+
+//  1. merged (isSameClassApplier)
+
+//  2. partially or entirely erased (className === null)
+
+//  3. partially or entirely replaced (isSameClassApplier == false && exclusive == true)
+
+// Remove existing highlights, keeping the unselected parts
+
+// Add new range
+
+// Remove the old highlights
+
+// Apply new highlights
+
+// Store the existing selection as character ranges
+
+// Create an array of selected character ranges
+
+// Restore selection
+
+// Convert to the current Highlighter's type, if different from the serialization type
+
 /* 23 */
+
+/**
+ * Text range module for Rangy.
+ * Text-based manipulation and searching of ranges and selections.
+ *
+ * Features
+ *
+ * - Ability to move range boundaries by character or word offsets
+ * - Customizable word tokenizer
+ * - Ignores text nodes inside <script> or <style> elements or those hidden by CSS display and visibility properties
+ * - Range findText method to search for text or regex within the page or within a range. Flags for whole words and case
+ *   sensitivity
+ * - Selection and range save/restore as text offsets within a node
+ * - Methods to return visible text within a range or selection
+ * - innerText method for elements
+ *
+ * References
+ *
+ * https://www.w3.org/Bugs/Public/show_bug.cgi?id=13145
+ * http://aryeh.name/spec/innertext/innertext.html
+ * http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html
+ *
+ * Part of Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Depends on Rangy core.
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+/**
+ * Problem: handling of trailing spaces before line breaks is handled inconsistently between browsers.
+ *
+ * First, a <br>: this is relatively simple. For the following HTML:
+ *
+ * 1 <br>2
+ *
+ * - IE and WebKit render the space, include it in the selection (i.e. when the content is selected and pasted into a
+ *   textarea, the space is present) and allow the caret to be placed after it.
+ * - Firefox does not acknowledge the space in the selection but it is possible to place the caret after it.
+ * - Opera does not render the space but has two separate caret positions on either side of the space (left and right
+ *   arrow keys show this) and includes the space in the selection.
+ *
+ * The other case is the line break or breaks implied by block elements. For the following HTML:
+ *
+ * <p>1 </p><p>2<p>
+ *
+ * - WebKit does not acknowledge the space in any way
+ * - Firefox, IE and Opera as per <br>
+ *
+ * One more case is trailing spaces before line breaks in elements with white-space: pre-line. For the following HTML:
+ *
+ * <p style="white-space: pre-line">1
+ * 2</p>
+ *
+ * - Firefox and WebKit include the space in caret positions
+ * - IE does not support pre-line up to and including version 9
+ * - Opera ignores the space
+ * - Trailing space only renders if there is a non-collapsed character in the line
+ *
+ * Problem is whether Rangy should ever acknowledge the space and if so, when. Another problem is whether this can be
+ * feature-tested
+ */
+
+// This function must create word and non-word tokens for the whole of the text supplied to it
+
+// Match words and mark characters
+
+// Get trailing space characters for word
+
+// Create token for non-word characters preceding this word
+
+// Create token for trailing non-word characters, if any exist
+
+/* DOM utility functions */
+
+// Create cachable versions of DOM functions
+
+// Test for old IE's incorrect display properties
+
+// Corrects IE's "block" value for table-related elements
+
+// Adpated from Aryeh's code.
+
+// "A whitespace node is either a Text node whose data is the empty string; or
+
+// a Text node whose data consists only of one or more tabs (0x0009), line
+
+// feeds (0x000A), carriage returns (0x000D), and/or spaces (0x0020), and whose
+
+// parent is an Element whose resolved value for "white-space" is "normal" or
+
+// "nowrap"; or a Text node whose data consists only of one or more tabs
+
+// (0x0009), carriage returns (0x000D), and/or spaces (0x0020), and whose
+
+// parent is an Element whose resolved value for "white-space" is "pre-line"."
+
+// "node is a collapsed whitespace node if the following algorithm returns
+
+// true:"
+
+// "If node's data is the empty string, return true."
+
+// "If node is not a whitespace node, return false."
+
+// "If ancestor is null, return true."
+
+/* PROCESSING_INSTRUCTION */
+
+/* COMMENT */
+
+// "A block node is either an Element whose "display" property does not have
+
+// resolved value "inline" or "inline-block" or "inline-table" or "none", or a
+
+// Document, or a DocumentFragment."
+
+// Possibly overengineered caching system to prevent repeated DOM calls slowing everything down
+
+/*
+                 <body><p>X  </p><p>Y</p></body>
+
+                 Positions:
+
+                 body:0:""
+                 p:0:""
+                 text:0:""
+                 text:1:"X"
+                 text:2:TRAILING_SPACE_IN_BLOCK
+                 text:3:COLLAPSED_SPACE
+                 p:1:""
+                 body:1:"\n"
+                 p:0:""
+                 text:0:""
+                 text:1:"Y"
+
+                 A character is a TRAILING_SPACE_IN_BLOCK iff:
+
+                 - There is no uncollapsed character after it within the visible containing block element
+
+                 A character is a TRAILING_SPACE_BEFORE_BR iff:
+
+                 - There is no uncollapsed character after it preceding a <br> element
+
+                 An element has inner text iff
+
+                 - It is not hidden
+                 - It contains an uncollapsed character
+
+                 All trailing spaces (pre-line, before <br>, end of block) require definite non-empty characters to render.
+                 */
+
+// Ensure that a block element containing a <br> is considered to have inner text
+
+/*
+            This method:
+            - Fully populates positions that have characters that can be determined independently of any other characters.
+            - Populates most types of space positions with a provisional character. The character is finalized later.
+             */
+
+// "If the character at position is from set, append a single space (U+0020) to newdata and advance
+
+// position until the character at position is not from set."
+
+// We also need to check for the case where we're in a pre-line and we have a space preceding a
+
+// line break, because such spaces are collapsed in some browsers
+
+//pos.checkForFollowingLineBreak = true;
+
+// Check the leading space of the next node for the case when a block element follows an inline
+
+// element or text node. In that case, there is an implied line break between the two nodes.
+
+// Resolve leading and trailing spaces, which may involve prepopulating other positions
+
+// Check if character is ignored
+
+// Normalize ignored characters into a string consisting of characters in ascending order of character code
+
+/// Convert back to a string and remove duplicates
+
+// Check if this position's  character is invariant (i.e. not dependent on character options) and return it
+
+// if so
+
+// We need to actually get the character now
+
+// Disallow a collapsible space that is followed by a line break or is the last character
+
+// Allow a trailing space that we've previously determined should be included
+
+// Move onto the next node
+
+// Go into the children next, if children there are
+
+/*
+             Next and previous position moving functions that filter out
+
+             - Hidden (CSS visibility/display) elements
+             - Script and style elements
+             */
+
+// We're skipping this node and all its descendants
+
+// Store text nodes keyed by data, although we may need to truncate this
+
+// Extensions to the rangy.dom utility object
+
+// Adjust the end position to ensure that it is actually reached
+
+// Provides a pair of iterators over text positions, tokenized. Transparently requests more text when next()
+
+// is called and there is no more tokenized text
+
+// Consumes a word and the whitespace beyond it
+
+// Get initial word surrounding initial position and tokenize it
+
+// If we're down to the last token, consume character chunks until we have a word or run out of
+
+// characters to consume
+
+// Merge trailing non-word into next word and tokenize
+
+// Merge leading non-word into next word and tokenize
+
+// If there is a non-breaking space in the innerText, then replace with empty space " " so that it
+
+// matches with the searchTerm. Based on the documentation, search should be performed on
+
+// the visible text of the document
+
+// Check whether the match is now over
+
+// Check whether regex match extends to the end of the range
+
+// Extensions to the Rangy Range object
+
+/*
+             Unit can be "character" or "word"
+             Options:
+
+             - includeTrailingSpace
+             - wordRegex
+             - tokenizer
+             - collapseSpaceBeforeLineBreak
+             */
+
+// Perform any necessary position tweaks
+
+// Tweak the position for the case of a leading space. The problem is that an uncollapsed leading space
+
+// before a block element (for example, the line break between "1" and "2" in the following HTML:
+
+// "1<p>2</p>") is considered to be attached to the position immediately before the block element, which
+
+// corresponds with a different selection position in most browsers from the one we want (i.e. at the
+
+// start of the contents of the block element). We get round this by advancing the position returned to
+
+// the last possible equivalent visible position.
+
+// Extensions to the Rangy Selection object
+
+// Character indexes are relative to the start of node
+
+// Create word options if we're matching whole words only
+
+// Set up options
+
+// We don't ever want trailing spaces for search results
+
+// Create a range representing the search scope if none was provided
+
+// Examine and prepare the search term
+
+// Adjust initial position if it lies outside the search scope
+
+// We've found a match that is not a whole word, so we carry on searching from the point immediately
+
+// after the match
+
+// Nothing found and we can't wrap around, so we're done
+
+// No result found but we're wrapping around and limiting the scope to the unsearched part of the range
+
+// Extensions to the core rangy object
 
 /* 24 */
 
+/**
+ * Serializer module for Rangy.
+ * Serializes Ranges and Selections. An example use would be to store a user's selection on a particular page in a
+ * cookie or local storage and restore it on the user's next visit to the same page.
+ *
+ * Part of Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Depends on Rangy core.
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+// encodeURIComponent and decodeURIComponent are required for cookie handling
+
+// Checksum for checking whether range can be serialized
+
+// Text node
+
+// Comment
+
+// Creates a string representation of the specified element's contents that is similar to innerHTML but omits all
+
+// attributes and comments and includes child node counts. This is done instead of using innerHTML to work around
+
+// IE <= 8's policy of including element properties in attributes, which ruins things by changing an element's
+
+// innerHTML whenever the user changes an input within the element.
+
 /* 25 */
+
+/**
+ * Selection save and restore module for Rangy.
+ * Saves and restores user selections using marker invisible elements in the DOM.
+ *
+ * Part of Rangy, a cross-browser JavaScript range and selection library
+ * https://github.com/timdown/rangy
+ *
+ * Depends on Rangy core.
+ *
+ * Copyright 2019, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3.3
+ * Build date: 2 January 2019
+ */
+
+// Create the marker element containing a single invisible character using DOM methods and insert it
+
+// Workaround for issue 17
+
+// Order the ranges by position within the DOM, latest first, cloning the array to leave the original untouched
+
+// Now that all the markers are in place and DOM manipulation over, adjust each range's boundaries to lie
+
+// between its markers
+
+// Ranges are in reverse order of appearance in the DOM. We want to restore earliest first to avoid
+
+// normalization affecting previously restored ranges.
+
+// Ensure current selection is unaffected
 
 /* 26 */
 
 /* 27 */
+
+// Module
 
 /* 28 */
 
@@ -360,6 +1420,18 @@
 /* 81 */
 
 /* 82 */
+
+/* 83 */
+
+/* 84 */
+
+/* 85 */
+
+/* 86 */
+
+/* 87 */
+
+/* 88 */
 
 // EXTERNAL MODULE: ./src/index.scss
 
@@ -1685,78 +2757,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * it will not needlessly try to `finalize`.
  */
 
-//# sourceMappingURL=lit-element.js.map
-
-// CONCATENATED MODULE: ./src/helper/markerHelper.ts
-
-/**
- * Creates the mark element to highlight text
- *
- * @param {Range} [range]
- * @param {Mark} [mark]
- * @returns
- */
-
-// Recreate container in between
-
-// Recreate the first container
-
-// Recreate the last container
-
-/**
- * Creates the mark in the DOM. Afterwards it listenes for a deletion event to remove it.
- *
- * @param {HTMLElement} markElement
- * @param {Mark} mark
- */
-
-/**
- * Adds the style for the mark element.
- *
- */
-
-// CONCATENATED MODULE: ./src/components/app.component.ts
-
-/**
- * If @param text is given the mark is created by the context menu
- *
- * @export
- * @param {string} [text]
- * @returns {Mark}
- */
-
-// If selection is made by my-menu popup
-
-// Mark is created by context menu
-
-/**
- * Creates a mark from the context-menu by handing text instead of using getSelection()
- *
- * @export
- * @param {string} text
- * @returns {Mark}
- */
-
-/**
- * Returns the StartContainer or EndContainer to recreate the range of the given mark
- *
- * @export
- * @param {HTMLElement} container
- * @param {Mark} mark
- * @param {boolean} start true = searchs for StartContainer; false = searchs for EndContainer
- * @returns {HTMLElement}
- */
-
-/**
- * Returns all text nodes under an element
- *
- * @export
- * @param {Node} node
- * @returns {Node[]}
- */
-
-// tslint:disable-next-line: prefer-for-of
-
 /**
  * Render method used to render the lit-html TemplateResult to the element's
  * DOM.
@@ -1795,6 +2795,94 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // so we leave it up to the user to call `ShadyCSSS.styleElement`
 
 // for dynamic changes.
+
+//# sourceMappingURL=lit-element.js.map
+
+// EXTERNAL MODULE: ./src/helper/rangy-updated/lib/rangy-classapplier.js
+
+// EXTERNAL MODULE: ./src/helper/rangy-updated/lib/rangy-highlighter.js
+
+// CONCATENATED MODULE: ./src/helper/markerHelper.ts
+
+//const markElement = markWithRangy(mark);
+
+/**
+ * Adds the style for the mark element.
+ *
+ */
+
+// CONCATENATED MODULE: ./src/components/app.component.ts
+
+/**
+ * Creates the mark element to highlight text
+ *
+ * @param {Range} [range]
+ * @param {Mark} [mark]
+ * @returns
+ */
+
+/**
+ * If @param text is given the mark is created by the context menu
+ *
+ * @export
+ * @param {string} [text]
+ * @returns {Mark}
+ */
+
+// If selection is made by my-menu popup
+
+// if (selection.toString()) {
+
+// Mark is created by context menu
+
+// else if (text) {
+
+//   return createContextMark(text)
+
+// }
+
+/**
+ * Creates a mark from the context-menu by handing text instead of using getSelection()
+ *
+ * @export
+ * @param {string} text
+ * @returns {Mark}
+ */
+
+/**
+ * Creates the mark in the DOM. Afterwards it listenes for a deletion event to remove it.
+ *
+ * @param {HTMLElement} markElement
+ * @param {Mark} mark
+ */
+
+// Listen for state changes and delete mark from DOM if it got removed
+
+// Unwraps the mark element
+
+// move all children out of the element
+
+// remove the empty element
+
+/**
+ * Returns the StartContainer or EndContainer to recreate the range of the given mark
+ *
+ * @export
+ * @param {HTMLElement} container
+ * @param {Mark} mark
+ * @param {boolean} start true = searchs for StartContainer; false = searchs for EndContainer
+ * @returns {HTMLElement}
+ */
+
+/**
+ * Returns all text nodes under an element
+ *
+ * @export
+ * @param {Node} node
+ * @returns {Node[]}
+ */
+
+// tslint:disable-next-line: prefer-for-of
 
 /**
          * Can be set to true to hide side-bar icon. E.g. in full screen mode
@@ -1872,8 +2960,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 //     this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt }, transports: ['websocket', 'xhr-polling'] });
 
 //   this.socket.emit('join', { id: jwtPayload._id, email: jwtPayload.email });
-
-// }
 
 // handleSockets() {
 

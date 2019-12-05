@@ -458,8 +458,6 @@
                 var converter = this.converter;
                 var classApplier = className ? this.classAppliers[className] : false;
 
-                console.log(markId);
-
                 options = createOptions(options, {
                     containerElementId: null,
                     exclusive: true

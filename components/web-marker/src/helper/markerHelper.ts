@@ -15,7 +15,13 @@ export function highlightText(range?: Range, mark?: Mark) {
   try {
     //const markElement = markWithRangy(mark);
     addStyles();
-    markWithRangy(mark);
+    if (mark.rangyObject) {
+      markWithRangy(mark);
+    } else {
+      // Supporting old marks, made without rangy
+      const markElement = createMarkElement(range, mark);
+      createMyMarkerComponent(mark, markElement);
+    }
     createMyMarkerComponent(mark);
 
   } catch (error) {
@@ -40,6 +46,31 @@ function markWithRangy(mark: Mark) {
   highlighter.highlightSelection('highlight', null, mark.id);
   rangy.getSelection().removeAllRanges();
 
+}
+
+/**
+ * Creates the mark element to highlight text
+ *
+ * @param {Range} [range]
+ * @param {Mark} [mark]
+ * @returns
+ */
+function createMarkElement(range?: Range, mark?: Mark) {
+  mark ? range = recreateRange(mark) : range = range;
+  const markElement = document.createElement('mark');
+  markElement.setAttribute('markId', mark ? mark.id : '');
+  markElement.appendChild(range.extractContents());
+  range.insertNode(markElement);
+  return markElement;
+}
+
+function recreateRange(mark) {
+  const startContainer = findStartEndContainer(document.body, mark, true);
+  const endContainer = findStartEndContainer(document.body, mark, false);
+  const range = document.createRange();
+  range.setStart(startContainer, mark.startOffset);
+  range.setEnd(endContainer, mark.endOffset);
+  return range;
 }
 
 
@@ -164,17 +195,7 @@ export function createContextMark(text: string): Mark {
   return mark;
 }
 
-/**
- * Creates the mark element to highlight text
- *
- * @param {Range} [range]
- * @param {Mark} [mark]
- * @returns
- */
-function createMarkElement(range?: Range, mark?: Mark) {
-  const markElement = recreateRange(mark);
-  return markElement;
-}
+
 
 /**
  * Creates the mark in the DOM. Afterwards it listenes for a deletion event to remove it.
@@ -182,13 +203,14 @@ function createMarkElement(range?: Range, mark?: Mark) {
  * @param {HTMLElement} markElement
  * @param {Mark} mark
  */
-function createMyMarkerComponent(mark: Mark) {
+function createMyMarkerComponent(mark: Mark, markElement?: HTMLElement) {
   const myMarkElement = document.createElement('my-marker') as MyMarkerElement;
   myMarkElement.mark = mark;
   myMarkElement.setAttribute('markId', mark.id);
 
-  let markElement = document.evaluate(`.//span[@markid='${mark.id}']`, document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0) as HTMLElement;
-  console.log(markElement);
+  if (!markElement) {
+    markElement = document.evaluate(`.//span[@markid='${mark.id}']`, document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0) as HTMLElement;
+  }
 
   markElement.appendChild(myMarkElement);
 
@@ -199,13 +221,17 @@ function createMyMarkerComponent(mark: Mark) {
     if (lastAction === 'REMOVE_MARK') {
       if (!store.getState().marks.find(e => e.id === mark.id)) {
         myMarkElement.remove();
-        deleteMarkFromDom(mark);
+        if(mark.rangyObject) {
+          deleteMarksFromDom(mark);
+        } else {
+          deleteMarkFromDom(markElement);
+        }
       }
     }
   });
 }
 
-export function deleteMarkFromDom(mark: Mark) {
+export function deleteMarksFromDom(mark: Mark) {
   try {
 
     let spanHighlights = document.evaluate(`.//span[@markid='${mark.id}']`, document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
@@ -225,134 +251,18 @@ export function deleteMarkFromDom(mark: Mark) {
   }
 }
 
-function recreateRange(mark: Mark) {
+export function deleteMarkFromDom(markElement: HTMLElement) {
   try {
-    const startContainer = findStartEndContainer(document.body, mark, true);
-    const endContainer = findStartEndContainer(document.body, mark, false);
-    const range = document.createRange();
-    range.setStart(startContainer, mark.startOffset);
-    range.setEnd(endContainer, mark.endOffset);
-    let markElement;
-    let firstMarkElement;
-    const commonAncestorContainer = range.commonAncestorContainer;
-    let markedText = '';
-
-    if (startContainer !== endContainer) {
-      // Recreate container in between
-      let followingSiblings = document.evaluate('.//parent::*/following-sibling::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-      let precedingSiblings = document.evaluate('.//parent::*/preceding-sibling::*//text()', endContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
-      for (let i = 0; i < followingSiblings.snapshotLength; i++) {
-        let node = followingSiblings.snapshotItem(i);
-        if (node.textContent) {
-          let nodeIsInPrecedingSiblings = isAlsoInPrecedingSiblings(precedingSiblings, endContainer, node);
-          if (nodeIsInPrecedingSiblings && markedText.length < mark.text.length) {
-            markedText += highlightContainerInBetween(node, mark);
-          }
-        }
-      }
-    }
-
-
-    // Recreate the first container
-    let firstContainerNodes = document.evaluate('.//parent::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    let tmp = '';
-    for (let i = 0; i < firstContainerNodes.snapshotLength; i++) {
-      let node = firstContainerNodes.snapshotItem(i);
-      markedText += node.textContent;
-
-      if (node.textContent.length >= mark.startOffset && tmp.length < mark.startOffset && markedText.length < mark.text.length) {
-        const range = document.createRange();
-        range.setStart(node, mark.startOffset);
-
-        if (startContainer === endContainer) {
-          range.setEnd(node, mark.endOffset);
-        } else {
-          range.setEnd(node, node.textContent.length);
-        }
-        let startMarkElement = document.createElement('mark');
-        startMarkElement.setAttribute('markId', mark ? mark.id : '');
-        startMarkElement.appendChild(range.extractContents());
-        range.insertNode(startMarkElement);
-      }
-
-      if (node.textContent && tmp.length >= mark.startOffset && markedText.length < mark.text.length) {
-        let newMarkElement = document.createElement('mark');
-        newMarkElement.setAttribute('markId', mark ? mark.id : '');
-        node.parentNode.insertBefore(newMarkElement, node);
-        newMarkElement.appendChild(node);
-      }
-      tmp += node.textContent;
-    }
-
-    // Recreate the last container
-    let endContainerNodes = document.evaluate('.//parent::*//text()', endContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    tmp = '';
-    let finished = false;
-    for (let i = 0; i < endContainerNodes.snapshotLength; i++) {
-      let node = endContainerNodes.snapshotItem(i);
-      markedText += node.textContent;
-      if ((mark.text.length - markedText.length) < node.textContent.length) {
-        // finished = true;
-        // let endMarkElement = document.createElement('mark');
-        // const range = document.createRange();
-        // range.setStart(node, 0);
-        // range.setEnd(node, mark.endOffset);
-        // endMarkElement.setAttribute('markId', mark ? mark.id : '');
-        // endMarkElement.appendChild(range.extractContents());
-        // range.insertNode(endMarkElement);
-
-      }
-      if (mark.text.length > markedText.length && !finished) {
-        // let newMarkElement = document.createElement('mark');
-        // newMarkElement.setAttribute('markId', mark ? mark.id : '');
-        // node.parentNode.insertBefore(newMarkElement, node);
-        // newMarkElement.appendChild(node);
-      }
-      tmp += node.textContent;
-    }
-
-    return firstMarkElement;
-
+    // Unwraps the mark element
+    const parent = markElement.parentNode;
+    // move all children out of the element
+    while (markElement.firstChild) parent.insertBefore(markElement.firstChild, markElement);
+    // remove the empty element
+    parent.removeChild(markElement);
   } catch (error) {
-    console.log(error);
+    //
   }
 }
-
-function isAlsoInPrecedingSiblings(precedingSiblings, endContainer, node: Node) {
-
-  for (let i = 0; i < precedingSiblings.snapshotLength; i++) {
-    let tmp = precedingSiblings.snapshotItem(i);
-    if (node.textContent === tmp.textContent) return true;
-  }
-  return false;
-}
-
-function highlightContainerInBetween(startContainer, mark: Mark) {
-  let tmp = '';
-  // Recreate the first container
-  let firstContainerNodes = document.evaluate('.//parent::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-  for (let i = 0; i < firstContainerNodes.snapshotLength; i++) {
-    let node = firstContainerNodes.snapshotItem(i);
-    tmp += node.textContent;
-    let newMarkElement = document.createElement('mark');
-    newMarkElement.setAttribute('markId', mark ? mark.id : '');
-    node.parentNode.insertBefore(newMarkElement, node);
-    newMarkElement.appendChild(node);
-  }
-  return tmp;
-
-}
-
-function getAllRootNodes(childNode: ChildNode) {
-  let children = [];
-  for (let child of childNode.childNodes) {
-    children = [...children, child];
-  }
-  return children;
-}
-
-
 
 /**
  * Returns the StartContainer or EndContainer to recreate the range of the given mark

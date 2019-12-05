@@ -45,7 +45,6 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     this.subDirectories = this.directories.filter(directory => this.selectedDirectory && directory._parentDirectory === this.selectedDirectory._id);
     this.searchFilter = store.getState().searchValue;
     this.selectedDirectory = store.getState().activeDirectory;
-    console.log("Selected directory:" + this.selectedDirectory);
     this.dragMode = store.getState().dragMode;
   }
 

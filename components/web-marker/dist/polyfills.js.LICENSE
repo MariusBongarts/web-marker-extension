@@ -50,6 +50,8 @@
 
 /* 2 */
 
+/* 3 */
+
 /***/
 
 // This works in non-strict mode
@@ -64,8 +66,6 @@
 
 // easier to handle this case. if(!global) { ...}
 
-/* 3 */
-
 /* 4 */
 
 /* 5 */
@@ -78,9 +78,11 @@
 
 /* 9 */
 
+/* 10 */
+
 /* harmony import */
 
-/* 10 */
+/* 11 */
 
 /**
 @license @nocompile
@@ -92,7 +94,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-/* 11 */
+/* 12 */
 
 /* WEBPACK VAR INJECTION */
 
@@ -171,7 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 //# sourceMappingURL=webcomponents-bundle.js.map
 
-/* 12 */
+/* 13 */
 
 // DOM APIs, for completeness
 
@@ -185,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // `setimmediate` library.
 
-/* 13 */
+/* 14 */
 
 // Spec says greater than zero
 
@@ -219,7 +221,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // "too much recursion" error.
 
-/* 14 */
+/* 15 */
 
 // shim for using process in browser
 
