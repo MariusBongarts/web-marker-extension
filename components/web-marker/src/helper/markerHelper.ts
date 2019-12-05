@@ -12,6 +12,7 @@ export function highlightText(range?: Range, mark?: Mark) {
     createMyMarkerComponent(markElement, mark);
 
   } catch (error) {
+    console.log(error);
     //
   }
 }
@@ -100,11 +101,7 @@ export function createContextMark(text: string): Mark {
  * @returns
  */
 function createMarkElement(range?: Range, mark?: Mark) {
-  mark ? range = recreateRange(mark) : range = range;
-  const markElement = document.createElement('mark');
-  markElement.setAttribute('markId', mark ? mark.id : '');
-  markElement.appendChild(range.extractContents());
-  range.insertNode(markElement);
+  const markElement = recreateRange(mark);
   return markElement;
 }
 
@@ -145,14 +142,133 @@ export function deleteMarkFromDom(markElement: HTMLElement) {
   }
 }
 
-function recreateRange(mark) {
-  const startContainer = findStartEndContainer(document.body, mark, true);
-  const endContainer = findStartEndContainer(document.body, mark, false);
-  const range = document.createRange();
-  range.setStart(startContainer, mark.startOffset);
-  range.setEnd(endContainer, mark.endOffset);
-  return range;
+function recreateRange(mark: Mark) {
+  try {
+    const startContainer = findStartEndContainer(document.body, mark, true);
+    const endContainer = findStartEndContainer(document.body, mark, false);
+    const range = document.createRange();
+    range.setStart(startContainer, mark.startOffset);
+    range.setEnd(endContainer, mark.endOffset);
+    let markElement;
+    let firstMarkElement;
+    const commonAncestorContainer = range.commonAncestorContainer;
+
+    if (startContainer === endContainer) {
+      markElement = document.createElement('mark');
+      firstMarkElement = markElement;
+      range.setStart(startContainer, mark.startOffset);
+      range.setEnd(startContainer, mark.endOffset);
+      markElement.setAttribute('markId', mark ? mark.id : '');
+      markElement.appendChild(range.extractContents());
+      range.insertNode(markElement);
+    }
+
+    if (startContainer !== endContainer) {
+      // Recreate the first container
+      range.setStart(startContainer, mark.startOffset);
+      range.setEnd(startContainer, startContainer.textContent.length);
+      const startMarkElement = document.createElement('mark');
+      firstMarkElement = startMarkElement;
+      startMarkElement.setAttribute('markId', mark ? mark.id : '');
+      startMarkElement.appendChild(range.extractContents());
+      range.insertNode(startMarkElement);
+
+
+      range.setStart(endContainer, 0);
+      range.setEnd(endContainer, mark.endOffset);
+      const endMarkElement = document.createElement('mark');
+      endMarkElement.setAttribute('markId', mark ? mark.id : '');
+      endMarkElement.appendChild(range.extractContents());
+      range.insertNode(endMarkElement);
+
+
+      let siblings = [];
+      let nextSibling = startMarkElement.nextSibling;
+      while (nextSibling) {
+        siblings.push(nextSibling);
+        nextSibling = nextSibling.nextSibling;
+      }
+
+      for (let sibling of siblings) {
+        let siblingText = sibling.textContent.trim().split(' ').join('');
+        let markText = mark.text.trim().split(' ').join('');
+        if (markText.includes(siblingText)) {
+          highlightContainerInBetween(sibling, mark);
+        }
+      }
+
+
+
+      // while (nextSibling && nextSibling.textContent && nextSibling !== endMarkElement) {
+
+      //   // TODO: Recreate the container in between
+      //   highlightContainerInBetween(nextSibling, mark);
+
+      //   nextSibling = nextSibling.nextSibling as HTMLElement;
+      // }
+
+
+    }
+    return firstMarkElement;
+
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+function highlightContainerInBetween(element, mark: Mark) {
+  let newMarkElement;
+
+  try {
+    let markElement;
+
+    if (element.childNodes.length === 0) {
+      newMarkElement = document.createElement('mark');
+      newMarkElement.setAttribute('markId', mark ? mark.id : '');
+      element.parentNode.insertBefore(newMarkElement, element);
+      newMarkElement.appendChild(element);
+    }
+
+    if (element.childNodes.length === 1) {
+      for (let child of element.childNodes) {
+        if (mark.text.includes(child.textContent)) {
+          newMarkElement = document.createElement('mark');
+          newMarkElement.setAttribute('markId', mark ? mark.id : '');
+          child.parentNode.insertBefore(newMarkElement, child);
+          newMarkElement.appendChild(child);
+        }
+      }
+    }
+
+    if (element.childNodes.length > 1) {
+      let tmp = element;
+
+      while (tmp.childNodes.length > 1) {
+        for (let child of tmp.childNodes) {
+          newMarkElement = document.createElement('mark');
+          newMarkElement.setAttribute('markId', mark ? mark.id : '');
+          child.parentNode.insertBefore(newMarkElement, child);
+          newMarkElement.appendChild(child);
+          tmp = child;
+        }
+      }
+
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function getAllRootNodes(childNode: ChildNode) {
+  let children = [];
+  for (let child of childNode.childNodes) {
+    children = [...children, child];
+  }
+  return children;
+}
+
+
 
 /**
  * Returns the StartContainer or EndContainer to recreate the range of the given mark
