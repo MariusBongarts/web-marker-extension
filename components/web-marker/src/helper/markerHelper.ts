@@ -3,13 +3,12 @@ import { MyMarkerElement } from './../components/my-marker/my-marker.component';
 import { Mark } from './../models/mark';
 import uuidv4 from 'uuid/v4';
 import { getTitleForBookmark } from './bookmarkHelper';
-import rangy from 'rangy-updated';
 import 'rangy-updated/lib/rangy-classapplier';
 import 'rangy-updated/lib/rangy-highlighter';
 import 'rangy-updated/lib/rangy-textrange';
 import 'rangy-updated/lib/rangy-serializer';
 import 'rangy-updated/lib/rangy-selectionsaverestore';
-
+import rangy from 'rangy-updated';
 
 export function highlightText(range?: Range, mark?: Mark) {
 
@@ -26,17 +25,16 @@ export function highlightText(range?: Range, mark?: Mark) {
 }
 
 function markWithRangy(mark: Mark) {
+  const selectionSerialized = mark.rangyObject;
 
-  const rangyObject = JSON.parse(mark.rangyObject);
-  console.log(rangyObject);
-
-  let highlighter;
-  highlighter = rangy.createHighlighter();
+  const highlighter = rangy.createHighlighter();
+  rangy.saveSelection();
   const applier = rangy.createClassApplier('highlight')
   highlighter.addClassApplier(applier);
-  // rangy.deserializeSelection(rangyObject);
+  highlighter.deserialize(selectionSerialized);
   highlighter.highlightSelection('highlight');
   rangy.getSelection().removeAllRanges();
+
 }
 
 
@@ -48,44 +46,58 @@ function markWithRangy(mark: Mark) {
  * @returns {Mark}
  */
 export function createMark(text?: string): Mark {
-  var selObj = rangy.getSelection();
-  var savedSel = rangy.serializeSelection(selObj, true);
 
-  rangy.saveSelection();
+    const selection = window.getSelection();
 
-  const selection = window.getSelection();
+    // If selection is made by my-menu popup
+    // if (selection.toString()) {
+      const range = selection.getRangeAt(0);
+      const mark: Mark = {
+        id: uuidv4(),
+        url: location.href,
+        origin: location.href,
+        tags: [],
+        text: selection.toString(),
+        title: getTitleForBookmark(),
+        anchorOffset: selection.anchorOffset,
+        createdAt: new Date().getTime(),
+        nodeData: range.startContainer.nodeValue,
+        completeText: range.startContainer.parentElement.innerText,
+        nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
+        startContainerText: range.startContainer.textContent,
+        endContainerText: range.endContainer.textContent,
+        startOffset: range.startOffset,
+        endOffset: range.endOffset,
+        scrollY: window.scrollY,
+        rangyObject: ''
+      };
 
-  // If selection is made by my-menu popup
-  if (selection.toString()) {
-    const range = selection.getRangeAt(0);
-    const mark: Mark = {
-      id: uuidv4(),
-      url: location.href,
-      origin: location.href,
-      tags: [],
-      text: selection.toString(),
-      title: getTitleForBookmark(),
-      anchorOffset: selection.anchorOffset,
-      createdAt: new Date().getTime(),
-      nodeData: range.startContainer.nodeValue,
-      completeText: range.startContainer.parentElement.innerText,
-      nodeTagName: range.startContainer.parentElement.tagName.toLowerCase(),
-      startContainerText: range.startContainer.textContent,
-      endContainerText: range.endContainer.textContent,
-      startOffset: range.startOffset,
-      endOffset: range.endOffset,
-      scrollY: window.scrollY,
-      rangyObject: JSON.stringify(savedSel)
-    };
 
-    localStorage.setItem('mark', JSON.stringify(mark));
-    return mark;
+      let selectionSerialized;
+      var selObj = rangy.getSelection();
+      var savedSel = rangy.serializeSelection(selObj, true);
+
+      let highlighter;
+
+      highlighter = rangy.createHighlighter();
+      rangy.saveSelection();
+      const applier = rangy.createClassApplier('highlight')
+      highlighter.addClassApplier(applier);
+      highlighter.highlightSelection('highlight');
+      selectionSerialized = highlighter.serialize();
+      highlighter.deserialize(selectionSerialized);
+      rangy.getSelection().removeAllRanges();
+
+
+      mark.rangyObject = selectionSerialized;
+
+      localStorage.setItem('mark', JSON.stringify(mark));
+      return mark;
   }
   // Mark is created by context menu
-  else if (text) {
-    return createContextMark(text)
-  }
-}
+  // else if (text) {
+  //   return createContextMark(text)
+  // }
 
 
 /**
