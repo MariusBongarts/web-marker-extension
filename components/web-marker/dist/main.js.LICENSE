@@ -1697,15 +1697,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * @returns
  */
 
-/**
- * Returns the StartContainer or EndContainer to recreate the range of the given mark
- *
- * @export
- * @param {HTMLElement} container
- * @param {Mark} mark
- * @param {boolean} start true = searchs for StartContainer; false = searchs for EndContainer
- * @returns {HTMLElement}
- */
+// Recreate container in between
+
+// Recreate the first container
+
+// Recreate the last container
 
 /**
  * Creates the mark in the DOM. Afterwards it listenes for a deletion event to remove it.
@@ -1720,14 +1716,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 // CONCATENATED MODULE: ./src/components/app.component.ts
-
-// Listen for state changes and delete mark from DOM if it got removed
-
-// Unwraps the mark element
-
-// move all children out of the element
-
-// remove the empty element
 
 /**
  * If @param text is given the mark is created by the context menu
@@ -1747,6 +1735,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * @export
  * @param {string} text
  * @returns {Mark}
+ */
+
+/**
+ * Returns the StartContainer or EndContainer to recreate the range of the given mark
+ *
+ * @export
+ * @param {HTMLElement} container
+ * @param {Mark} mark
+ * @param {boolean} start true = searchs for StartContainer; false = searchs for EndContainer
+ * @returns {HTMLElement}
  */
 
 /**
@@ -2297,6 +2295,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
 
 // Only set id when id does not equal the directoryId
+
+// If directory element is dragged one directory level back
 
 // CONCATENATED MODULE: ./src/components/pop-up/add-directory-element/add-directory-element.component.ts
 

@@ -3,18 +3,40 @@ import { MyMarkerElement } from './../components/my-marker/my-marker.component';
 import { Mark } from './../models/mark';
 import uuidv4 from 'uuid/v4';
 import { getTitleForBookmark } from './bookmarkHelper';
+import rangy from 'rangy-updated';
+import 'rangy-updated/lib/rangy-classapplier';
+import 'rangy-updated/lib/rangy-highlighter';
+import 'rangy-updated/lib/rangy-textrange';
+import 'rangy-updated/lib/rangy-serializer';
+import 'rangy-updated/lib/rangy-selectionsaverestore';
+
 
 export function highlightText(range?: Range, mark?: Mark) {
 
   try {
-    const markElement = createMarkElement(range, mark);
+    //const markElement = markWithRangy(mark);
     addStyles();
-    createMyMarkerComponent(markElement, mark);
+    markWithRangy(mark);
+    //createMyMarkerComponent(markElement, mark);
 
   } catch (error) {
     console.log(error);
     //
   }
+}
+
+function markWithRangy(mark: Mark) {
+
+  const rangyObject = JSON.parse(mark.rangyObject);
+  console.log(rangyObject);
+
+  let highlighter;
+  highlighter = rangy.createHighlighter();
+  const applier = rangy.createClassApplier('highlight')
+  highlighter.addClassApplier(applier);
+  // rangy.deserializeSelection(rangyObject);
+  highlighter.highlightSelection('highlight');
+  rangy.getSelection().removeAllRanges();
 }
 
 
@@ -26,6 +48,11 @@ export function highlightText(range?: Range, mark?: Mark) {
  * @returns {Mark}
  */
 export function createMark(text?: string): Mark {
+  var selObj = rangy.getSelection();
+  var savedSel = rangy.serializeSelection(selObj, true);
+
+  rangy.saveSelection();
+
   const selection = window.getSelection();
 
   // If selection is made by my-menu popup
@@ -47,8 +74,11 @@ export function createMark(text?: string): Mark {
       endContainerText: range.endContainer.textContent,
       startOffset: range.startOffset,
       endOffset: range.endOffset,
-      scrollY: window.scrollY
+      scrollY: window.scrollY,
+      rangyObject: JSON.stringify(savedSel)
     };
+
+    localStorage.setItem('mark', JSON.stringify(mark));
     return mark;
   }
   // Mark is created by context menu
@@ -152,63 +182,83 @@ function recreateRange(mark: Mark) {
     let markElement;
     let firstMarkElement;
     const commonAncestorContainer = range.commonAncestorContainer;
-
-    if (startContainer === endContainer) {
-      markElement = document.createElement('mark');
-      firstMarkElement = markElement;
-      range.setStart(startContainer, mark.startOffset);
-      range.setEnd(startContainer, mark.endOffset);
-      markElement.setAttribute('markId', mark ? mark.id : '');
-      markElement.appendChild(range.extractContents());
-      range.insertNode(markElement);
-    }
+    let markedText = '';
 
     if (startContainer !== endContainer) {
-      // Recreate the first container
-      range.setStart(startContainer, mark.startOffset);
-      range.setEnd(startContainer, startContainer.textContent.length);
-      const startMarkElement = document.createElement('mark');
-      firstMarkElement = startMarkElement;
-      startMarkElement.setAttribute('markId', mark ? mark.id : '');
-      startMarkElement.appendChild(range.extractContents());
-      range.insertNode(startMarkElement);
+      // Recreate container in between
+      let followingSiblings = document.evaluate('.//parent::*/following-sibling::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+      let precedingSiblings = document.evaluate('.//parent::*/preceding-sibling::*//text()', endContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-
-      range.setStart(endContainer, 0);
-      range.setEnd(endContainer, mark.endOffset);
-      const endMarkElement = document.createElement('mark');
-      endMarkElement.setAttribute('markId', mark ? mark.id : '');
-      endMarkElement.appendChild(range.extractContents());
-      range.insertNode(endMarkElement);
-
-
-      let siblings = [];
-      let nextSibling = startMarkElement.nextSibling;
-      while (nextSibling) {
-        siblings.push(nextSibling);
-        nextSibling = nextSibling.nextSibling;
-      }
-
-      for (let sibling of siblings) {
-        let siblingText = sibling.textContent.trim().split(' ').join('');
-        let markText = mark.text.trim().split(' ').join('');
-        if (markText.includes(siblingText)) {
-          highlightContainerInBetween(sibling, mark);
+      for (let i = 0; i < followingSiblings.snapshotLength; i++) {
+        let node = followingSiblings.snapshotItem(i);
+        if (node.textContent) {
+          let nodeIsInPrecedingSiblings = isAlsoInPrecedingSiblings(precedingSiblings, endContainer, node);
+          if (nodeIsInPrecedingSiblings && markedText.length < mark.text.length) {
+            markedText += highlightContainerInBetween(node, mark);
+          }
         }
       }
-
-
-
-      // while (nextSibling && nextSibling.textContent && nextSibling !== endMarkElement) {
-
-      //   // TODO: Recreate the container in between
-      //   highlightContainerInBetween(nextSibling, mark);
-
-      //   nextSibling = nextSibling.nextSibling as HTMLElement;
-      // }
-
-
     }
+
+
+    // Recreate the first container
+    let firstContainerNodes = document.evaluate('.//parent::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    let tmp = '';
+    for (let i = 0; i < firstContainerNodes.snapshotLength; i++) {
+      let node = firstContainerNodes.snapshotItem(i);
+      markedText += node.textContent;
+
+      if (node.textContent.length >= mark.startOffset && tmp.length < mark.startOffset && markedText.length < mark.text.length) {
+        const range = document.createRange();
+        range.setStart(node, mark.startOffset);
+
+        if (startContainer === endContainer) {
+          range.setEnd(node, mark.endOffset);
+        } else {
+          range.setEnd(node, node.textContent.length);
+        }
+        let startMarkElement = document.createElement('mark');
+        startMarkElement.setAttribute('markId', mark ? mark.id : '');
+        startMarkElement.appendChild(range.extractContents());
+        range.insertNode(startMarkElement);
+      }
+
+      if (node.textContent && tmp.length >= mark.startOffset && markedText.length < mark.text.length) {
+        let newMarkElement = document.createElement('mark');
+        newMarkElement.setAttribute('markId', mark ? mark.id : '');
+        node.parentNode.insertBefore(newMarkElement, node);
+        newMarkElement.appendChild(node);
+      }
+      tmp += node.textContent;
+    }
+
+    // Recreate the last container
+    let endContainerNodes = document.evaluate('.//parent::*//text()', endContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    tmp = '';
+    let finished = false;
+    for (let i = 0; i < endContainerNodes.snapshotLength; i++) {
+      let node = endContainerNodes.snapshotItem(i);
+      markedText += node.textContent;
+      if ((mark.text.length - markedText.length) < node.textContent.length) {
+        // finished = true;
+        // let endMarkElement = document.createElement('mark');
+        // const range = document.createRange();
+        // range.setStart(node, 0);
+        // range.setEnd(node, mark.endOffset);
+        // endMarkElement.setAttribute('markId', mark ? mark.id : '');
+        // endMarkElement.appendChild(range.extractContents());
+        // range.insertNode(endMarkElement);
+
+      }
+      if (mark.text.length > markedText.length && !finished) {
+        // let newMarkElement = document.createElement('mark');
+        // newMarkElement.setAttribute('markId', mark ? mark.id : '');
+        // node.parentNode.insertBefore(newMarkElement, node);
+        // newMarkElement.appendChild(node);
+      }
+      tmp += node.textContent;
+    }
+
     return firstMarkElement;
 
   } catch (error) {
@@ -216,48 +266,29 @@ function recreateRange(mark: Mark) {
   }
 }
 
-function highlightContainerInBetween(element, mark: Mark) {
-  let newMarkElement;
+function isAlsoInPrecedingSiblings(precedingSiblings, endContainer, node: Node) {
 
-  try {
-    let markElement;
-
-    if (element.childNodes.length === 0) {
-      newMarkElement = document.createElement('mark');
-      newMarkElement.setAttribute('markId', mark ? mark.id : '');
-      element.parentNode.insertBefore(newMarkElement, element);
-      newMarkElement.appendChild(element);
-    }
-
-    if (element.childNodes.length === 1) {
-      for (let child of element.childNodes) {
-        if (mark.text.includes(child.textContent)) {
-          newMarkElement = document.createElement('mark');
-          newMarkElement.setAttribute('markId', mark ? mark.id : '');
-          child.parentNode.insertBefore(newMarkElement, child);
-          newMarkElement.appendChild(child);
-        }
-      }
-    }
-
-    if (element.childNodes.length > 1) {
-      let tmp = element;
-
-      while (tmp.childNodes.length > 1) {
-        for (let child of tmp.childNodes) {
-          newMarkElement = document.createElement('mark');
-          newMarkElement.setAttribute('markId', mark ? mark.id : '');
-          child.parentNode.insertBefore(newMarkElement, child);
-          newMarkElement.appendChild(child);
-          tmp = child;
-        }
-      }
-
-    }
-
-  } catch (error) {
-    console.log(error);
+  for (let i = 0; i < precedingSiblings.snapshotLength; i++) {
+    let tmp = precedingSiblings.snapshotItem(i);
+    if (node.textContent === tmp.textContent) return true;
   }
+  return false;
+}
+
+function highlightContainerInBetween(startContainer, mark: Mark) {
+  let tmp = '';
+  // Recreate the first container
+  let firstContainerNodes = document.evaluate('.//parent::*//text()', startContainer, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  for (let i = 0; i < firstContainerNodes.snapshotLength; i++) {
+    let node = firstContainerNodes.snapshotItem(i);
+    tmp += node.textContent;
+    let newMarkElement = document.createElement('mark');
+    newMarkElement.setAttribute('markId', mark ? mark.id : '');
+    node.parentNode.insertBefore(newMarkElement, node);
+    newMarkElement.appendChild(node);
+  }
+  return tmp;
+
 }
 
 function getAllRootNodes(childNode: ChildNode) {
@@ -324,7 +355,7 @@ export function textNodesUnder(node: Node) {
 function addStyles() {
   const style = document.createElement('style');
   style.innerHTML = `
-      mark {
+      mark, span.highlight {
         border-radius: 5px;
         padding: 2px 0px;
         background-color: #92ffaa;
