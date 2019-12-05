@@ -319,8 +319,8 @@ function addStyles() {
   const style = document.createElement('style');
   style.innerHTML = `
       mark, span.highlight {
-        border-radius: 5px;
-        padding: 2px 2px;
+        border-radius: 3px;
+        padding: 2px 0px;
         background-color: #92ffaa;
         width: 100%;
       }
