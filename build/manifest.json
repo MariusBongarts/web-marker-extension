@@ -1,6 +1,7 @@
 {
-  "name": "WebHighlighter",
-  "version": "1.2.0",
+  "name": Web-Highlights - Web & Text Highlighter",
+  "short_name": "Web Highlighter"
+  "version": "1.3.0",
   "manifest_version": 2,
   "content_scripts": [
     {
