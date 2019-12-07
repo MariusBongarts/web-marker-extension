@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment.dev';
 import uuidv4 from 'uuid/v4';
 import { connect } from 'pwa-helpers';
 import { store } from './../store/store';

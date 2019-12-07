@@ -3017,6 +3017,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @memberof MyMarkerElement
      */
 
+// CONCATENATED MODULE: ./src/environments/environment.prod.ts
+
 // CONCATENATED MODULE: ./src/helper/router.ts
 
 // CONCATENATED MODULE: ./src/components/my-menu/my-menu.component.ts

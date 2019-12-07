@@ -7,19 +7,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const marker = document.createElement("web-marker");
-document.body.appendChild(marker);
-const popup = document.createElement("pop-up");
-document.body.appendChild(popup);
-// Listens for messages from popup in browser action
-chrome.runtime.onMessage.addListener((request) => __awaiter(void 0, void 0, void 0, function* () {
-    if (request.id === 'loggedIn') {
-        yield popup.loadUserData();
-    }
-    ;
-    if (request.id === 'loggedOut') {
-        yield popup.logout();
-    }
-    ;
-}));
+import { environment } from './components/web-marker/src/environments/environment.dev';
+// Don´t show extension on FRONTEND_URL
+if (!location.href.includes(environment.FRONTEND_URL)) {
+    const marker = document.createElement("web-marker");
+    document.body.appendChild(marker);
+    const popup = document.createElement("pop-up");
+    document.body.appendChild(popup);
+    // Listens for messages from popup in browser action
+    chrome.runtime.onMessage.addListener((request) => __awaiter(void 0, void 0, void 0, function* () {
+        if (request.id === 'loggedIn') {
+            yield popup.loadUserData();
+        }
+        ;
+        if (request.id === 'loggedOut') {
+            yield popup.logout();
+        }
+        ;
+    }));
+}
 //# sourceMappingURL=content.js.map
