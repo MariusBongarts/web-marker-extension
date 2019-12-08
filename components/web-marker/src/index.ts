@@ -5,6 +5,7 @@ import './components/my-menu/my-menu.component';
 import './components/bronco-chip/app.component.ts';
 import './components/bronco-chip-list/app.component.ts';
 import './components/bronco-chip-list/auto-complete/auto-complete.component';
+import './components/bronco-chip-list/chip-list-item/chip-list-item.component';
 import './components/pop-up/app.component.ts';
 import './components/pop-up/tab-bar/tab-bar.component.ts';
 import './components/pop-up/action-toolbar/action-toolbar.component.ts';

@@ -7,6 +7,7 @@ import { css, customElement, html, LitElement, property, unsafeCSS, query } from
 import { classMap } from 'lit-html/directives/class-map';
 import './../bronco-chip/app.component';
 import { updateMark, navigateToTab } from '../../store/actions';
+import { Tag } from '../../models/tag';
 
 const componentCSS = require('./app.component.scss');
 
@@ -36,6 +37,9 @@ export class BroncoChipList extends connect(store)(LitElement) {
    */
   @property()
   chips = [] as string[];
+
+  @property()
+  tags: Tag[];
 
 
   /**
@@ -93,6 +97,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
   inputValue = ''
 
   firstUpdated() {
+    this.tags = store.getState().tags;
     this.mark ? this.chips = this.mark.tags : '';
     document.addEventListener('click', () => this.markedToDelete = false);
     this.focused ? this.inputElement.focus() : '';
@@ -101,6 +106,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
 
   stateChanged(e: State) {
     if (this.mark && store.getState().lastAction === 'UPDATE_MARK') {
+      this.tags = store.getState().tags;
       this.mark = e.marks.find(e => e.id === this.mark.id);
       this.chips = this.mark && this.mark.tags ? this.mark.tags : [];
     }
@@ -112,6 +118,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
       if (e.target !== this && e.target['tagName'] !== 'MY-MARKER') {
         this.remove();
         document.body.onclick = undefined;
+        this.dispatchEvent(new CustomEvent('closed'));
       }
     }
   }
@@ -249,7 +256,8 @@ ${this.chips.map((chip, index) => html`
 <bronco-chip .deleteMode="${this.markedToDelete && index === this.chips.length - 1}"
 @deleted=${async () => await this.filterChips(chip)}
 @click=${() => navigateToTab('tags-view', chip)}
->${chip}</bronco-chip>
+>
+${chip}</bronco-chip>
 `)}
     <input
     placeholder=${'+'}
@@ -259,7 +267,6 @@ ${this.chips.map((chip, index) => html`
   </div>
   ${this.inputElement && this.inputElement.value ? html`
   <auto-complete
-  .items=${this.getAllTags().filter(value => !this.chips.includes(value))}
   .filter=${this.inputElement.value}
   @selected=${(e: CustomEvent) => this.autoCompleteEvent(e)}
   @clickSelected=${(e: CustomEvent) => this.autoCompleteEvent(e, true)}
