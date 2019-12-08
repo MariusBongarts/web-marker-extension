@@ -4,7 +4,7 @@ import { JwtService } from './jwt.service';
 import { HttpClient } from './http-client';
 import { environment } from '../environments/environment.dev';
 import { v4 as uuid } from 'uuid';
-import { initDirectories, addDirectory, removeDirectory, updateDirectory } from '../store/actions';
+import { initDirectories, addDirectory, removeDirectory, updateDirectory, addTag } from '../store/actions';
 
 
 export class DirectoryService {
@@ -27,8 +27,13 @@ export class DirectoryService {
     const newDirectory = { ...directory, id: uuidv4() } as Directory;
     const response = await this.httpClient.post(this.BASE_URL, newDirectory);
     const createdDirectory: Directory = (await response.json() as Directory);
+
     // Update redux
     addDirectory(createdDirectory);
+
+    // Create tag for directory
+    addTag(createdDirectory.name, createdDirectory._id);
+
     return createdDirectory;
   }
 

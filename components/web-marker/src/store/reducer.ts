@@ -113,7 +113,7 @@ export const reducer = (state = INITIAL_STATE, action: ReduxAction) => {
       };
 
     case 'ADD_TAG':
-      const tag: Tag = { name: action.tagName };
+      const tag: Tag = { name: action.tagName, _directory: action.directoryId };
       return {
         ...state,
         tags: [...state.tags, tag],

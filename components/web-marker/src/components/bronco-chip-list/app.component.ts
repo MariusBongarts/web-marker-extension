@@ -135,13 +135,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
   }
 
   getAllTags() {
-    let tags = [];
-    store.getState().marks.forEach(mark => {
-      tags = [...tags, ...mark.tags];
-    });
-    store.getState().bookmarks.forEach(bookmark => {
-      tags = [...tags, ...bookmark.tags];
-    });
+    let tags = store.getState().tags.map(tag => tag.name);
     tags = [...new Set(tags)];
     tags.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
     return tags;
@@ -177,6 +171,7 @@ export class BroncoChipList extends connect(store)(LitElement) {
       const tagValue = this.autoCompleteValue ? this.autoCompleteValue : target.value;
       this.addChip(tagValue);
       this.markedToSubmit = false;
+      this.autoCompleteValue = '';
     }
 
     if (e.key === 'Backspace' && this.chips.length && !target.value.length) {

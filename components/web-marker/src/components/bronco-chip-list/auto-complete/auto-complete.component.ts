@@ -31,6 +31,10 @@ export class HeaderToggleComponent extends LitElement {
         filteredItems = this.items.filter(item => item.toLowerCase().includes(this.filter.toLowerCase()));
       }
 
+      if (e.keyCode === 13) {
+        this.selectedIndex = -1;
+      }
+
 
       // Key arrow down
       if (e.keyCode === 40 && ((this.selectedIndex + 1) < this.maxSuggestions)) {

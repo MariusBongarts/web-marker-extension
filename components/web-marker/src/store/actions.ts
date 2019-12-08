@@ -52,10 +52,11 @@ export function initTags(tags: Tag[]) {
   store.dispatch(reduxAction);
 }
 
-export function addTag(tagName: string) {
+export function addTag(tagName: string, directoryId?: string) {
   const reduxAction: ReduxAction = {
     type: 'ADD_TAG',
-    tagName: tagName
+    tagName: tagName,
+    directoryId: directoryId || ''
   }
   store.dispatch(reduxAction);
 }

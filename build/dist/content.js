@@ -7,9 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { environment } from './components/web-marker/src/environments/environment.dev';
+const FRONTEND_URL = 'https://web-highlights.com';
 // Don´t show extension on FRONTEND_URL
-if (!location.href.startsWith(environment.FRONTEND_URL)) {
+if (!location.href.includes(FRONTEND_URL)) {
     const marker = document.createElement("web-marker");
     document.body.appendChild(marker);
     const popup = document.createElement("pop-up");
