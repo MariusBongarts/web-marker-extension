@@ -72,9 +72,10 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     this.dragMode = store.getState().dragMode;
     this.marks = store.getState().marks;
     this.bookmarks = store.getState().bookmarks;
-    this.selectedTag = store.getState().activeTag;
+    this.selectedTag = store.getState().activeTag || '';
     this.getTags();
     this.selectedDirectory = store.getState().activeDirectory;
+    if (!this.selectedTag && this.selectedDirectory && this.selectedDirectory.name) this.selectedTag = this.selectedDirectory.name;
     this.selectedBookmark = undefined;
     this.loaded = true;
   }
@@ -212,17 +213,21 @@ ${!this.selectedTag ? html`
 
 <!-- If Tag is selected -->
 ` : html`
+
+<!-- Hide the selected chip when the current directory is the selected tag -->
+${this.selectedDirectory && this.selectedDirectory.name && this.selectedTag === this.selectedDirectory.name ? html`` : html`
 <div class="selectedChipContainer">
   <bronco-chip @click=${() => this.toggleTag(this.selectedTag)}
   draggable="true"
   @dragstart=${(e: DragEvent) => this.dragTag(e, this.selectedTag)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length +
-            this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
+              this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
       <span>${this.selectedTag}</span>
     </div>
   </bronco-chip>
 </div>
+`}
 
 
 <!-- Show related tags -->
@@ -232,7 +237,7 @@ ${!this.selectedTag ? html`
   draggable="true"
   @dragstart=${(e: DragEvent) => this.dragTag(e, tag.name)}
     .badgeValue=${this.marks.filter(mark => mark.tags.includes(tag)).length + this.bookmarks.filter(bookmark =>
-              bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
+                bookmark.tags.includes(tag)).length} .hideDeleteIcon=${true}>
     <div class="chipContainer">
       <span>${tag}</span>
     </div>
@@ -251,11 +256,11 @@ ${this.bookmarks.filter(bookmark => bookmark.tags.includes(this.selectedTag)).le
 ` : ''}
 <!-- Show bookmarks for selected tag -->
 ${this.bookmarks.filter(bookmark =>
-                bookmark.tags.includes(this.selectedTag)).map(bookmark => html`
+                  bookmark.tags.includes(this.selectedTag)).map(bookmark => html`
 <!-- Hide bookmark, when a bookmark got selected and it is not the selected one -->
 ${!this.selectedBookmark || this.selectedBookmark === bookmark ? html`
 <bookmark-element @click=${() => this.selectedBookmark && this.selectedBookmark === bookmark ? this.selectedBookmark =
-                      undefined : this.selectedBookmark = bookmark}
+                        undefined : this.selectedBookmark = bookmark}
   .bookmark=${bookmark}
   .isDropdown=${true}></bookmark-element>
 ` : ''}
@@ -273,8 +278,8 @@ ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).length ? html`
 ` : ''}
 <!-- Show marks for selected tag -->
 ${this.marks.filter(mark => mark.tags.includes(this.selectedTag)).map(mark =>
-                        html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-element>`
-                      )}
+                          html`<mark-element .mark=${mark} .headerInfo=${urlToOrigin(mark.url)}></mark-element>`
+                        )}
 
 </div>
 

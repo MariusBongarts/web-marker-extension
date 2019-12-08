@@ -23,7 +23,7 @@ export const reducer = (state = INITIAL_STATE, action) => {
         case 'INIT_TAGS':
             return Object.assign(Object.assign({}, state), { tags: action.tags, lastAction: action.type });
         case 'ADD_TAG':
-            const tag = { name: action.tagName };
+            const tag = { name: action.tagName, _directory: action.directoryId };
             return Object.assign(Object.assign({}, state), { tags: [...state.tags, tag], lastAction: action.type });
         case 'TOGGLE_TAG':
             return Object.assign(Object.assign({}, state), { activeTag: action.activeTag });

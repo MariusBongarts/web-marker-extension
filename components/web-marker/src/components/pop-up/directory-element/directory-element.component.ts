@@ -47,8 +47,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     this.handleDragEvents();
   }
 
-  async stateChanged() {
-    this.active = false;
+  async stateChanged(state) {
     if (this.directory) {
       this.getState();
     }

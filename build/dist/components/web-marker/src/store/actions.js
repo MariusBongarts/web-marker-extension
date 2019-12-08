@@ -47,10 +47,11 @@ export function initTags(tags) {
     };
     store.dispatch(reduxAction);
 }
-export function addTag(tagName) {
+export function addTag(tagName, directoryId) {
     const reduxAction = {
         type: 'ADD_TAG',
-        tagName: tagName
+        tagName: tagName,
+        directoryId: directoryId || ''
     };
     store.dispatch(reduxAction);
 }

@@ -1,6 +1,7 @@
 import { Tag } from './../../../models/tag';
 import { css, customElement, html, LitElement, property, unsafeCSS, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { store } from '../../../store/store';
 
 const componentCSS = require('./chip-list-item.component.scss');
 
@@ -27,6 +28,18 @@ export class ChipListItemComponent extends LitElement {
   async firstUpdated() {
   }
 
+
+  /**
+   * Check if the tag is a directory or tag
+   *
+   * @returns
+   * @memberof ChipListItemComponent
+   */
+  tagIsDirectory() {
+    return this.tag._directory &&
+    store.getState().directories.find(directory => directory._id === this.tag._directory).name === this.tag.name;
+  }
+
   render() {
     return html`
 
@@ -35,7 +48,7 @@ export class ChipListItemComponent extends LitElement {
         .deleteMode=${this.deleteMode}
         .hideDeleteIcon=${this.hideDeleteIcon}>
 
-        ${this.tag._directory ? html`
+        ${this.tagIsDirectory() ? html`
         <!-- Show directory icon -->
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
         ` : html`
