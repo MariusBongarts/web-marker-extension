@@ -75,7 +75,7 @@ export class TagsViewComponent extends connect(store)(LitElement) {
     this.selectedTag = store.getState().activeTag || '';
     this.getTags();
     this.selectedDirectory = store.getState().activeDirectory;
-    if (!this.selectedTag && this.selectedDirectory && this.selectedDirectory.name) this.selectedTag = this.selectedDirectory.name;
+    if (this.selectedTag && this.selectedDirectory && this.selectedDirectory.name) this.selectedTag = this.selectedDirectory.name;
     this.selectedBookmark = undefined;
     this.loaded = true;
   }

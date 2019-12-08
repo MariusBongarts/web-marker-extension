@@ -119,11 +119,15 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
       const droppedTag: Tag = store.getState().tags.find(tag => tag.name === tagName);
 
       // Only set id when id does not equal the directoryId
-      if (droppedTag._directory !== this.directory._id) {
+      if (!this.active && droppedTag._directory !== this.directory._id) {
         droppedTag._directory = this.directory._id;
-      } else {
-        // parentId === id => Maybe in previous folder?
       }
+
+      if (this.active) {
+        droppedTag._directory = this.directory._parentDirectory;
+      }
+
+
       await this.tagService.updateTag(droppedTag);
     }
   }
@@ -134,7 +138,7 @@ export class DirectoryOverviewComponent extends connect(store)(LitElement) {
     const directoryId = e.dataTransfer.getData("directoryId").trim();
 
     // If directory element is dragged one directory level back
-    if (this.active) {
+    if (this.active && directoryId) {
       const droppedDirectory = store.getState().directories.find(directory => directory._id === directoryId);
       droppedDirectory._parentDirectory = this.directory._parentDirectory || '';
       await this.directoryService.updateDirectory(droppedDirectory);
